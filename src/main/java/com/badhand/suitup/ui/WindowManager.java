@@ -31,11 +31,34 @@ public class WindowManager {
         return w.newGraphic(width, height);
     }
 
-    public boolean put(PGraphics g, int x, int y){ // Returns false if window is null   
+    public PFont getFont(){
+        return w.getFont();
+    }
+
+    public boolean put(GUI g) { // Returns false if window is null   
         if(w == null) return false;
-        w.put(g, x, y);
+        w.put(g);
         return true;
     }
+    
+    public boolean remove(String name) { // Returns false if window is null
+        if(w == null) return false;
+        w.remove(name);
+        return true;
+    }
+
+    public boolean remove(GUI g) { // Returns false if window is null
+        if(w == null) return false;
+        w.remove(g);
+        return true;
+    }
+
+    public boolean clear() { // Returns false if window is null
+        if(w == null) return false;
+        w.clear();
+        return true;
+    }
+
 
 }
     
