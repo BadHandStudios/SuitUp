@@ -3,7 +3,7 @@ package com.badhand.suitup.events;
 import java.util.*;
 
 public class EventManager {
-    private LinkedList<Event> eventQueue = LinkedList<Event>();
+    private LinkedList<Event> eventQueue = new LinkedList<Event>();
 
 
     private static EventManager instance = null;
