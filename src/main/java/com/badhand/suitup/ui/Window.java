@@ -64,6 +64,12 @@ public class Window extends PApplet {
         
     }
 
+    public void mousePressed() {
+        for(GUI g : guiBuffer.values()) {
+            g.click(mouseX, mouseY);
+        }
+    }
+
     public PFont getFont(){
         return font;
     }

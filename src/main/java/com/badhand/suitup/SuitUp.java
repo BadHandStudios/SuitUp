@@ -19,6 +19,8 @@ public class SuitUp {
         // TODO: Remove busy wait
         while(!wm.isReady());
 
+        TextButton b = new TextButton("Hello World", 32, 100, 100, null);
+        wm.put(b);
 
     }
 }
