@@ -16,6 +16,8 @@ public class Window extends PApplet {
 
     private PFont font;
 
+    private Color bg = new Color(0, 0, 0);
+
     public Window(int width, int height) {
         this.width = width;
         this.height = height;
@@ -40,14 +42,13 @@ public class Window extends PApplet {
             System.out.println("Error loading font");
         }
         textFont(font);
-        background(0);
     }
 
     public void draw() {
+        background(bg.toProcessingColor());
         for(GUI g : guiBuffer.values()) {
             if(g.visible()) {
                 if(g instanceof TextElement){
-                    
                     push();
                     TextElement te = (TextElement) g;
                     textSize(te.getSize());
@@ -67,6 +68,10 @@ public class Window extends PApplet {
         return font;
     }
 
+    public void setBackground(Color c){
+        bg = c;
+    }
+    
     public void put(GUI g) {
         guiBuffer.put(g.getName(), g);
     }

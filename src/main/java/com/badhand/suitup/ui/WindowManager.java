@@ -34,12 +34,17 @@ public class WindowManager {
     public PFont getFont(){
         return w.getFont();
     }
+    
+    public void setBackground(Color c){
+        w.setBackground(c);
+    }
 
     public boolean put(GUI g) { // Returns false if window is null   
         if(w == null) return false;
         w.put(g);
         return true;
     }
+
     
     public boolean remove(String name) { // Returns false if window is null
         if(w == null) return false;
