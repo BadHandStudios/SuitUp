@@ -46,7 +46,7 @@ public class Window extends PApplet {
         textAlign(PConstants.CENTER, PConstants.CENTER);
         imageMode(PConstants.CENTER);
         rectMode(PConstants.CENTER);
-        
+
     }
 
     public void draw() {

@@ -1,7 +1,7 @@
 package com.badhand.suitup.game;
 import com.badhand.suitup.ui.*;
 
-public class Game {
+public class GameManager {
     
     public enum state {
         MENU_SETTINGS,
