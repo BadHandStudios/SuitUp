@@ -98,6 +98,9 @@ public class Window extends PApplet {
     }
 
 
+    public PImage importImage(String path){
+        return loadImage(path);
+    }
 
     public PGraphics newGraphic(int width, int height) {
         PGraphics g = createGraphics(width, height);

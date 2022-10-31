@@ -58,6 +58,10 @@ public class WindowManager {
         return true;
     }
 
+    public PImage importImage(String path) {
+        return w.importImage(path);
+    }
+
     public boolean clear() { // Returns false if window is null
         if(w == null) return false;
         w.clear();
