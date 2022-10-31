@@ -42,6 +42,11 @@ public class Window extends PApplet {
             System.out.println("Error loading font");
         }
         textFont(font);
+        shapeMode(PConstants.CENTER);
+        textAlign(PConstants.CENTER, PConstants.CENTER);
+        imageMode(PConstants.CENTER);
+        rectMode(PConstants.CENTER);
+        
     }
 
     public void draw() {
@@ -62,6 +67,12 @@ public class Window extends PApplet {
             }
         }
         
+    }
+
+    public void mousePressed() {
+        for(GUI g : guiBuffer.values()) {
+            g.click(mouseX, mouseY);
+        }
     }
 
     public PFont getFont(){
@@ -87,6 +98,9 @@ public class Window extends PApplet {
     }
 
 
+    public PImage importImage(String path){
+        return loadImage(path);
+    }
 
     public PGraphics newGraphic(int width, int height) {
         PGraphics g = createGraphics(width, height);
