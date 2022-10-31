@@ -13,6 +13,7 @@ public class TextButton implements GUI {
     private int size;
     private PGraphics texture;
     private Event e;
+    private String name;
 
     private WindowManager wm = WindowManager.getInstance();
     private EventManager em = EventManager.getInstance();
@@ -25,6 +26,7 @@ public class TextButton implements GUI {
         this.width = (int)(text.length() * size * 0.6);
         this.height = (int)(size * 1.5);
         this.e = e;
+        this.name = "TextButton_" + id++;
 
         this.texture = wm.newGraphic(width, height);
         texture.beginDraw();
@@ -73,7 +75,7 @@ public class TextButton implements GUI {
     }
 
     public String getName(){
-        return "TextButton_" + id;
+        return name;
     }
 
     public boolean click(int x, int y) {
