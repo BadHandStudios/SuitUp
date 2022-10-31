@@ -1,5 +1,4 @@
 package com.badhand.suitup.game;
-import com.badhand.suitup.ui.*;
 import com.badhand.suitup.game.Scenes.*;
 
 public class GameManager {
@@ -29,7 +28,6 @@ public class GameManager {
                 currentScene = new MenuMain();
         }
         currentScene.initialize();
-
     }
 
     public enum state {
