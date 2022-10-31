@@ -2,24 +2,22 @@ package com.badhand.suitup.game.Scenes;
 
 //import processing.core.*;
 import com.badhand.suitup.ui.*;
+import com.badhand.suitup.game.*;
+import com.badhand.suitup.events.*;
 
 import processing.core.*;
 
-public class MenuMain {
+public class MenuMain implements Scene{
+    WindowManager wm = WindowManager.getInstance();
+    int width = 1920;
+    int height = 1080;
 
-    private static MenuMain instance = null;
 
-    private MenuMain(){};
-
-    public static MenuMain getInstance() {
-        if(instance == null) instance = new MenuMain();
-        return instance;
+    public MenuMain(){
+        
     }
 
-
-    public void createMenu(WindowManager wm, int width, int height) {
-        PGraphics pg;
-
+    public void initialize() {
         wm.clear();
 
         wm.setBackground(new Color(50,50,50));
@@ -38,5 +36,13 @@ public class MenuMain {
 
         TextElement logo = new TextElement("SuitUp",128,width/2,height/4);
         wm.put(logo);
+    }
+
+    public void update() {
+
+    }
+
+    public void handle(Event e) {
+
     }
 }
