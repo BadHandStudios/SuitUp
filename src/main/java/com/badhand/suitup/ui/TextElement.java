@@ -17,6 +17,8 @@ public class TextElement implements GUI {
 
     private int size;
 
+    private String name = "TextElement_" + id++;
+
     public TextElement(String text, int size, int x, int y) {
         this.size = size;
         this.text = text;
@@ -79,7 +81,7 @@ public class TextElement implements GUI {
     }
 
     public String getName() {
-        return "TextElement_" + id;
+        return name;
     }
     
 }
