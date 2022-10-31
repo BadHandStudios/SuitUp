@@ -42,6 +42,11 @@ public class Window extends PApplet {
             System.out.println("Error loading font");
         }
         textFont(font);
+        shapeMode(PConstants.CENTER);
+        textAlign(PConstants.CENTER, PConstants.CENTER);
+        imageMode(PConstants.CENTER);
+        rectMode(PConstants.CENTER);
+        
     }
 
     public void draw() {
