@@ -4,10 +4,10 @@ import java.io.*;
 import javazoom.jl.player.*;
 
 public class FilePlayer {
-    private File MP3File;
+    private String MP3File;
     private Player jlPlayer;
 
-    public FilePlayer(File MP3File) {
+    public FilePlayer(String MP3File) {
         this.MP3File = MP3File;
     }
 
