@@ -30,7 +30,7 @@ public class Window extends PApplet {
     }
 
     public void settings() {
-        fullScreen();
+        size(width, height);
         ready = true;
 
     }
