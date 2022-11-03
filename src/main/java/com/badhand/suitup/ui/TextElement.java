@@ -3,6 +3,8 @@ package com.badhand.suitup.ui;
 
 import processing.core.PGraphics;
 
+import java.util.*;
+
 public class TextElement implements GUI {
     private String text;
 
@@ -19,6 +21,8 @@ public class TextElement implements GUI {
 
     private String name = "TextElement_" + id++;
 
+    private LinkedList<GUI> enumeration;
+
     public TextElement(String text, int size, int x, int y) {
         this.size = size;
         this.text = text;
@@ -26,7 +30,9 @@ public class TextElement implements GUI {
         this.y = y;
         this.width = text.length() * 12;
         this.height = 12;
-
+        
+        enumeration = new LinkedList<GUI>();
+        enumeration.add(this);
     }
 
     
@@ -82,6 +88,10 @@ public class TextElement implements GUI {
 
     public String getName() {
         return name;
+    }
+
+    public LinkedList<GUI> enumerate() {
+        return enumeration;
     }
     
 }

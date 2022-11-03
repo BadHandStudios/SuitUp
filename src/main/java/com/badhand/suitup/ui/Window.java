@@ -1,6 +1,6 @@
 package com.badhand.suitup.ui;
 
-import java.util.HashMap;
+import java.util.*;
 
 import processing.core.*;
 
@@ -12,7 +12,7 @@ public class Window extends PApplet {
 
     private boolean ready = false;
 
-    private HashMap<String, GUI> guiBuffer = new HashMap<String, GUI>();
+    private LinkedList<GUI> guiBuffer = new LinkedList<GUI>();
 
     private PFont font;
 
@@ -51,26 +51,28 @@ public class Window extends PApplet {
 
     public void draw() {
         background(bg.toProcessingColor());
-        for(GUI g : guiBuffer.values()) {
-            if(g.visible()) {
-                if(g instanceof TextElement){
-                    push();
-                    TextElement te = (TextElement) g;
-                    textSize(te.getSize());
-                    fill(255);
-                    stroke(255);
-                    text(te.getText(), te.getX(), te.getY());
-                    pop();
-                    continue;
+        for(GUI g : guiBuffer) {
+            for(GUI e : g.enumerate()){
+                if(e.visible()) {
+                    if(e instanceof TextElement){
+                        push();
+                        TextElement te = (TextElement) e;
+                        textSize(te.getSize());
+                        fill(255);
+                        stroke(255);
+                        text(te.getText(), te.getX(), te.getY());
+                        pop();
+                        continue;
+                    }
+                    image(e.getTexture().get(), e.getX(), e.getY());
                 }
-                image(g.getTexture().get(), g.getX(), g.getY());
             }
         }
         
     }
 
     public void mousePressed() {
-        for(GUI g : guiBuffer.values()) {
+        for(GUI g : guiBuffer) {
             g.click(mouseX, mouseY);
         }
     }
@@ -84,15 +86,22 @@ public class Window extends PApplet {
     }
     
     public void put(GUI g) {
-        guiBuffer.put(g.getName(), g);
+        guiBuffer.add(g);
     }
 
-    public void remove(String name){
-        guiBuffer.remove(name);
+    public void remove(String name){ // Deprecated as per switch to LinkedList
+        for(GUI g : guiBuffer) {
+            if(g.getName().equals(name)) {
+                guiBuffer.remove(g);
+                break;
+            }
+        }
     }
+
     public void remove(GUI g){
         remove(g.getName());
     }
+
     public void clear(){
         guiBuffer.clear();
     }

@@ -1,5 +1,7 @@
 package com.badhand.suitup.ui;
 
+import java.util.*;
+
 import processing.core.*;
 
 public class ImageElement implements GUI {
@@ -8,6 +10,8 @@ public class ImageElement implements GUI {
     private boolean visible = true;
     private String name;
     private PGraphics texture;
+
+    private LinkedList<GUI> enumeration;
 
 
     public ImageElement(String name, int x, int y, int width, int height, PImage texture) {
@@ -22,7 +26,8 @@ public class ImageElement implements GUI {
         this.texture.image(texture, 0, 0, width, height);
         this.texture.endDraw();
         
-
+        enumeration = new LinkedList<GUI>();
+        enumeration.add(this);
 
     }
 
@@ -65,12 +70,12 @@ public class ImageElement implements GUI {
         return false;
     }
 
-    @Override
     public boolean click(int mouseX, int mouseY) {
-        // TODO Auto-generated method stub
         return false;
     }
 
-
+    public List<GUI> enumerate() {
+        return enumeration;
+    }
 
 }
