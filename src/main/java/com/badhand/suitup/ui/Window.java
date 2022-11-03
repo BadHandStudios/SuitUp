@@ -36,6 +36,7 @@ public class Window extends PApplet {
     }
 
     public void setup() {
+        frameRate(60);
         try{
             font = createFont(SuitUp.class.getResource("/fonts/ArchitunMedium.ttf").toURI().getPath(), 256);
         }catch(Exception e){
@@ -54,7 +55,8 @@ public class Window extends PApplet {
         for(GUI g : guiBuffer) {
             for(GUI e : g.enumerate()){
                 if(e.visible()) {
-                    if(e instanceof TextElement){
+                    if(e instanceof TextElement){ 
+                        // Text requires special handling due to the how processing handles fonts
                         push();
                         TextElement te = (TextElement) e;
                         textSize(te.getSize());
@@ -64,7 +66,14 @@ public class Window extends PApplet {
                         pop();
                         continue;
                     }
+
                     image(e.getTexture().get(), e.getX(), e.getY());
+                }
+
+                // Update the animations
+                if(e instanceof Animation){
+                    Animation a = (Animation) e;
+                    a.update();
                 }
             }
         }
