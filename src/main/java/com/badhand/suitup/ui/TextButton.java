@@ -4,6 +4,8 @@ import com.badhand.suitup.events.*;
 
 import processing.core.*;
 
+import java.util.*;
+
 public class TextButton implements GUI {
     private String text;
     private int x, y;
@@ -17,6 +19,8 @@ public class TextButton implements GUI {
 
     private WindowManager wm = WindowManager.getInstance();
     private EventManager em = EventManager.getInstance();
+
+    private LinkedList<GUI> enumeration;
 
     public TextButton(String text, int size, int x, int y, Event e) {
         this.text = text;
@@ -34,11 +38,16 @@ public class TextButton implements GUI {
         texture.fill(127);
         texture.rect(0, 0, width - 1, height - 1, 5);
         texture.fill(0);
-        texture.textAlign(PConstants.CENTER, PConstants.CENTER);
-        texture.textSize(size);
-        texture.text(text, (width / 2) - 1, (height / 2 - 1));
+        // texture.textAlign(PConstants.CENTER, PConstants.CENTER);
+        // texture.textSize(size);
+        // texture.text(text, (width / 2) - 1, (height / 2 - 1));
         texture.endDraw();
 
+        enumeration = new LinkedList<GUI>();
+        enumeration.add(this);
+
+        TextElement buttonText = new TextElement(text, size, x, y);
+        enumeration.add(buttonText);
 
 
         
@@ -84,4 +93,7 @@ public class TextButton implements GUI {
         return true;
     }
 
+    public List<GUI> enumerate() {
+        return enumeration;
+    }
 }
