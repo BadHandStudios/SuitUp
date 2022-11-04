@@ -2,6 +2,8 @@ package com.badhand.suitup.ui;
 
 import processing.core.PGraphics;
 
+import java.util.*;
+
 public interface GUI {
 
     public int getWidth();
@@ -20,4 +22,5 @@ public interface GUI {
 
     public String getName(); // Returns the name of the GUI element
 
+    public List<GUI> enumerate(); // Returns an ordered list of all GUI elements contained within this GUI element
 }
