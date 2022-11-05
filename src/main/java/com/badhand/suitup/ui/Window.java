@@ -5,6 +5,7 @@ import java.util.*;
 import processing.core.*;
 
 import com.badhand.suitup.*;
+import com.badhand.suitup.game.*;
 
 public class Window extends PApplet {
 
@@ -17,6 +18,8 @@ public class Window extends PApplet {
     private PFont font;
 
     private Color bg = new Color(0, 0, 0);
+
+    private GameManager gm = GameManager.getInstance();
 
     public Window(int width, int height) {
         this.width = width;
