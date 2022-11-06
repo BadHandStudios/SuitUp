@@ -63,8 +63,8 @@ public class Window extends PApplet {
                         push();
                         TextElement te = (TextElement) e;
                         textSize(te.getSize());
-                        fill(255);
-                        stroke(255);
+                        fill(te.getColor().toProcessingColor());
+                        stroke(te.getColor().toProcessingColor());
                         text(te.getText(), te.getX(), te.getY());
                         pop();
                         continue;

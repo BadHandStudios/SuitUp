@@ -11,6 +11,8 @@ public class TextElement implements GUI {
     private int x, y;
     private int width, height;
 
+    private Color  c = new Color(255, 255, 255);
+
     PGraphics texture;
 
     boolean visible = true;
@@ -72,6 +74,16 @@ public class TextElement implements GUI {
 
     public String getText() {
         return text;
+    }
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Color getColor() {
+        return c;
+    }
+    public void setColor(Color c){
+        this.c = c;
     }
     
     public boolean visible() {

@@ -30,7 +30,7 @@ public class MenuMain implements Scene{
 
         wm.setBackground(new Color(50,50,50));
 
-        TextButton b = new TextButton("Play", 64, width/2, height/2, null);
+        TextButton b = new TextButton("Play", 64, width/2, height/2, new Event(Events.SCENE_CHANGE, GameState.MENU_LEVEL_SELECT));
         wm.put(b);
 
         TextButton c = new TextButton("Options", 64, width/2, (int)(height/1.5)-16, null);
