@@ -80,6 +80,8 @@ public class Window extends PApplet {
                 }
             }
         }
+
+        gm.update();
         
     }
 

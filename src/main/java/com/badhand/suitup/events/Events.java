@@ -1,5 +1,6 @@
 package com.badhand.suitup.events;
 
 public enum Events {
-    CLICK
+    CLICK,
+    SCENE_CHANGE
 }
