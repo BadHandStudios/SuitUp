@@ -6,6 +6,7 @@ import processing.core.*;
 
 import com.badhand.suitup.*;
 import com.badhand.suitup.game.*;
+import com.badhand.suitup.events.*;
 
 public class Window extends PApplet {
 
@@ -20,6 +21,7 @@ public class Window extends PApplet {
     private Color bg = new Color(0, 0, 0);
 
     private GameManager gm = GameManager.getInstance();
+    private static EventManager em = EventManager.getInstance();
 
     public Window(int width, int height) {
         this.width = width;
@@ -89,6 +91,10 @@ public class Window extends PApplet {
         for(GUI g : guiBuffer) {
             g.click(mouseX, mouseY);
         }
+    }
+
+    public void keyPressed() {
+        em.push(new Event(Events.KEY_PRESS, keyCode));
     }
 
     public PFont getFont(){
