@@ -15,8 +15,8 @@ public class MenuMain implements Scene{
     int width = 1920;
     int height = 1080;
 
-    private ImageElement[] chips = new ImageElement[4];
-    private double[] chipVelocity = new double[4];
+    private ImageElement[] chips = new ImageElement[6];
+    private double[] chipVelocity = new double[6];
     private double chipAcceleration = 0.5;
 
     private Random rand = new Random();
@@ -30,6 +30,24 @@ public class MenuMain implements Scene{
 
         wm.setBackground(new Color(50,50,50));
 
+
+        for(int i = 0; i < chips.length; i++){
+            int x = rand.nextInt(width);
+            int y = rand.nextInt(height) - height;
+            int v = rand.nextInt(3) + 1;
+            int size = rand.nextInt(100) + 70;
+            chipVelocity[i] = v;
+            if(i % 2 == 0){
+                chips[i] = new ImageElement("chip"+i, x, y, size, size, am.getImage("chip_red.png"));
+            }else{
+                chips[i] = new ImageElement("chip"+i, x, y, size, size, am.getImage("chip_blue.png"));
+            }
+            wm.put(chips[i]);
+        }
+
+        TextElement logo = new TextElement("SuitUp",128,width/2,height/4);
+        wm.put(logo);
+
         TextButton b = new TextButton("Play", 64, width/2, height/2, new Event(Events.SCENE_CHANGE, GameState.MENU_LEVEL_SELECT));
         wm.put(b);
 
@@ -42,21 +60,9 @@ public class MenuMain implements Scene{
         TextElement t = new TextElement("Developed by BadHandStudios", 64, 400, height - 64);
         wm.put(t);
 
-        TextElement logo = new TextElement("SuitUp",128,width/2,height/4);
-        wm.put(logo);
 
-        for(int i = 0; i < chips.length; i++){
-            int x = rand.nextInt(width);
-            int y = rand.nextInt(height) - height;
-            int v = rand.nextInt(3) + 1;
-            chipVelocity[i] = v;
-            if(i % 2 == 0){
-                chips[i] = new ImageElement("chip"+i, x, y, 128, 128, am.getImage("chip_red.png"));
-            }else{
-                chips[i] = new ImageElement("chip"+i, x, y, 128, 128, am.getImage("chip_blue.png"));
-            }
-            wm.put(chips[i]);
-        }
+
+
     }
 
     public void update() {
