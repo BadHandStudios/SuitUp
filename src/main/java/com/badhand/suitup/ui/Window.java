@@ -5,6 +5,7 @@ import java.util.*;
 import processing.core.*;
 
 import com.badhand.suitup.*;
+import com.badhand.suitup.game.*;
 
 public class Window extends PApplet {
 
@@ -17,6 +18,8 @@ public class Window extends PApplet {
     private PFont font;
 
     private Color bg = new Color(0, 0, 0);
+
+    private GameManager gm = GameManager.getInstance();
 
     public Window(int width, int height) {
         this.width = width;
@@ -47,7 +50,7 @@ public class Window extends PApplet {
         textAlign(PConstants.CENTER, PConstants.CENTER);
         imageMode(PConstants.CENTER);
         rectMode(PConstants.CENTER);
-        
+
     }
 
     public void draw() {
@@ -60,8 +63,8 @@ public class Window extends PApplet {
                         push();
                         TextElement te = (TextElement) e;
                         textSize(te.getSize());
-                        fill(255);
-                        stroke(255);
+                        fill(te.getColor().toProcessingColor());
+                        stroke(te.getColor().toProcessingColor());
                         text(te.getText(), te.getX(), te.getY());
                         pop();
                         continue;
@@ -77,6 +80,8 @@ public class Window extends PApplet {
                 }
             }
         }
+
+        gm.update();
         
     }
 
