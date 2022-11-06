@@ -10,7 +10,7 @@ import processing.core.*;
 public class Splash implements Scene {
     private ImageElement logo;
     private GraphicsWrapper fade;
-    private float opacity = -500;
+    private float opacity = -400;
 
     private static AssetManager am = AssetManager.getInstance();
     private static WindowManager wm = WindowManager.getInstance();
