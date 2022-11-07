@@ -2,6 +2,7 @@ package com.badhand.suitup.game;
 
 import com.badhand.suitup.events.*;
 import com.badhand.suitup.game.Scenes.*;
+import com.badhand.suitup.ui.WindowManager;
 
 public class GameManager {
 
@@ -12,6 +13,8 @@ public class GameManager {
     private Scene currentScene = null;
 
     private static EventManager em = EventManager.getInstance();
+
+    private static WindowManager wm = WindowManager.getInstance();
 
     private GameManager(){};
 
@@ -31,6 +34,10 @@ public class GameManager {
         switch(e.getType()){
             case SCENE_CHANGE:
                 changeScene((GameState)(e.getData()));
+                break;
+            case QUIT_GAME:
+                wm.destroyWindow();
+                System.exit(0);
                 break;
             default:
                 currentScene.handle(e);
