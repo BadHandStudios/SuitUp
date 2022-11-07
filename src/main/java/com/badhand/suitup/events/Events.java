@@ -4,4 +4,6 @@ public enum Events {
     CLICK,
     SCENE_CHANGE,
     SCENE_EVENT,
+    KEY_PRESS,
+    QUIT_GAME,
 }

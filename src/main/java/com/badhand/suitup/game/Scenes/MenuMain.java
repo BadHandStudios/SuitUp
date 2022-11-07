@@ -54,7 +54,7 @@ public class MenuMain implements Scene{
         TextButton c = new TextButton("Options", 64, width/2, (int)(height/1.5)-16, null);
         wm.put(c);
 
-        TextButton d = new TextButton("Quit", 64, width/2, (int) (height/1.25), null);
+        TextButton d = new TextButton("Quit", 64, width/2, (int) (height/1.25), new Event(Events.QUIT_GAME, null));
         wm.put(d);
 
         TextElement t = new TextElement("Developed by BadHandStudios", 64, 400, height - 64);

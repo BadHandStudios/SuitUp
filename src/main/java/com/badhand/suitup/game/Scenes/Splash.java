@@ -47,7 +47,13 @@ public class Splash implements Scene {
     }
 
     public void handle(Event e) {
-        
+        switch(e.getType()){
+            case KEY_PRESS:
+                em.push(new Event(Events.SCENE_CHANGE, GameState.MENU_MAIN));
+                break;
+            default:
+                break;
+        }
     }
 
 }
