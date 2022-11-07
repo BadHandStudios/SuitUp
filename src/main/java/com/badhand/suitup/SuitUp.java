@@ -15,19 +15,17 @@ public class SuitUp {
 
         // Initialize the WindowManager for the application
         wm = WindowManager.getInstance();
-        gm = GameManager.getInstance();
-
+        
         // Create the game window
         wm.createWindow(1920, 1080);
-
+        
         // Initialize the AssetManger for the application
         am = AssetManager.getInstance();
-
+        
         // Wait for the window to be ready
         // TODO: Remove busy wait
         while(!wm.isReady());
-
-        gm.changeScene(GameManager.state.MENU_MAIN);
-        gm.update();
+        
+        gm = GameManager.getInstance();
     }
 }
