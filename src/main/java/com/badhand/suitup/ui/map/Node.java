@@ -39,7 +39,7 @@ public class Node implements GUI {
         // Initialize texture
         texture = WindowManager.getInstance().newGraphic(width, height);
         texture.beginDraw();
-        texture.stroke(0);
+        texture.stroke(255);
         texture.fill(26, 35, 74);
         texture.ellipse(texture.width/2, texture.height/2, texture.width - 2, texture.height - 2);
         texture.endDraw();
@@ -70,7 +70,7 @@ public class Node implements GUI {
     public void setPos(int x, int y) {
         this.x = x + offsetX;
         this.y = y + offsetY;
-        shadow.setPos(x, y + (int)(height * 0.25));
+        shadow.setPos(this.x, this.y + (int)(height * 0.25));
     }
 
     public boolean isFilled() {
@@ -78,6 +78,7 @@ public class Node implements GUI {
     }
     public void setFilled(boolean filled) {
         this.filled = filled;
+        this.shadow.setVisibility(filled);
     }
 
     public boolean getEdge(int i) {
@@ -85,6 +86,15 @@ public class Node implements GUI {
     }
     public void setEdge(int i, boolean value) {
         edges[i] = value;
+    }
+    public int connectingEdges(){
+        int count = 0;
+        for (int i = 0; i < edges.length - 1; i++) {
+            if (edges[i]) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public PGraphics getTexture() {
@@ -108,7 +118,8 @@ public class Node implements GUI {
     }
 
     public void setVisibility(boolean visible){
-        filled = visible;
+        this.filled = visible;
+        this.shadow.setVisibility(visible);
     }
 
     public String getName() {
