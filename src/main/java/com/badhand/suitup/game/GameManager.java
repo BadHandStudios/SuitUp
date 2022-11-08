@@ -52,6 +52,9 @@ public class GameManager {
             case MENU_LEVEL_SELECT:
                 currentScene = new MenuLevelSelect();
                 break;
+            case CARD_DEBUG_SCENE:
+                currentScene = new CardDebugScene();
+                break;
         }
         currentScene.initialize();
     }
