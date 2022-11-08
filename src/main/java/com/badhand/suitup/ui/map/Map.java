@@ -18,42 +18,109 @@ public class Map implements GUI {
 
     private int x, y, width, height;
 
+    private int nodeWidth, nodeHeight;
+    private int nodePaddingX, nodePaddingY;
+
+    private static WindowManager wm = WindowManager.getInstance();
+
 
 
     public Map() {
 
-        width = 1920;
-        height = 900;
-        x = 0;
-        y = 1080 - height;
+
 
         // Populate the map with empty nodes
-        for (int i = 0; i < INITIAL_SIZE; i++) {
-            Node[] c = new Node[3];
-            for (int j = 0; j < c.length; j++) {
-                c[j] = new Node(i, j);
-                c[j].setVisibility(true);
+        for (int c = 0; c < INITIAL_SIZE; c++) {
+            Node[] col = new Node[3];
+            for (int r = 0; r < col.length; r++) {
+                col[r] = new Node(r, c);
+                col[r].setVisibility(true);
             }
-            columns.add(c);
+            columns.add(col);
         }
 
         // Initialize enumeration
         enumeration = new LinkedList<GUI>();
 
+        
+        nodeWidth = columns.get(0)[0].getWidth();
+        nodeHeight = columns.get(0)[0].getHeight();
+        nodePaddingX = nodeWidth;
+        nodePaddingY = nodeHeight;
+
+        width = nodeWidth * 2 + nodePaddingX * 2;
+        height = nodeHeight * 2 + nodePaddingY * 2;
+
+        x = wm.getWidth()/2 - width/2;
+        y = wm.getHeight()/2 - height/2;
+
         // Add nodes to enumeration
-        for (Node[] c : columns) {
+    
+        for(Node[] j : columns){
+            for(Node n : j){
+                n.setPos(x + nodeWidth * n.getMapColumn() + nodePaddingX * n.getMapColumn(), y + nodeHeight * n.getMapRow() + nodePaddingY * n.getMapRow());
+                if(n.getMapRow() > 0){
+                    n.setEdge(0, true);
+                }
+                if(n.getMapRow() < 2){
+                    n.setEdge(2, true);
+                }
+                if(n.getMapRow() < 2){
+                    n.setEdge(3, true);
+                }
+                n.setEdge(1, true);
+
+            }
+        }
+
+        for(Node[] c : getViewPort(viewX)) {
             for (Node n : c) {
-                enumeration.add(n);
+                for(int i = 0; i < 4; i++){
+                    if(n.getEdge(i)){
+                        switch(i){
+                            case 0:
+                                // i - 1, j + 1
+                                Node connection = getNode(n.getMapRow() - 1, n.getMapColumn() + 1);
+                                LineElement line = new LineElement(n.getX(), n.getY(), connection.getX(), connection.getY(), 3, new Color(255, 255, 255));
+                                enumeration.add(line);
+                                break;
+                            case 1:
+                                // i, j + 1
+                                connection = getNode(n.getMapRow(), n.getMapColumn() + 1);
+                                line = new LineElement(n.getX(), n.getY(), connection.getX(), connection.getY(), 3, new Color(255, 255, 255));
+                                enumeration.add(line);
+                                break;
+                            case 2:
+                                // i + 1, j + 1
+                                connection = getNode(n.getMapRow() + 1, n.getMapColumn() + 1);
+                                line = new LineElement(n.getX(), n.getY(), connection.getX(), connection.getY(), 3, new Color(255, 255, 255));
+                                enumeration.add(line);
+                                break;
+                            case 3:
+                                // i + 1, j
+                                connection = getNode(n.getMapRow() + 1, n.getMapColumn());
+                                line = new LineElement(n.getX(), n.getY(), connection.getX(), connection.getY(), 3, new Color(255, 255, 255));
+                                enumeration.add(line);
+                                break;
+
+                        }
+                    }
+                }
             }
         }
 
-        for(Node[] c : getViewPort(viewX)){
-            for(Node n : c){
-                n.setPos(n.getMapX() * 128, n.getMapY() * 80);
+        for (Node[] j: getViewPort(viewX)) {
+            for (Node n : j) {
+                enumeration.addAll(n.enumerate());
             }
         }
 
 
+
+    }
+
+    private Node getNode(int i, int j){
+        return columns.get(j)[i];
     }
 
     public void pan(int x) {
@@ -64,10 +131,10 @@ public class Map implements GUI {
         return viewX;
     }
 
-    public ArrayList<Node[]> getViewPort(int i) {
+    public ArrayList<Node[]> getViewPort(int j) {
         ArrayList<Node[]> viewPort = new ArrayList<Node[]>();
-        for (int j = i; j < i + 3 ; j++) {
-            viewPort.add(columns.get(j));
+        for (int i = j; i < j + 3 ; i++) {
+            viewPort.add(columns.get(i));
         }
         return viewPort;
     }

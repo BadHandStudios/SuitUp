@@ -70,6 +70,15 @@ public class Window extends PApplet {
                         text(te.getText(), te.getX(), te.getY());
                         pop();
                         continue;
+                    }else if(e instanceof LineElement){
+                        // Lines are a processing primitive
+                        push();
+                        LineElement le = (LineElement) e;
+                        stroke(le.getColor().toProcessingColor());
+                        strokeWeight(le.getWidth());
+                        line(le.getX(), le.getY(), le.getX2(), le.getY2());
+                        pop();
+                        continue;
                     }
 
                     image(e.getTexture().get(), e.getX(), e.getY());

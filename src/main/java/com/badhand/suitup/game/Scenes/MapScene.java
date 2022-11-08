@@ -11,7 +11,7 @@ public class MapScene implements Scene {
 
     public void initialize() {
         wm.clear();
-        wm.setBackground(new Color(127));
+        wm.setBackground(new Color(127, 127, 127));
 
         Map map = new Map();
         wm.put(map);

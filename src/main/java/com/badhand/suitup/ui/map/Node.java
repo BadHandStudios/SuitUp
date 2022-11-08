@@ -9,12 +9,19 @@ public class Node implements GUI {
 
 
     private int x, y, i, j;
+    private int width = 256;
+    private int height = 128;
+
     private boolean filled = false;
-    private boolean[] edges = new boolean[3];
+    private boolean[] edges = new boolean[4];
 
     private PGraphics texture;
+    private GUI shadow;
     private LinkedList<GUI> enumeration;
 
+    private static Random rand = new Random();
+
+    private int offsetX, offsetY;
     
 
     // private Entity entity;
@@ -30,24 +37,27 @@ public class Node implements GUI {
 
 
         // Initialize texture
-        texture = WindowManager.getInstance().newGraphic(64, 40);
+        texture = WindowManager.getInstance().newGraphic(width, height);
         texture.beginDraw();
-        texture.stroke(255);
-        texture.fill(127);
-        texture.ellipse(64/2, 40/2, 64, 40);
+        texture.stroke(0);
+        texture.fill(26, 35, 74);
+        texture.ellipse(texture.width/2, texture.height/2, texture.width - 2, texture.height - 2);
         texture.endDraw();
 
         enumeration = new LinkedList<GUI>();
+        shadow = new SpotShadow(0, 0, width, height, 100, 10);
+        enumeration.add(shadow);
         enumeration.add(this);
 
 
+        offsetX = rand.nextInt(100) - 50;
+        offsetY = rand.nextInt(100) - 50;
+    }   
 
-    }
-
-    public int getMapX() {
+    public int getMapRow() {
         return i;
     }
-    public int getMapY() {
+    public int getMapColumn() {
         return j;
     }
 
@@ -58,8 +68,9 @@ public class Node implements GUI {
         return y;
     }
     public void setPos(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.x = x + offsetX;
+        this.y = y + offsetY;
+        shadow.setPos(x, y + (int)(height * 0.25));
     }
 
     public boolean isFilled() {

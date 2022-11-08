@@ -13,7 +13,7 @@ public class SpotShadow implements GUI {
 
     private static WindowManager wm = WindowManager.getInstance();
 
-    public SpotShadow(int x, int y, int width, int height, int blur) {
+    public SpotShadow(int x, int y, int width, int height, int darkness,int blur) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -22,7 +22,7 @@ public class SpotShadow implements GUI {
         texture = wm.newGraphic(width * 2, height * 2);
         texture.beginDraw();
         texture.noStroke();
-        texture.fill(0, 0, 0, 255);
+        texture.fill(0, 0, 0, darkness);
         texture.ellipse(width, height, width, height);
         texture.filter(PConstants.BLUR, blur);
         texture.endDraw();
