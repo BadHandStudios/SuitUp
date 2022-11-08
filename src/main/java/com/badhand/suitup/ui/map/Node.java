@@ -46,6 +46,7 @@ public class Node implements GUI {
 
         enumeration = new LinkedList<GUI>();
         shadow = new SpotShadow(0, 0, width, height, 100, 10);
+        shadow.setVisibility(false);
         enumeration.add(shadow);
         enumeration.add(this);
 
