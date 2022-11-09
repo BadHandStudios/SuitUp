@@ -59,6 +59,9 @@ public class GameManager {
             case MENU_LEVEL_SELECT:
                 currentScene = new MenuLevelSelect();
                 break;
+            case SCENE_BATTLE:
+                currentScene = new SceneBattle();
+                break;
         }
         currentScene.initialize();
     }
