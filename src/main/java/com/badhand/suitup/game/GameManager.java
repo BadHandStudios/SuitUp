@@ -38,7 +38,7 @@ public class GameManager {
             case QUIT_GAME:
                 wm.destroyWindow();
                 System.exit(0);
-                break;
+                break; 
             default:
                 currentScene.handle(e);
                 break;

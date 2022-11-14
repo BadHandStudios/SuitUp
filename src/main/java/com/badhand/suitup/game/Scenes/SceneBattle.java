@@ -11,15 +11,28 @@ public class SceneBattle implements Scene {
     
     WindowManager wm = WindowManager.getInstance();
     AssetManager am = AssetManager.getInstance();
+    EventManager em = EventManager.getInstance();
 
     int width = 1920;
     int height = 1080;
-
-    //ArrayList<Card> playerHand = new ArrayList<Card>();
-    //ArrayList<Card> enemyHand = new ArrayList<Card>();
-
     int playerHealth = 25;
     int enemyHealth = 25;
+    int playerTotal = 0;
+    int enemyTotal = 0;
+
+    ArrayList<Integer> playerHand = new ArrayList<Integer>();
+    ArrayList<Integer> enemyHand = new ArrayList<Integer>();
+    int[] playerPositions = {0,0,0,0,0};
+    int[] enemyPositions = {0,0,0,0,0};
+
+    TextButton hit = new TextButton("Hit",64,width/2 - 150,height/2,new Event(Events.CLICK,"Hit"));
+    TextButton stay = new TextButton("Stay",64,width/2 + 150,height/2,new Event(Events.CLICK,"Stay"));
+    TextElement winner = new TextElement("",64,200,height/2);
+
+    boolean playerTurn = true;
+    boolean roundStart = true;
+    boolean roundEnd = false;
+    boolean battle = false;
 
     public void initialize() {
         wm.clear();
@@ -37,42 +50,165 @@ public class SceneBattle implements Scene {
         TextElement enemyHealthText = new TextElement("Health: " + playerHealth,36,width-150,height/2 - 140);
         wm.put(enemyHealthText);
 
+        if (roundStart) {
+            getCard(playerHand);
+            getCard(playerHand);
+            getCard(enemyHand);
+            getCard(enemyHand);
+            roundStart = false;
+        }
 
-        int cardNum = 5;
-        int[] positions = {0,0,0,0,0};
+        if (roundEnd) {
+            TextButton reset = new TextButton("Reset?",64,width/2,height/2, new Event(Events.CLICK,"reset"));
+            wm.put(reset);
+            wm.put(winner);
+        }
 
-       switch (cardNum) {
+        if (playerTurn) {
+            wm.put(hit);
+            wm.put(stay);
+        }
+    }
+
+    public void update() {
+        initialize();
+        drawHand(playerHand,height-200);
+        drawHand(enemyHand, 200);
+    }
+
+    public void handle(Event e) {
+        if (e.getType() == Events.CLICK) {
+            switch ("" + e.getData()) {
+                case "Stay":
+                    playerTurn = false;
+                    gameLogic();
+                    break;
+                case "Hit":
+                    getCard(playerHand);
+                    update();
+                    gameLogic();
+                    break;
+                case "reset":
+                    reset();
+                    break;
+            }
+        }
+    }
+
+    public void reset() {
+        playerHand.clear();
+        enemyHand.clear();
+        playerTotal = 0;
+        enemyTotal = 0;
+        playerTurn = true;
+        roundStart = true;
+        roundEnd = false;
+        battle = false;
+        playerPositions = new int[]{0,0,0,0,0};
+        enemyPositions = new int[]{0,0,0,0,0};
+    }
+
+    public ArrayList<Integer> getCard(ArrayList<Integer> hand) {
+        ArrayList<Integer> result = hand;
+
+        int card = (int) (Math.random() * 10) + 1;
+
+        result.add(card);
+
+        return result;
+    }
+
+    public int[] formatHand(int size) {
+        int[] result = {0,0,0,0,0};
+
+        switch (size) {
             case 1:
-                positions = new int[]{960,0,0,0,0};
+                result = new int[]{960,0,0,0,0};
                 break;
             case 2:
-                positions = new int[]{840,1080,0,0,0};
+                result = new int[]{840,1080,0,0,0};
                 break;
             case 3:
-                positions = new int[]{720,960,1200,0,0};
+                result = new int[]{720,960,1200,0,0};
                 break;
             case 4:
-                positions = new int[]{600,840,1080,1320,0};
+                result = new int[]{600,840,1080,1320,0};
                 break;
             case 5:
-                positions = new int[]{480,720,960,1200,1440};
+                result = new int[]{480,720,960,1200,1440};
                 break;
        }
 
-        for (int i = 0; i < cardNum; i++) {
-            ImageElement Playercard = new ImageElement("Card", positions[i],height-200,200,300,am.getImage("Card.png"));
-            wm.put(Playercard);
-            ImageElement Enemycard = new ImageElement("Card", positions[i],200,200,300,am.getImage("Card.png"));
-            wm.put(Enemycard);
+        return result;
+    }
+
+    public void drawHand(ArrayList<Integer> hand, int handHeight) {
+        int[] positions = {0,0,0,0,0};
+        positions = formatHand(hand.size());
+
+        for (int i = 0; i < hand.size(); i++) {
+            //ImageElement Playercard = new ImageElement("Card", playerPositions[i],handHeight,200,300,am.getImage("Card.png"));
+            TextElement card = new TextElement("" + hand.get(i),64,positions[i], handHeight);
+            wm.put(card);
         }
 
     }
 
-    public void update() {
+    public int handValue(ArrayList<Integer> hand) {
+        int result = 0;
 
+        for (int i = 0; i < hand.size(); i++) {
+            result += hand.get(i);
+        }
+
+        return result;
     }
 
-    public void handle(Event e) {
+    public void enemyTurn() {
+        if (enemyTotal <= 10) {
+            getCard(enemyHand);
+        }
+        else {
+            battle = true;
+        }
+    }
 
+    public void gameLogic() {
+        playerTotal = handValue(playerHand);
+        enemyTotal = handValue(enemyHand);
+
+        if (playerHand.size() >= 5) {
+            playerTurn = false;
+            if (playerTotal <= 21) {
+                winner = new TextElement("Player Wins!",64, 200, height/2);
+            }
+        }
+        if (playerTotal > 21) {
+            playerTurn = false;
+            roundEnd = true;
+            winner = new TextElement("Enemy Wins!",64, 200, height/2);
+        }
+        
+        if (!playerTurn && !roundEnd) {
+            enemyTurn();
+            if (battle) {
+                roundEnd = true;
+            }
+            else {
+                gameLogic();
+            }
+        }
+
+        if (battle) {
+            if (playerTotal > enemyTotal) {
+                winner = new TextElement("Player Wins!",64, 200, height/2);
+            }
+            else {
+                winner = new TextElement("Enemy Wins!",64, 200, height/2);
+            }
+            battle = false;
+        }
+
+        update();
     }
 }
