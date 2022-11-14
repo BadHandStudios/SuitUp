@@ -47,7 +47,7 @@ public class SceneBattle implements Scene {
         TextElement playerHealthText = new TextElement("Health: " + playerHealth,36,150,height/2 + 140);
         wm.put(playerHealthText);
 
-        TextElement enemyHealthText = new TextElement("Health: " + playerHealth,36,width-150,height/2 - 140);
+        TextElement enemyHealthText = new TextElement("Health: " + enemyHealth,36,width-150,height/2 - 140);
         wm.put(enemyHealthText);
 
         if (roundStart) {
@@ -59,7 +59,7 @@ public class SceneBattle implements Scene {
         }
 
         if (roundEnd) {
-            TextButton reset = new TextButton("Reset?",64,width/2,height/2, new Event(Events.CLICK,"reset"));
+            TextButton reset = new TextButton("Continue",64,width/2,height/2, new Event(Events.CLICK,"reset"));
             wm.put(reset);
             wm.put(winner);
         }
@@ -89,6 +89,10 @@ public class SceneBattle implements Scene {
                     gameLogic();
                     break;
                 case "reset":
+                    if (playerHealth <= 0 || enemyHealth <= 0) {
+                        Event end = new Event(Events.SCENE_CHANGE,GameState.MENU_LEVEL_SELECT);
+                        em.push(end);
+                    }
                     reset();
                     break;
             }
@@ -180,15 +184,17 @@ public class SceneBattle implements Scene {
         if (playerHand.size() >= 5) {
             playerTurn = false;
             if (playerTotal <= 21) {
+                roundEnd = true;
                 winner = new TextElement("Player Wins!",64, 200, height/2);
+                enemyHealth -= 5;
             }
         }
         if (playerTotal > 21) {
             playerTurn = false;
             roundEnd = true;
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
+            playerHealth -= 5;
         }
-        
         if (!playerTurn && !roundEnd) {
             enemyTurn();
             if (battle) {
@@ -202,9 +208,11 @@ public class SceneBattle implements Scene {
         if (battle) {
             if (playerTotal > enemyTotal) {
                 winner = new TextElement("Player Wins!",64, 200, height/2);
+                enemyHealth -= 5;
             }
             else {
                 winner = new TextElement("Enemy Wins!",64, 200, height/2);
+                playerHealth -= 5;
             }
             battle = false;
         }
