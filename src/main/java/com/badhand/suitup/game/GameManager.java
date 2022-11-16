@@ -45,7 +45,7 @@ public class GameManager {
             case QUIT_GAME:
                 wm.destroyWindow();
                 System.exit(0);
-                break;
+                break; 
             default:
                 currentScene.handle(e);
                 break;
@@ -68,6 +68,8 @@ public class GameManager {
                 break;
             case DEBUG:
                 currentScene = new Debug();
+            case SCENE_BATTLE:
+                currentScene = new SceneBattle();
                 break;
         }
         currentScene.initialize();
