@@ -4,6 +4,8 @@ import com.badhand.suitup.events.*;
 import com.badhand.suitup.game.Scenes.*;
 import com.badhand.suitup.ui.WindowManager;
 
+import processing.core.PConstants;
+
 public class GameManager {
 
     private GameState scene = GameState.SPLASH;
@@ -30,6 +32,11 @@ public class GameManager {
 
         Event e = em.pop();
         if(e == null) return;
+
+        if(e.getType() == Events.KEY_PRESS && (int)(e.getData()) == PConstants.ENTER) {
+            changeScene(GameState.DEBUG);
+            return;
+        }
         
         switch(e.getType()){
             case SCENE_CHANGE:
@@ -61,6 +68,8 @@ public class GameManager {
                 break;
             case SCENE_BATTLE:
                 currentScene = new SceneBattle();
+            case DEBUG:
+                currentScene = new Debug();
                 break;
         }
         currentScene.initialize();
