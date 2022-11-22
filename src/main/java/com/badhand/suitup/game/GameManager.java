@@ -69,6 +69,9 @@ public class GameManager {
             case DEBUG:
                 currentScene = new Debug();
                 break;
+            case MAP_SCENE:
+                currentScene = new MapScene();
+                break;
         }
         currentScene.initialize();
     }
