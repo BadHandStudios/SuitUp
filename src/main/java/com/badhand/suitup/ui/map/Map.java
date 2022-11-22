@@ -11,11 +11,15 @@ public class Map implements GUI {
 
     private ArrayList<Node[]> columns = new ArrayList<Node[]>();
 
-    private final int INITIAL_SIZE = 8;
+    private static final int INITIAL_SIZE = 8;
+    private static final int COLUMNS_PER_GEN = 3;
+
 
     boolean generate = true;
     boolean finishedStopping = false;
     private int viewX = 0;
+    private int furthestX = 3;
+
     private int viewPortViewX = -1;
 
     boolean panning = false;
@@ -34,6 +38,7 @@ public class Map implements GUI {
     private static WindowManager wm = WindowManager.getInstance();
 
     private Node mainPath;
+
 
     private Random rand = new Random();
 
@@ -87,8 +92,12 @@ public class Map implements GUI {
             viewportOffsetX = (nodeWidth + nodePaddingX);
             if(viewX < columns.size() - 5){
                 viewX++;
+                if(viewX + 3 > furthestX) furthestX = viewX + 3;
+                
                 if(viewX == columns.size() - 5){
-                    addColumn();
+                    for(int i = 0; i < COLUMNS_PER_GEN; i++){
+                        addColumn();
+                    }
                 }
                 updateViewport();
 
@@ -318,6 +327,8 @@ public class Map implements GUI {
 
     public void stopGeneration(){
         this.generate = false;
+
+
         addColumn(true);
         
 

@@ -25,6 +25,8 @@ public class MapScene implements Scene {
     private int cloudOffsetY = 0;
     private boolean cloudOffsetYIncreasing = true;
 
+    private ProgressBar movesRemainingBar;
+
 
     private GraphicsWrapper[] cloudElements = new GraphicsWrapper[2];
 
@@ -69,6 +71,10 @@ public class MapScene implements Scene {
         wm.put(cloudElements[0]);
         wm.put(cloudElements[1]);
         
+        movesRemainingBar = new ProgressBar(wm.getWidth() / 2, 100, 500, 50, maxMoves, movesRemaining);
+        movesRemainingBar.setColor(new Color(30, 150, 250));
+        wm.registerDiffered(movesRemainingBar);
+        wm.put(movesRemainingBar);
 
     }
 
@@ -109,6 +115,8 @@ public class MapScene implements Scene {
                 Node current = p.getCurrentNode();
                 if(map.connected(current, requested)) {
                     movesRemaining--;
+                    movesRemainingBar.setValue(movesRemaining);
+                    if(movesRemaining < maxMoves * 0.25) movesRemainingBar.setColor(new Color(255, 100, 100));
                     p.move(requested);
 
                     System.out.println("Moves remaining: " + movesRemaining);
