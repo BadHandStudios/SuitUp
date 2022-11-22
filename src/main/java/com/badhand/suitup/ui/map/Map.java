@@ -13,16 +13,16 @@ public class Map implements GUI {
 
     private final int INITIAL_SIZE = 8;
 
-    private int maxMoves = 100;
-    private int movesRemaining = maxMoves;
+    boolean generate = true;
+    boolean finishedStopping = false;
     private int viewX = 0;
+    private int viewPortViewX = -1;
 
     boolean panning = false;
     private int panSpeed = 10;
-    private int panAmount;
-    private int panWidth;
 
     private LinkedList<GUI> enumeration;
+    private ArrayList<Node[]> viewPort = new ArrayList<Node[]>();
 
     private int x, y, width, height;
 
@@ -81,7 +81,10 @@ public class Map implements GUI {
     }
 
     public void pan(boolean direction){
+        if(panning == true) return;
+        panning = true;
         if(!direction){
+            viewportOffsetX = (nodeWidth + nodePaddingX);
             if(viewX < columns.size() - 5){
                 viewX++;
                 if(viewX == columns.size() - 5){
@@ -92,6 +95,7 @@ public class Map implements GUI {
 
             }
         } else {
+            viewportOffsetX =  -(nodeWidth + nodePaddingX);
             if(viewX > 0){
                 viewX--;
                 updateViewport();
@@ -99,7 +103,8 @@ public class Map implements GUI {
         }
         
     }
-    private void addColumn(){
+    private void addColumn(boolean finalColumn){
+
         Node[] prevCol = columns.get(columns.size() - 1);
         Node[] col = new Node[3];
 
@@ -110,6 +115,7 @@ public class Map implements GUI {
 
         for(int i = 0; i < prevCol.length; i++){
             if(!prevCol[i].isFilled()) continue;
+            if(finalColumn) break;
             randomizeEdges(prevCol[i]);
             for(int edge = 0; edge < 4; edge++){
                 if(prevCol[i].getEdge(edge)){
@@ -118,6 +124,7 @@ public class Map implements GUI {
             }
         }
 
+        if(!generate) return;
         if(mainPath.connectingEdges() == 0){
             int edge;
             switch(mainPath.getMapRow()){
@@ -139,16 +146,20 @@ public class Map implements GUI {
             
 
         }else{
+            int edge = rand.nextInt(3);
             do{
-                int edge = rand.nextInt(3);
                 if(mainPath.getEdge(edge)){
                     mainPath = followEdge(mainPath, edge);
                     mainPath.setFilled(true);
                     break;
                 }
+                edge = (edge + 1) % 3;
             }while(true);
         }
         
+    }
+    private void addColumn(){
+        addColumn(false);
     }
 
     public boolean connected(Node n1, Node n2){
@@ -196,7 +207,7 @@ public class Map implements GUI {
         ArrayList<Node[]> vp = getViewPort(viewX);
         for(Node[] j : vp){
             for(Node n : j){
-                n.setPos(x + nodeWidth * (n.getMapColumn() - viewX) + nodePaddingX * (n.getMapColumn() - viewX), y + nodeHeight * n.getMapRow() + nodePaddingY * n.getMapRow());
+                n.setPos(x + nodeWidth * (n.getMapColumn() - viewX) + nodePaddingX * (n.getMapColumn() - viewX) + viewportOffsetX, y + nodeHeight * n.getMapRow() + nodePaddingY * n.getMapRow());
             }
         }
 
@@ -234,11 +245,6 @@ public class Map implements GUI {
                         }
                     }
                 }
-            }
-        }
-
-        for (Node[] j: vp) {
-            for (Node n : j) {
                 enumeration.addAll(n.enumerate());
             }
         }
@@ -249,7 +255,10 @@ public class Map implements GUI {
     }
 
     public ArrayList<Node[]> getViewPort(int j) {
-        ArrayList<Node[]> viewPort = new ArrayList<Node[]>();
+        if(viewX == viewPortViewX) return viewPort;
+        viewPortViewX = viewX;
+
+        viewPort = new ArrayList<Node[]>();
         if(j > 0) j--;
         for (int i = j; i < j+5 && i < columns.size(); i++) {
             viewPort.add(columns.get(i));
@@ -296,5 +305,51 @@ public class Map implements GUI {
         return "Map";
     }
 
+    public boolean isEdge(Node n){
+        Node[] lastColumn = viewPort.get(3);
+        if(viewX == 0) lastColumn = viewPort.get(2);
+        for(Node node : lastColumn){
+            if(node == n){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void stopGeneration(){
+        this.generate = false;
+        addColumn(true);
+        
+
+
+        mainPath.clearEdges();
+        mainPath.setFilled(true);
+        mainPath.debug();
+
+        // Node[] finalColumn = new Node[3];
+        // for(int i = 0; i < 3; i++){
+        //     finalColumn[i] = new Node(i, columns.size());
+        //     if(i != mainPath.getMapRow()) continue;
+        //     finalColumn[i].setFilled(true);
+        // }
+        // columns.add(finalColumn);
+        updateViewport();
+
+    }
+
     
+    public void update(){
+        if(panning){
+            if(viewportOffsetX > 0){
+                viewportOffsetX -= panSpeed;
+            }else if(viewportOffsetX < 0){
+                viewportOffsetX += panSpeed;
+            }
+            if(viewportOffsetX < panSpeed && viewportOffsetX > -panSpeed){
+                viewportOffsetX = 0;
+                panning = false;
+            }
+            updateViewport();
+        }
+    }
 }

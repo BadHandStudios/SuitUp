@@ -17,6 +17,15 @@ public class MapScene implements Scene {
 
     private Map map;
 
+    private boolean doubleBack = true;
+
+    private int maxMoves = 10;
+    private int movesRemaining = maxMoves;
+
+    private int cloudOffsetY = 0;
+    private boolean cloudOffsetYIncreasing = true;
+
+
     private GraphicsWrapper[] cloudElements = new GraphicsWrapper[2];
 
     private Random rand = new Random();
@@ -31,22 +40,24 @@ public class MapScene implements Scene {
         p.move(map.getNode(1, 0));
         wm.put(p);
         wm.put(map);
+
+        int cloudHeight = 1280;
         
-        PGraphics clouds = wm.newGraphic(500, 1080);
+        PGraphics clouds = wm.newGraphic(500, cloudHeight);
         clouds.beginDraw();
         clouds.noStroke();
         clouds.shapeMode(PConstants.CENTER);
         clouds.fill(255);
                 
-        PGraphics clouds2 = wm.newGraphic(500, 1080);
+        PGraphics clouds2 = wm.newGraphic(500, cloudHeight);
         clouds2.beginDraw();
         clouds2.noStroke();
         clouds2.shapeMode(PConstants.CENTER);
         clouds2.fill(255);
 
-        for(int i = 0; i < 35; i++) {
-            clouds.circle(0, rand.nextInt(1200) - 100, rand.nextInt(100) + 200);
-            clouds2.circle(500, rand.nextInt(1200) - 100, rand.nextInt(100) + 200);
+        for(int i = 0; i < 40; i++) {
+            clouds.circle(0, rand.nextInt(cloudHeight + 100) - 100, rand.nextInt(100) + 200);
+            clouds2.circle(500, rand.nextInt(cloudHeight + 100) - 100, rand.nextInt(100) + 200);
         }
 
         clouds.endDraw();
@@ -58,17 +69,29 @@ public class MapScene implements Scene {
         wm.put(cloudElements[0]);
         wm.put(cloudElements[1]);
         
-        AnimatedImage casino_sign = new AnimatedImage(1920/4, 200, 300, 150, am.getImage("casino_1.png"), am.getImage("casino_2.png"));
-        casino_sign.setSpeed(20);
-        casino_sign.setRotation(20);
-        wm.put(casino_sign);
-        
 
     }
 
     public void update() {
-        // TODO Auto-generated method stub
+
+        Node n = p.getCurrentNode();
+        if(map.isEdge(n) && n.connectingEdges() != 0) {
+            map.pan(false);
+        }
+
+        if(cloudOffsetYIncreasing) {
+            cloudOffsetY += 1;
+            if(cloudOffsetY > 100) cloudOffsetYIncreasing = false;
+        } else {
+            cloudOffsetY -= 1;
+            if(cloudOffsetY < -100) cloudOffsetYIncreasing = true;
+        }
+
+        cloudElements[0].setPos(cloudElements[0].getX(), wm.getHeight() / 2 + cloudOffsetY);
+        cloudElements[1].setPos(cloudElements[1].getX(), wm.getHeight() / 2 - cloudOffsetY);
         
+
+        map.update();
     }
 
     public void handle(Event e) {
@@ -85,7 +108,13 @@ public class MapScene implements Scene {
                 // Move character if possible
                 Node current = p.getCurrentNode();
                 if(map.connected(current, requested)) {
+                    movesRemaining--;
                     p.move(requested);
+
+                    System.out.println("Moves remaining: " + movesRemaining);
+                    if(movesRemaining == 0) {
+                        map.stopGeneration();
+                    }
                 }
                 break;
             default:

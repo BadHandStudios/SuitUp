@@ -1,16 +1,21 @@
 package com.badhand.suitup.ui.map;
 
 import com.badhand.suitup.ui.*;
+import com.badhand.suitup.assets.AssetManager;
 import com.badhand.suitup.events.Event;
 import com.badhand.suitup.events.EventManager;
 import com.badhand.suitup.events.Events;
 import com.badhand.suitup.game.entities.*;
+import com.badhand.suitup.game.ShuffleBag;
 
 import processing.core.*;
 import java.util.*;
 
 public class Node implements GUI {
+    private static AssetManager am = AssetManager.getInstance();
 
+
+    private static ShuffleBag<PImage> decoBag;
 
     private int x, y, i, j;
     private int width = 256;
@@ -19,9 +24,15 @@ public class Node implements GUI {
     private boolean filled = false;
     private boolean[] edges = new boolean[4];
 
-    private PGraphics texture;
+    private boolean debug = false;
+
+    private static PGraphics texture;
+    private static PGraphics debugTexture;
+
     private GUI shadow;
     private LinkedList<GUI> enumeration;
+    private GUI unfilledDecoration;
+    private boolean canDisplayUnfilledDecoration = false;
 
     private static Random rand = new Random();
 
@@ -33,6 +44,18 @@ public class Node implements GUI {
     private static EventManager em = EventManager.getInstance();
 
     public Node(int i, int j) {
+        if(decoBag == null){
+            decoBag = new ShuffleBag<PImage>();
+            decoBag.add(am.getImage("chippile.png"), 2);
+            decoBag.add(am.getImage("roulette.png"), 2);
+            decoBag.add(am.getImage("slotmachine.png"), 2);
+        }
+
+
+        this.canDisplayUnfilledDecoration = rand.nextInt(100) < 25;
+        if(canDisplayUnfilledDecoration) this.unfilledDecoration = new ImageElement(0, 0, 200, 200, decoBag.next());
+
+
         this.i = i;
         this.j = j;
 
@@ -43,18 +66,26 @@ public class Node implements GUI {
 
 
         // Initialize texture
-        texture = WindowManager.getInstance().newGraphic(width, height);
-        texture.beginDraw();
-        texture.stroke(255);
-        texture.fill(26, 35, 74);
-        texture.ellipse(texture.width/2, texture.height/2, texture.width - 2, texture.height - 2);
-        texture.endDraw();
+        if(texture == null){
+            texture = WindowManager.getInstance().newGraphic(width, height);
+            texture.beginDraw();
+            texture.stroke(255);
+            texture.fill(26, 35, 74);
+            texture.ellipse(texture.width/2, texture.height/2, texture.width - 2, texture.height - 2);
+            texture.endDraw();
+        }
+        
 
         enumeration = new LinkedList<GUI>();
         shadow = new SpotShadow(0, 0, width, height, 100, 10);
         shadow.setVisibility(false);
+
         enumeration.add(shadow);
-        enumeration.add(this);
+        if(this.canDisplayUnfilledDecoration){ 
+            enumeration.add(unfilledDecoration);
+
+        }
+
 
 
         offsetX = rand.nextInt(100) - 50;
@@ -78,6 +109,7 @@ public class Node implements GUI {
         this.x = x + offsetX;
         this.y = y + offsetY;
         shadow.setPos(this.x, this.y + (int)(height * 0.25));
+        if(this.canDisplayUnfilledDecoration) this.unfilledDecoration.setPos(x, y);
 
         if(!(entity == null)) {
             entity.setPos(this.x, this.y - 50);
@@ -94,6 +126,13 @@ public class Node implements GUI {
     public boolean getEdge(int i) {
         return edges[i];
     }
+    public void clearEdges(){
+        for (int i = 0; i < edges.length; i++) {
+            edges[i] = false;
+        }
+    }
+
+
     public void setEdge(int i, boolean value) {
         edges[i] = value;
     }
@@ -108,7 +147,7 @@ public class Node implements GUI {
     }
 
     public PGraphics getTexture() {
-        return texture;
+        return debug ? debugTexture : texture;
     }
 
 
@@ -127,7 +166,8 @@ public class Node implements GUI {
     }
 
     public boolean visible(){
-        return filled;
+        
+        return filled || canDisplayUnfilledDecoration;
     }
 
 
@@ -136,6 +176,14 @@ public class Node implements GUI {
         this.filled = visible;
         this.shadow.setVisibility(visible);
         if(this.entity != null) this.entity.setVisibility(visible);
+
+        if(this.filled = true){
+            if(this.canDisplayUnfilledDecoration) this.unfilledDecoration.setVisibility(false);
+            enumeration.add(this);
+        }else{
+            if(this.canDisplayUnfilledDecoration) this.unfilledDecoration.setVisibility(true);
+            enumeration.remove(this);
+        }
     }
 
     public String getName() {
@@ -165,6 +213,19 @@ public class Node implements GUI {
     public void removeEntity() {
         // enumeration.removeAll(entity.enumerate());
         entity = null;
+
+    }
+
+    public void debug(){
+            if(debugTexture == null){
+                debugTexture = WindowManager.getInstance().newGraphic(width, height);
+                debugTexture.beginDraw();
+                debugTexture.stroke(255);
+                debugTexture.fill(200, 10, 10);
+                debugTexture.ellipse(debugTexture.width/2, debugTexture.height/2, debugTexture.width - 2, debugTexture.height - 2);
+                debugTexture.endDraw();
+            }
+            debug = true;
 
     }
 
