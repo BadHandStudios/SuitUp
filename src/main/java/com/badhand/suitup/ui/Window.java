@@ -15,6 +15,9 @@ public class Window extends PApplet {
     private boolean ready = false;
 
     private LinkedList<GUI> guiBuffer = new LinkedList<GUI>();
+    
+    private Hashtable<GUI, Boolean> differedRegistry = new Hashtable<GUI, Boolean>();
+
 
     private PFont font;
 
@@ -57,48 +60,81 @@ public class Window extends PApplet {
 
     public void draw() {
         background(bg.toProcessingColor());
+        LinkedList<GUI> differ = new LinkedList<GUI>();
         for(GUI g : guiBuffer) {
+            
             for(GUI e : g.enumerate()){
-                if(e.visible()) {
-                    if(e instanceof TextElement){ 
-                        // Text requires special handling due to the how processing handles fonts
-                        push();
-                        TextElement te = (TextElement) e;
-                        textSize(te.getSize());
-                        fill(te.getColor().toProcessingColor());
-                        stroke(te.getColor().toProcessingColor());
-                        text(te.getText(), te.getX(), te.getY());
-                        pop();
-                        continue;
-                    }else if(e instanceof LineElement){
-                        // Lines are a processing primitive
-                        push();
-                        LineElement le = (LineElement) e;
-                        stroke(le.getColor().toProcessingColor());
-                        strokeWeight(le.getWidth());
-                        line(le.getX(), le.getY(), le.getX2(), le.getY2());
-                        pop();
-                        continue;
-                    }
-
-                    image(e.getTexture().get(), e.getX(), e.getY());
-                }
-
-                // Update the animations
                 if(e instanceof Animation){
                     Animation a = (Animation) e;
                     a.update();
                 }
+
+                if(differedRegistry.containsKey(e)) {
+                    differ.add(e);
+                    continue;
+                }
+
+                place(e);
             }
+        }
+        for(GUI g : differ){
+            place(g);
         }
 
         gm.update();
         
     }
 
+    private void place(GUI e) {
+        if(e.visible()) {
+            if(e instanceof TextElement){ 
+                // Text requires special handling due to the how processing handles fonts
+                push();
+                TextElement te = (TextElement) e;
+                textSize(te.getSize());
+                fill(te.getColor().toProcessingColor());
+                stroke(te.getColor().toProcessingColor());
+                text(te.getText(), te.getX(), te.getY());
+                pop();
+                return;
+            }else if(e instanceof LineElement){
+                // Lines are a processing primitive
+                push();
+                LineElement le = (LineElement) e;
+                stroke(le.getColor().toProcessingColor());
+                strokeWeight(le.getWidth());
+                line(le.getX(), le.getY(), le.getX2(), le.getY2());
+                pop();
+                return;
+            }
+            
+
+            
+            if(e instanceof Rotatable){
+                pushMatrix();
+                translate(e.getX(), e.getY());
+                rotate(radians(((Rotatable) e).getRotation()));
+                image(e.getTexture(), 0, 0);
+                popMatrix();
+            } else{
+                image(e.getTexture(), e.getX(), e.getY());
+            }
+        }
+
+    }
+
+    public void registerDiffered(GUI g) {
+        differedRegistry.put(g, Boolean.TRUE);
+    }
+
     public void mousePressed() {
         for(GUI g : guiBuffer) {
-            g.click(mouseX, mouseY);
+            for(GUI e : g.enumerate()){
+                if(e.visible()) {
+                    e.click(mouseX, mouseY);
+                }
+            }
+            
         }
     }
 
@@ -118,17 +154,17 @@ public class Window extends PApplet {
         guiBuffer.add(g);
     }
 
-    public void remove(String name){ // Deprecated as per switch to LinkedList
-        for(GUI g : guiBuffer) {
-            if(g.getName().equals(name)) {
-                guiBuffer.remove(g);
-                break;
-            }
-        }
-    }
+    // public void remove(String name){ // Deprecated as per switch to LinkedList
+    //     for(GUI g : guiBuffer) {
+    //         if(g.getName().equals(name)) {
+    //             guiBuffer.remove(g);
+    //             break;
+    //         }
+    //     }
+    // }
 
     public void remove(GUI g){
-        remove(g.getName());
+        guiBuffer.remove(g);
     }
 
     public void clear(){

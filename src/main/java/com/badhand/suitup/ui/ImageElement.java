@@ -4,6 +4,8 @@ import java.util.*;
 
 import processing.core.*;
 
+import com.badhand.suitup.assets.*;
+
 public class ImageElement implements GUI {
     private int x, y;
     private int width, height;
@@ -12,6 +14,8 @@ public class ImageElement implements GUI {
     private PGraphics texture;
 
     private LinkedList<GUI> enumeration;
+
+    private static AssetManager am = AssetManager.getInstance();
 
 
     public ImageElement(String name, int x, int y, int width, int height, PImage texture) {
@@ -30,6 +34,14 @@ public class ImageElement implements GUI {
         enumeration.add(this);
 
     }
+    public ImageElement(int x, int y, int width, int height, PImage texture) {
+        this("", x, y, width, height, texture);
+    }
+    public ImageElement(int x, int y, int width, int height, String fileName) {
+        this("", x, y, width, height, am.getImage(fileName));
+    }
+
+
 
     public int getWidth() {
         return width;
@@ -64,6 +76,14 @@ public class ImageElement implements GUI {
 
     public PGraphics getTexture() {
         return texture;
+    }
+    public void setTexture(PImage texture) {
+        this.texture.beginDraw();
+        this.texture.image(texture, 0, 0, width, height);
+        this.texture.endDraw();
+    }
+    public void setTexture(PGraphics p){
+        this.texture = p;
     }
 
     public boolean click(){

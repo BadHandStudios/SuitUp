@@ -49,12 +49,16 @@ public class WindowManager {
         return true;
     }
 
+    public void registerDiffered(GUI g) {
+        w.registerDiffered(g);
+    } 
+
     
-    public boolean remove(String name) { // Returns false if window is null
-        if(w == null) return false;
-        w.remove(name);
-        return true;
-    }
+    // public boolean remove(String name) { // Returns false if window is null
+    //     if(w == null) return false;
+    //     w.remove(name);
+    //     return true;
+    // }
 
     public boolean remove(GUI g) { // Returns false if window is null
         if(w == null) return false;

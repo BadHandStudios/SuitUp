@@ -1,6 +1,10 @@
 package com.badhand.suitup.ui.map;
 
 import com.badhand.suitup.ui.*;
+import com.badhand.suitup.events.Event;
+import com.badhand.suitup.events.EventManager;
+import com.badhand.suitup.events.Events;
+import com.badhand.suitup.game.entities.*;
 
 import processing.core.*;
 import java.util.*;
@@ -24,7 +28,9 @@ public class Node implements GUI {
     private int offsetX, offsetY;
     
 
-    // private Entity entity;
+    private Entity entity;
+
+    private static EventManager em = EventManager.getInstance();
 
     public Node(int i, int j) {
         this.i = i;
@@ -72,14 +78,17 @@ public class Node implements GUI {
         this.x = x + offsetX;
         this.y = y + offsetY;
         shadow.setPos(this.x, this.y + (int)(height * 0.25));
+
+        if(!(entity == null)) {
+            entity.setPos(this.x, this.y - 50);
+        }
     }
 
     public boolean isFilled() {
         return filled;
     }
     public void setFilled(boolean filled) {
-        this.filled = filled;
-        this.shadow.setVisibility(filled);
+       setVisibility(filled);
     }
 
     public boolean getEdge(int i) {
@@ -102,6 +111,9 @@ public class Node implements GUI {
         return texture;
     }
 
+
+
+
     public int getWidth() {
         return texture.width;
     }
@@ -118,9 +130,12 @@ public class Node implements GUI {
         return filled;
     }
 
+
+
     public void setVisibility(boolean visible){
         this.filled = visible;
         this.shadow.setVisibility(visible);
+        if(this.entity != null) this.entity.setVisibility(visible);
     }
 
     public String getName() {
@@ -128,11 +143,30 @@ public class Node implements GUI {
     }
 
     public boolean click(int x, int y) {
-        return x >= this.x  - (texture.width / 2) && x <= this.x + (texture.width / 2) && y >= this.y - (texture.height / 2) && y <= this.y + (texture.height / 2);
+        boolean clicked = x > this.x- width/2 && x < this.x+ width/2 && y > this.y - height/2 && y < this.y  + height/2;
+        if(clicked) em.push(new Event(Events.SCENE_EVENT, this));
+        return clicked;
     }
 
     
+    
+    public boolean setEntity(Entity e){
+        if(this.entity != null) return false;
+        this.entity = e;
+        entity.setPos(x, y - 50);
+        entity.setVisibility(filled);
+        return true;
+    }
 
+    public Entity getEntity() {
+        return entity;
+    }
+
+    public void removeEntity() {
+        // enumeration.removeAll(entity.enumerate());
+        entity = null;
+
+    }
 
 
 }

@@ -4,8 +4,6 @@ import com.badhand.suitup.ui.*;
 
 import java.util.*;
 
-import javax.naming.ldap.ManageReferralControl;
-
 import processing.core.*;
 
 
@@ -78,7 +76,7 @@ public class Map implements GUI {
 
     }
 
-    private Node getNode(int i, int j){
+    public Node getNode(int i, int j){
         return columns.get(j)[i];
     }
 
@@ -151,6 +149,16 @@ public class Map implements GUI {
             }while(true);
         }
         
+    }
+
+    public boolean connected(Node n1, Node n2){
+        for(int i = 0; i < 4; i++){
+            if((n1.getEdge(i) && followEdge(n1, i) == n2) || (n2.getEdge(i) && followEdge(n2, i) == n1)){
+                return true;
+            }
+
+        }
+        return false;
     }
 
     private Node followEdge(Node node, int edge){

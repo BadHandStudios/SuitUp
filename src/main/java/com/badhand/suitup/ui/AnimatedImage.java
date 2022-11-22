@@ -3,10 +3,11 @@ package com.badhand.suitup.ui;
 import java.util.*;
 import processing.core.*;
 
-public class AnimatedImage extends ImageElement implements Animation {
+public class AnimatedImage extends ImageElement implements Animation, Rotatable {
     private int speed = 60;
     private int frame = 0;
     private int animFrame = 0;
+    private int rotation;
 
     boolean paused = false;
 
@@ -39,7 +40,7 @@ public class AnimatedImage extends ImageElement implements Animation {
 
     }
 
-    @Override
+    
     public void update() {
         if(frame++ >= speed && !paused) {
             frame = 0;
@@ -48,29 +49,38 @@ public class AnimatedImage extends ImageElement implements Animation {
         }
         
     }
-    @Override
+    
     public void setSpeed(int speed) {
         this.speed = speed;
         
     }
-    @Override
+    
     public void pause() {
         paused = true;
     }
-    @Override
+    
     public void resume() {
         paused = false;
         
     }
-    @Override
+
     public void stop() {
         pause();
         frame = 0;
         
     }
 
+    public int getRotation(){
+        return rotation;
+    }
+
+    public void setRotation(int rotation){
+        this.rotation = rotation;
+    }
+    
+
     
 
 
     
-}
+}  

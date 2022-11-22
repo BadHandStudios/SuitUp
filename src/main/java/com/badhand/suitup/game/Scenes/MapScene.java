@@ -4,6 +4,8 @@ import com.badhand.suitup.events.Event;
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.ui.*;
 import com.badhand.suitup.ui.map.*;
+import com.badhand.suitup.game.entities.*;
+import com.badhand.suitup.assets.*;
 
 import processing.core.*;
 import java.util.Random;
@@ -11,19 +13,25 @@ import java.util.Random;
 public class MapScene implements Scene {
     private static WindowManager wm = WindowManager.getInstance();
 
+    private static AssetManager am = AssetManager.getInstance();
+
     private Map map;
 
     private GraphicsWrapper[] cloudElements = new GraphicsWrapper[2];
 
     private Random rand = new Random();
 
+    Player p = new Player();
+
     public void initialize() {
         wm.clear();
         wm.setBackground(new Color(127, 127, 127));
 
         map = new Map();
+        p.move(map.getNode(1, 0));
+        wm.put(p);
         wm.put(map);
-
+        
         PGraphics clouds = wm.newGraphic(500, 1080);
         clouds.beginDraw();
         clouds.noStroke();
@@ -49,6 +57,12 @@ public class MapScene implements Scene {
         
         wm.put(cloudElements[0]);
         wm.put(cloudElements[1]);
+        
+        AnimatedImage casino_sign = new AnimatedImage(1920/4, 200, 300, 150, am.getImage("casino_1.png"), am.getImage("casino_2.png"));
+        casino_sign.setSpeed(20);
+        casino_sign.setRotation(20);
+        wm.put(casino_sign);
+        
 
     }
 
@@ -65,6 +79,14 @@ public class MapScene implements Scene {
                 if(key == PConstants.LEFT) map.pan(false);
                 if(key == PConstants.RIGHT) map.pan(true);
 
+                break;
+            case SCENE_EVENT:
+                Node requested = (Node)(e.getData());
+                // Move character if possible
+                Node current = p.getCurrentNode();
+                if(map.connected(current, requested)) {
+                    p.move(requested);
+                }
                 break;
             default:
                 break;
