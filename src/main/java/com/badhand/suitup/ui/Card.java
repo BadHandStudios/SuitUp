@@ -3,6 +3,7 @@ package com.badhand.suitup.ui;
 import com.badhand.suitup.ui.*;
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.events.*;
+import com.badhand.suitup.assets.*;
 
 import processing.core.*;
 
@@ -12,6 +13,9 @@ public class Card implements GUI{
 
     private Suit suit;
     private int value;
+
+    private boolean faceUp = true;
+    private PGraphics cardBack;
 
     private int x,y; //position
     private int width = 250;
@@ -24,52 +28,42 @@ public class Card implements GUI{
     private PGraphics texture;
 
     private WindowManager wm = WindowManager.getInstance();
-    private EventManager em = EventManager.getInstance();
+    private AssetManager am = AssetManager.getInstance();
+
+
 
     private LinkedList<GUI> enumeration;
 
-    public Card(Suit suit, int value, int x, int y){
+    public Card(Suit suit, int value, int x, int y, int width, int height){
+        
+        cardBack = wm.newGraphic(width, height);
+        cardBack.beginDraw();
+        cardBack.image(am.getImage("CardBack1.png"), 0, 0, width, height);
+        cardBack.endDraw();
+
+        
+
+
+        String textureFile;
         this.suit = suit;
         this.value = value;
         this.x = x;
         this.y = y;
-        //this.image = image;
+
+
         this.name = String.valueOf(value) + " of " + suit.toString(); //Change this?
 
+        textureFile = this.toString() + ".png";
+        PImage image = am.getImage(textureFile);
         this.texture = wm.newGraphic(width, height);
-        texture.beginDraw();
-        texture.stroke(0);
-        texture.fill(255);
-        texture.rect(0,0, width -1, height -1, 5);
-        texture.fill(0);
-        texture.endDraw();
+        this.texture.beginDraw();
+        this.texture.image(image, 0, 0, width, height);
+        this.texture.endDraw();
+        
+        
 
         enumeration = new LinkedList<GUI>();
         enumeration.add(this);
-
-        //Card text:
-        String text = String.valueOf(value);
-        Color color = new Color(0,0,0);
-        //Suit text:
-        switch (suit){
-            case CLUBS:
-                text += " C";
-                break;
-            case DIAMONDS:
-                text += " D";
-                color = new Color(255,0,0);
-                break;
-            case HEARTS:
-                text += " H";
-                color = new Color(255,0,0);
-                break;
-            case SPADES:
-                text += " S";
-                break;
-        }
-        TextElement t = new TextElement(text, textSize, x, y);
-        t.setColor(color);
-        enumeration.add(t);
     }
 
     public int getWidth(){
@@ -102,7 +96,7 @@ public class Card implements GUI{
     }
 
     public PGraphics getTexture(){
-        return texture;
+        return faceUp ? texture : cardBack;
     }
 
     public String getName(){
@@ -111,11 +105,43 @@ public class Card implements GUI{
 
     public boolean click(int x, int y){
         if(!(x > this.x - (width/2) && x < this.x + width/2 && y > this.y - height/2 && y < this.y + height/2)) return false;
-        em.push(e);
+        flip();
         return true;
     }
 
     public List<GUI> enumerate(){
         return enumeration;
+    }
+
+    public int getValue(){
+        if(value == 1) return 11;
+        if(value > 10) return 10;
+        return value;
+    }
+
+    public String suitName(){
+        switch(suit){
+            case CLUBS:
+                return "Clubs";
+            case DIAMONDS:
+                return "Dmnds";
+            case HEARTS:
+                return "Hearts";
+            case SPADES:
+                return "Spades";
+        }
+        return "ERROR";
+    }
+
+    public void flip(){
+        faceUp = !faceUp;
+    }
+
+    public String toString(){
+        if(value == 1) return "Aof" + suitName();
+        if(value == 11) return "Jof" + suitName();
+        if(value == 12) return "Qof" + suitName();
+        if(value == 13) return "Kof" + suitName();
+        return String.valueOf(value) + "of" + suitName();
     }
 }
