@@ -5,5 +5,5 @@ public enum GameState {
     MENU_MAIN,
     MENU_SETTINGS,
     MENU_LEVEL_SELECT,
-    CARD_DEBUG_SCENE
+    DEBUG,
 }
