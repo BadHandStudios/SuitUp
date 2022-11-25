@@ -42,7 +42,7 @@ public class Splash implements Scene {
             fade.getTexture().background(255, 255, 255, opacity);
         }else if(opacity != 999){
             opacity = 999;
-            em.push(new Event(Events.SCENE_CHANGE, GameState.MENU_MAIN))
+            em.push(new Event(Events.SCENE_CHANGE, GameState.MENU_MAIN));
         }
     }
 
