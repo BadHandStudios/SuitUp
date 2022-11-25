@@ -105,7 +105,6 @@ public class Card implements GUI{
 
     public boolean click(int x, int y){
         if(!(x > this.x - (width/2) && x < this.x + width/2 && y > this.y - height/2 && y < this.y + height/2)) return false;
-        flip();
         return true;
     }
 
