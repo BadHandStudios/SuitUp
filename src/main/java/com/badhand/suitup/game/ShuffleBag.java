@@ -13,7 +13,6 @@ public class ShuffleBag<T> {
     public ShuffleBag(){
         bag = new ArrayList<T>();
     }
-
     public void add(T item){
         bag.add(item);
         reshuffle();

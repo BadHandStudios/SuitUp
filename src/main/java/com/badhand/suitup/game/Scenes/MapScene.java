@@ -36,7 +36,7 @@ public class MapScene implements Scene {
 
     public void initialize() {
         wm.clear();
-        wm.setBackground(new Color(127, 127, 127));
+        wm.setBackground(new Color(80, 80, 80));
 
         map = new Map();
         p.move(map.getNode(1, 0));

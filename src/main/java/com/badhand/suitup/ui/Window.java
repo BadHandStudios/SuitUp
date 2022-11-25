@@ -7,6 +7,7 @@ import processing.core.*;
 import com.badhand.suitup.*;
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.events.*;
+import com.badhand.suitup.assets.*;
 
 public class Window extends PApplet {
 
@@ -25,6 +26,7 @@ public class Window extends PApplet {
 
     private GameManager gm = GameManager.getInstance();
     private static EventManager em = EventManager.getInstance();
+    private static AssetManager am = AssetManager.getInstance();
 
     public Window(int width, int height) {
         this.width = width;
@@ -46,7 +48,7 @@ public class Window extends PApplet {
     public void setup() {
         frameRate(60);
         try{
-            font = createFont(SuitUp.class.getResource("/fonts/ArchitunMedium.ttf").toURI().getPath(), 256);
+            font = createFont(am.getFont("ArchitunMedium.ttf"), 256);
         }catch(Exception e){
             System.out.println("Error loading font");
         }

@@ -123,8 +123,8 @@ public class Map implements GUI {
         columns.add(col);
 
         for(int i = 0; i < prevCol.length; i++){
-            if(!prevCol[i].isFilled()) continue;
             if(finalColumn) break;
+            if(!prevCol[i].isFilled()) continue;
             randomizeEdges(prevCol[i]);
             for(int edge = 0; edge < 4; edge++){
                 if(prevCol[i].getEdge(edge)){

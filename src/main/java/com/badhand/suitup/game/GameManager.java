@@ -4,7 +4,6 @@ import com.badhand.suitup.events.*;
 import com.badhand.suitup.game.Scenes.*;
 import com.badhand.suitup.ui.WindowManager;
 
-import processing.core.PConstants;
 
 public class GameManager {
 
