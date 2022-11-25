@@ -40,6 +40,7 @@ public class Node implements GUI {
     
 
     private Entity entity;
+    private Player player;
 
     private static EventManager em = EventManager.getInstance();
 
@@ -111,8 +112,8 @@ public class Node implements GUI {
         shadow.setPos(this.x, this.y + (int)(height * 0.25));
         if(this.canDisplayUnfilledDecoration) this.unfilledDecoration.setPos(x, y);
 
-        if(!(entity == null)) {
-            entity.setPos(this.x, this.y - 50);
+        if(!(entity == null) || !(player == null)) {
+            setEntityPositions();
         }
     }
 
@@ -199,9 +200,15 @@ public class Node implements GUI {
     
     
     public boolean setEntity(Entity e){
+        if(e instanceof Player){
+            this.player = (Player)e;
+            setEntityPositions();
+            e.setVisibility(filled);
+            return true;
+        }
         if(this.entity != null) return false;
         this.entity = e;
-        entity.setPos(x, y - 50);
+        setEntityPositions();
         entity.setVisibility(filled);
         return true;
     }
@@ -211,8 +218,23 @@ public class Node implements GUI {
     }
 
     public void removeEntity() {
-        // enumeration.removeAll(entity.enumerate());
         entity = null;
+
+    }
+    public void removePlayer() {
+        player = null;
+
+    }
+
+    private void setEntityPositions(){
+        if(player != null && entity != null){
+            player.setPos(x - 75, y - 50);
+            entity.setPos(x + 75, y - 50);
+        }else if(player != null){
+            player.setPos(x, y - 50);
+        }else if(entity != null){
+            entity.setPos(x, y - 50);
+        }
 
     }
 
