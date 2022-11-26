@@ -27,7 +27,7 @@ public class GameManager {
         return instance;
     }
 
-    public void update() {
+    public synchronized void update() {
         if(updateLock) return;
         updateLock = true;
 
@@ -56,7 +56,7 @@ public class GameManager {
 
     }
 
-    public void unlock(){
+    public synchronized void unlock(){
         updateLock = false;
     }
 

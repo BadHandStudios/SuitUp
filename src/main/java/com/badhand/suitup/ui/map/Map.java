@@ -39,6 +39,10 @@ public class Map implements GUI {
 
     private Node mainPath;
 
+    Runnable panMapLeft;
+
+    boolean finishedAdding = false;
+
 
     private Random rand = new Random();
 
@@ -79,13 +83,20 @@ public class Map implements GUI {
 
         updateViewport();
 
+
+        panMapLeft = new Runnable(){
+            public void run(){
+                internalPan(false);
+            }
+        };
+
     }
 
     public Node getNode(int i, int j){
         return columns.get(j)[i];
     }
 
-    public void pan(boolean direction){
+    private synchronized void internalPan(boolean direction){
         if(panning == true) return;
         panning = true;
         if(!direction){
@@ -112,7 +123,12 @@ public class Map implements GUI {
         }
         
     }
-    private void addColumn(boolean finalColumn){
+
+    public void pan(boolean direction){
+        new Thread(panMapLeft).start();
+    }
+
+    private synchronized void addColumn(boolean finalColumn){
 
         Node[] prevCol = columns.get(columns.size() - 1);
         Node[] col = new Node[3];
@@ -349,7 +365,7 @@ public class Map implements GUI {
     }
 
     
-    public void update(){
+    public synchronized void update(){
         if(panning){
             if(viewportOffsetX > 0){
                 viewportOffsetX -= panSpeed;

@@ -63,28 +63,31 @@ public class Window extends PApplet {
     public void draw() {
         background(bg.toProcessingColor());
         LinkedList<GUI> differ = new LinkedList<GUI>();
-        for(GUI g : guiBuffer) {
-            
-            for(GUI e : g.enumerate()){
-                if(e instanceof Animation){
-                    Animation a = (Animation) e;
-                    a.update();
-                }
 
-                if(differedRegistry.containsKey(e)) {
-                    differ.add(e);
-                    continue;
-                }
+        synchronized(Window.class){
+            for(GUI g : guiBuffer) {
+                
+                for(GUI e : g.enumerate()){
+                    if(e instanceof Animation){
+                        Animation a = (Animation) e;
+                        a.update();
+                    }
 
-                place(e);
+                    if(differedRegistry.containsKey(e)) {
+                        differ.add(e);
+                        continue;
+                    }
+
+                    place(e);
+                }
             }
         }
         for(GUI g : differ){
             place(g);
         }
 
-        gm.unlock(); // Replace this with a release of the game managers update lock, upon which SuitUp.java will call this method
-        
+        gm.unlock();
+
     }
 
     private void place(GUI e) {
@@ -152,8 +155,10 @@ public class Window extends PApplet {
         bg = c;
     }
     
-    public void put(GUI g) {
-        guiBuffer.add(g);
+    public synchronized void put(GUI g) {
+        // synchronized(guiBuffer){
+            guiBuffer.add(g);
+        // }
     }
 
     // public void remove(String name){ // Deprecated as per switch to LinkedList
@@ -165,11 +170,11 @@ public class Window extends PApplet {
     //     }
     // }
 
-    public void remove(GUI g){
+    public synchronized void remove(GUI g){
         guiBuffer.remove(g);
     }
 
-    public void clear(){
+    public synchronized void clear(){
         guiBuffer.clear();
     }
 
