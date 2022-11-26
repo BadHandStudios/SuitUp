@@ -96,7 +96,7 @@ public class Map implements GUI {
         return columns.get(j)[i];
     }
 
-    private synchronized void internalPan(boolean direction){
+    private void internalPan(boolean direction){
         if(panning == true) return;
         panning = true;
         if(!direction){
@@ -125,10 +125,12 @@ public class Map implements GUI {
     }
 
     public void pan(boolean direction){
+        if(panning) return;
         new Thread(panMapLeft).start();
+        return;
     }
 
-    private synchronized void addColumn(boolean finalColumn){
+    private void addColumn(boolean finalColumn){
 
         Node[] prevCol = columns.get(columns.size() - 1);
         Node[] col = new Node[3];
@@ -365,7 +367,7 @@ public class Map implements GUI {
     }
 
     
-    public synchronized void update(){
+    public void update(){
         if(panning){
             if(viewportOffsetX > 0){
                 viewportOffsetX -= panSpeed;

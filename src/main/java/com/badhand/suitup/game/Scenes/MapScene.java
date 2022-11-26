@@ -96,7 +96,6 @@ public class MapScene implements Scene {
         cloudElements[0].setPos(cloudElements[0].getX(), wm.getHeight() / 2 + cloudOffsetY);
         cloudElements[1].setPos(cloudElements[1].getX(), wm.getHeight() / 2 - cloudOffsetY);
         
-
         map.update();
     }
 
