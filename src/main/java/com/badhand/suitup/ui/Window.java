@@ -83,7 +83,7 @@ public class Window extends PApplet {
             place(g);
         }
 
-        gm.update(); // Replace this with a release of the game managers update lock, upon which SuitUp.java will call this method
+        gm.unlock(); // Replace this with a release of the game managers update lock, upon which SuitUp.java will call this method
         
     }
 

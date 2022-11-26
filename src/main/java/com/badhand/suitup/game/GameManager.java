@@ -19,6 +19,8 @@ public class GameManager {
 
     private GameManager(){};
 
+    private boolean updateLock = false;
+
     public static GameManager getInstance() {
         if(instance == null) instance = new GameManager();
         
@@ -26,6 +28,9 @@ public class GameManager {
     }
 
     public void update() {
+        if(updateLock) return;
+        updateLock = true;
+
         if(currentScene == null) changeScene(scene);
         currentScene.update();
 
@@ -49,6 +54,10 @@ public class GameManager {
         
 
 
+    }
+
+    public void unlock(){
+        updateLock = false;
     }
 
     public void changeScene(GameState state) {
