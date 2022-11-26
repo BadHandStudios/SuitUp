@@ -11,8 +11,8 @@ public class Map implements GUI {
 
     private ArrayList<Node[]> columns = new ArrayList<Node[]>();
 
-    private static final int INITIAL_SIZE = 8;
-    private static final int COLUMNS_PER_GEN = 3;
+    private static final int INITIAL_SIZE = 10;
+    private static final int COLUMNS_PER_GEN = 2;
 
 
     boolean generate = true;
@@ -330,7 +330,7 @@ public class Map implements GUI {
         return "Map";
     }
 
-    public boolean isEdge(Node n){
+    public synchronized boolean isEdge(Node n){
         Node[] lastColumn = viewPort.get(3);
         if(viewX == 0) lastColumn = viewPort.get(2);
         for(Node node : lastColumn){
