@@ -27,5 +27,9 @@ public class SuitUp {
         while(!wm.isReady());
         
         gm = GameManager.getInstance();
+
+        while(true){
+            gm.update();
+        }
     }
 }

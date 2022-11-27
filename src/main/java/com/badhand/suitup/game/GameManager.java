@@ -4,7 +4,6 @@ import com.badhand.suitup.events.*;
 import com.badhand.suitup.game.Scenes.*;
 import com.badhand.suitup.ui.WindowManager;
 
-import processing.core.PConstants;
 
 public class GameManager {
 
@@ -20,38 +19,45 @@ public class GameManager {
 
     private GameManager(){};
 
+    private boolean updateLock = false;
+
     public static GameManager getInstance() {
         if(instance == null) instance = new GameManager();
         
         return instance;
     }
 
-    public void update() {
+    public synchronized void update() {
+        if(updateLock) return;
+        updateLock = true;
+
         if(currentScene == null) changeScene(scene);
         currentScene.update();
 
-        Event e = em.pop();
-        if(e == null) return;
-
-        if(e.getType() == Events.KEY_PRESS && (int)(e.getData()) == PConstants.ENTER) {
-            changeScene(GameState.DEBUG);
-            return;
+        while(!em.isEmpty()) {
+            Event e = em.pop();
+            if(e == null) return;
+            
+            switch(e.getType()){
+                case SCENE_CHANGE:
+                    changeScene((GameState)(e.getData()));
+                    break;
+                case QUIT_GAME:
+                    wm.destroyWindow();
+                    System.exit(0);
+                    break;
+                default:
+                    currentScene.handle(e);
+                    break;
+            }
         }
         
-        switch(e.getType()){
-            case SCENE_CHANGE:
-                changeScene((GameState)(e.getData()));
-                break;
-            case QUIT_GAME:
-                wm.destroyWindow();
-                System.exit(0);
-                break;
-            default:
-                currentScene.handle(e);
-                break;
-        }
 
 
+    }
+
+    public synchronized void unlock(){
+        updateLock = false;
     }
 
     public void changeScene(GameState state) {
@@ -68,6 +74,9 @@ public class GameManager {
                 break;
             case DEBUG:
                 currentScene = new Debug();
+                break;
+            case MAP_SCENE:
+                currentScene = new MapScene();
                 break;
         }
         currentScene.initialize();
