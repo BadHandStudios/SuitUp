@@ -7,6 +7,8 @@ import java.util.*;
 
 import processing.core.*;
 
+import com.badhand.suitup.game.*;
+
 
 public class Player implements Entity {
     private int x, y;
@@ -17,6 +19,8 @@ public class Player implements Entity {
     ImageElement texture;
 
     Node currentNode;
+
+    Deck deck;
     
     private static WindowManager wm = WindowManager.getInstance();
 
@@ -31,6 +35,8 @@ public class Player implements Entity {
         enumeration.add(texture);
 
         wm.registerDiffered(texture);
+
+        this.deck = new Deck();
 
         
     }   

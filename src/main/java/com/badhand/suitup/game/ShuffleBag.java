@@ -31,7 +31,11 @@ public class ShuffleBag<T> {
         return item;
     }
 
-    private void reshuffle(){
+    public T peek(){
+        return bag.get(curr-1);
+    }
+
+    public void reshuffle(){
         curr = bag.size();
         Collections.shuffle(bag);
     }
