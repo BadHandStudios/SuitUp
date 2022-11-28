@@ -27,6 +27,7 @@ public class Splash implements Scene {
         f.endDraw();
 
         fade = new GraphicsWrapper(f, 1920/2, 1080/2);
+        wm.registerDiffered(fade);
 
         wm.put(logo);
         wm.put(fade);

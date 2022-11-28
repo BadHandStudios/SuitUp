@@ -20,7 +20,7 @@ public interface GUI {
 
     public boolean click(int mouseX, int mouseY); // Returns true if the GUI element was clicked
 
-    public String getName(); // Returns the name of the GUI element
+    // public String getName(); // Returns the name of the GUI element
 
     public List<GUI> enumerate(); // Returns an ordered list of all GUI elements contained within this GUI element
 }
