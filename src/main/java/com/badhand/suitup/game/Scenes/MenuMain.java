@@ -29,7 +29,6 @@ public class MenuMain implements Scene{
         wm.clear();
 
         wm.setBackground(new Color(50,50,50));
-        am.stopSound();
         am.playSound("catchit.mp3");
 
         for(int i = 0; i < chips.length; i++){
