@@ -214,7 +214,21 @@ public class SceneBattle implements Scene {
         bjai.setPlayerHand(player.getHand());
         bjai.updateTotals();
 
-        if (bjai.playerTotal <= 21 && !playerTurn) {
+        if (player.getHand().size() == 5 && bjai.playerTotal < 21) {
+            enemy.setHealth(enemy.getHealth() - 5);
+            bjai.setEnemyHealth(enemy.getHealth());
+            enemyHealthText.setText("Health: " + enemy.getHealth());
+            winner = new TextElement("Player Wins!",64, 200, height/2);
+            wm.put(winner);
+        }
+        else if (enemy.getHand().size() == 5 && bjai.enemyTotal < 21) {
+            player.setHealth(player.getHealth() - 5);
+            bjai.setPlayerHealth(player.getHealth());
+            playerHealthText.setText("Health: " + player.getHealth());
+            winner = new TextElement("Enemy Wins!",64, 200, height/2);
+            wm.put(winner);
+        }
+        else if (bjai.playerTotal <= 21 && !playerTurn) {
             if (bjai.enemyTotal > 21) {
                 enemy.setHealth(enemy.getHealth() - 5);
                 bjai.setEnemyHealth(enemy.getHealth());
