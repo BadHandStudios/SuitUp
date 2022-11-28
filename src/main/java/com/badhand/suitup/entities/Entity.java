@@ -3,28 +3,29 @@ package com.badhand.suitup.entities;
 import java.util.*;
 
 import com.badhand.suitup.ui.*;
+import com.badhand.suitup.game.*;
 
 abstract class Entity {
 
     WindowManager wm = WindowManager.getInstance();
 
-    private ArrayList<Integer> deck;
-    private ArrayList<Integer> hand;
-    private ImageElement texture;
-    private int x;
-    private int y;
-    private int health;
+    public Deck deck;
+    public ArrayList<Card> hand;
+    public ImageElement texture;
+    public int x;
+    public int y;
+    public int health;
 
-    public void setDeck(ArrayList<Integer> deck) {
+    public void setDeck(Deck deck) {
         this.deck = deck;
     }
-    public ArrayList<Integer> getDeck() {
+    public Deck getDeck() {
         return this.deck;
     }
-    public void setHand(ArrayList<Integer> hand) {
+    public void setHand(ArrayList<Card> hand) {
         this.hand = hand;
     }
-    public ArrayList<Integer> getHand() {
+    public ArrayList<Card> getHand() {
         return this.hand;
     }
     public void setTexture(ImageElement texture) {
@@ -49,12 +50,10 @@ abstract class Entity {
         return this.health;
     }
     public void drawCard() {
-        Integer card = deck.get(0);
-        deck.remove(0);
-        if (deck.size() <= 0) {
-            // turn deck back into template deck
-            // shuffle
+        if (deck.cardsLeft() == 0) {
+            deck.shuffle();
         }
+        Card card = deck.draw();
         hand.add(card);
     }
 }

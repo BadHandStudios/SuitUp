@@ -1,51 +1,52 @@
 package com.badhand.suitup.entities;
 
 import java.util.*;
+import com.badhand.suitup.ui.*;
 
 abstract class AI {
 
-    public ArrayList<Integer> enemyHand;
-    public ArrayList<Integer> playerHand;
+    public ArrayList<Card> enemyHand;
+    public ArrayList<Card> playerHand;
     public int enemyHealth;
     public int playerHealth;
+    public int enemyTotal;
+    public int playerTotal;
     
-    public void setEnemyHand(ArrayList<Integer> enemyHand) {
+    public void setEnemyHand(ArrayList<Card> enemyHand) {
         this.enemyHand = enemyHand;
     }
-    public void setPlayerHand(ArrayList<Integer> playerHand) {
+    public void setPlayerHand(ArrayList<Card> playerHand) {
         this.playerHand = playerHand;
     }
     public void setEnemyHealth(int health) {
         this.enemyHealth = health;
     }
+    public int getEnemyHealth() {
+        return enemyHealth;
+    }
     public void setPlayerHealth(int health) {
         this.playerHealth = health;
+    }
+    public int getPlayerHealth() {
+        return playerHealth;
     }
     public int getEnemyTotal() {
         int total = 0;
         for (int i = 0; i < enemyHand.size(); i++) {
-            total += enemyHand.get(i);
+            total += enemyHand.get(i).getValue();
         }
-        return total;
+        enemyTotal = total;
+        return enemyTotal;
     }
     public int getPlayerTotal() {
         int total = 0;
         for (int i = 0; i < playerHand.size(); i++) {
-            total += playerHand.get(i);
+            total += playerHand.get(i).getValue();
         }
-        return total;
+        playerTotal = total;
+        return playerTotal;
     }
-    public int random(int a, int b) {
-        int max = 0;
-        int min = 0;
-        if (a >= b) {
-            max = a;
-            min = b;
-        }
-        else {
-            max = b;
-            min = a;
-        }
+    public int random(int min, int max) {
         return (int)Math.floor(Math.random() * (max - min + 1) + min);
     }
 }

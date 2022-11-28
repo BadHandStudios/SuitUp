@@ -4,6 +4,13 @@ import java.util.*;
 import com.badhand.suitup.ui.*;
 
 public class Player extends Entity {
+
+    private static Player instance = null;
+    private Player() {};
+    public static Player getInstance() {
+        if(instance == null) instance = new Player();
+        return instance;
+    }
     
     private int chips;
     private String[] items = {"","","","",""};
@@ -39,6 +46,7 @@ public class Player extends Entity {
             }
         }
     }
+
     public void clearItems() {
         items = new String[]{"","","","",""};
     }

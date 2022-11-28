@@ -68,6 +68,7 @@ public class GameManager {
                 break;
             case SCENE_BATTLE:
                 currentScene = new SceneBattle();
+                break;
             case DEBUG:
                 currentScene = new Debug();
                 break;

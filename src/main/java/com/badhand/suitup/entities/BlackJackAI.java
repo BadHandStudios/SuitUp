@@ -2,13 +2,25 @@ package com.badhand.suitup.entities;
 
 import java.util.*;
 
-abstract class BlackJackAI extends AI{
+public class BlackJackAI extends AI{
     
-    public int enemyTotal;
-    public int playerTotal;
+    public boolean hit() {
+        boolean result = false;
+        getEnemyTotal();
+        if (enemyTotal < 17) {
+            result = true;
+        }
+        return result;
+    }
     
     public boolean compareHands() {
-        // return true if enemyTotal is higher than playerTotal
-        return (getEnemyTotal() > getPlayerTotal());
+        getEnemyTotal();
+        getPlayerTotal();
+        return (enemyTotal > playerTotal);
+    }
+
+    public void updateTotals() {
+        getEnemyTotal();
+        getPlayerTotal();
     }
 }
