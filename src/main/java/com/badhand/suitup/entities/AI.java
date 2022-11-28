@@ -35,6 +35,13 @@ abstract class AI {
         for (int i = 0; i < enemyHand.size(); i++) {
             total += enemyHand.get(i).getValue();
         }
+        if (total > 21) {
+            for (int i = 0; i < enemyHand.size(); i++) {
+                if (enemyHand.get(i).getValue() == 11 && total > 21) {
+                    total -= 10;
+                }
+            }
+        }
         enemyTotal = total;
         return enemyTotal;
     }
@@ -42,6 +49,13 @@ abstract class AI {
         int total = 0;
         for (int i = 0; i < playerHand.size(); i++) {
             total += playerHand.get(i).getValue();
+        }
+        if (total > 21) {
+            for (int i = 0; i < playerHand.size(); i++) {
+                if (playerHand.get(i).getValue() == 11 && total > 21) {
+                    total -= 10;
+                }
+            }
         }
         playerTotal = total;
         return playerTotal;

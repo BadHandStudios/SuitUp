@@ -19,6 +19,7 @@ public class Enemy extends Entity {
         setTexture(new ImageElement("Enemy", (1920 - 150), 200, 200,300, am.getImage("Enemy.png")));
         x = texture.getX();
         y = texture.getY();
+        deck = new Deck();
         hand = new ArrayList<Card>();
     }
 

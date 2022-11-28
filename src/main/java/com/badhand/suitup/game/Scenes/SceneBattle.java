@@ -38,7 +38,6 @@ public class SceneBattle implements Scene {
 
     boolean playerTurn = true;
     boolean roundStart = true;
-    boolean roundEnd = false;
     boolean battle = false;
 
     Enemy enemy;
@@ -53,9 +52,8 @@ public class SceneBattle implements Scene {
         player = Player.getInstance();
 
         bjai = enemy.getBJAI();
-        player.setHealth(health);
-        enemy.setDeck(temp1);
-        player.setDeck(temp2);
+        player.setHealth(25);
+        player.setDeck(new Deck());
         player.setHand(new ArrayList<Card>());
 
         player.setTexture(new ImageElement("Player", 150, height - 200, 200, 300, am.getImage("Player.png")));
@@ -71,8 +69,7 @@ public class SceneBattle implements Scene {
         enemy.drawCard();
 
         enemy.getHand().get(0).flip();
-        drawPlayerHand();
-        drawEnemyHand();
+        drawHands();
 
         wm.put(hit);
         wm.put(stay);
@@ -95,7 +92,7 @@ public class SceneBattle implements Scene {
                     break;
                 case "Hit":
                     player.drawCard();
-                    drawPlayerHand();
+                    drawHands();
                     gameLogic();
                     break;
                 case "reset":
@@ -112,10 +109,26 @@ public class SceneBattle implements Scene {
     }
 
     public void reset() {
+        playerTurn = true;
         playerPositions = new int[]{0,0,0,0,0};
         enemyPositions = new int[]{0,0,0,0,0};
-        health = player.getHealth();
-        initialize();
+
+        playerHealthText.setText("Health: " + player.getHealth());
+        enemyHealthText.setText("Health: " + enemy.getHealth());
+
+        player.setHand(new ArrayList<Card>());
+        enemy.setHand(new ArrayList<Card>());
+        
+        player.drawCard();
+        player.drawCard();
+        enemy.drawCard();
+        enemy.drawCard();
+
+        enemy.getHand().get(0).flip();
+        drawHands();
+
+        wm.put(hit);
+        wm.put(stay);
     }
 
     public int[] formatHand(int size) {
@@ -140,6 +153,11 @@ public class SceneBattle implements Scene {
        }
 
         return result;
+    }
+
+    public void drawHands() {
+        drawPlayerHand();
+        drawEnemyHand();
     }
 
     public void drawPlayerHand() {
@@ -180,7 +198,7 @@ public class SceneBattle implements Scene {
         bjai.setPlayerHand(player.getHand());
         if (bjai.hit()) {
             enemy.drawCard();
-            drawEnemyHand();
+            drawHands();
             if (bjai.getEnemyTotal() > 21) {
                 gameLogic();
             }
@@ -196,8 +214,6 @@ public class SceneBattle implements Scene {
         bjai.setPlayerHand(player.getHand());
         bjai.updateTotals();
 
-        System.out.println(bjai.playerTotal + " : " + bjai.enemyTotal);
-
         if (bjai.playerTotal <= 21 && !playerTurn) {
             if (bjai.enemyTotal > 21) {
                 enemy.setHealth(enemy.getHealth() - 5);
@@ -207,14 +223,14 @@ public class SceneBattle implements Scene {
                 wm.put(winner);
             }
             else {
-                if (bjai.compareHands()) {
+                if (bjai.getEnemyTotal() > bjai.getPlayerTotal()) {
                     player.setHealth(player.getHealth() - 5);
                     bjai.setPlayerHealth(player.getHealth());
                     playerHealthText.setText("Health: " + player.getHealth());
                     winner = new TextElement("Enemy Wins!",64, 200, height/2);
                     wm.put(winner);
                 }
-                else if (!bjai.compareHands()) {
+                else if (bjai.getEnemyTotal() < bjai.getPlayerTotal()) {
                     enemy.setHealth(enemy.getHealth() - 5);
                     bjai.setEnemyHealth(enemy.getHealth());
                     enemyHealthText.setText("Health: " + enemy.getHealth());
@@ -232,6 +248,7 @@ public class SceneBattle implements Scene {
             bjai.setPlayerHealth(player.getHealth());
             playerHealthText.setText("Health: " + player.getHealth());
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
+            wm.put(winner);
             wm.put(reset);
             wm.remove(hit);
             wm.remove(stay);

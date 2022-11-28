@@ -12,12 +12,6 @@ public class BlackJackAI extends AI{
         }
         return result;
     }
-    
-    public boolean compareHands() {
-        getEnemyTotal();
-        getPlayerTotal();
-        return (enemyTotal > playerTotal);
-    }
 
     public void updateTotals() {
         getEnemyTotal();
