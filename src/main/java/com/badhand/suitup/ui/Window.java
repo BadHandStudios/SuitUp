@@ -7,6 +7,7 @@ import processing.core.*;
 import com.badhand.suitup.*;
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.events.*;
+
 import com.badhand.suitup.assets.*;
 
 public class Window extends PApplet {

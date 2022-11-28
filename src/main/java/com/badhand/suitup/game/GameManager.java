@@ -4,6 +4,8 @@ import com.badhand.suitup.events.*;
 import com.badhand.suitup.game.Scenes.*;
 import com.badhand.suitup.ui.WindowManager;
 
+import processing.core.PConstants;
+
 
 public class GameManager {
 
@@ -33,7 +35,6 @@ public class GameManager {
 
         if(currentScene == null) changeScene(scene);
         currentScene.update();
-
         while(!em.isEmpty()) {
             Event e = em.pop();
             if(e == null) return;
