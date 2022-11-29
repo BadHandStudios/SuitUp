@@ -9,13 +9,13 @@ public class FilePlayer {
     private String MP3File;
     private AdvancedPlayer jlPlayer;
     private boolean loop = true;
+    private boolean playing = false;
 
     public FilePlayer(String MP3File) {
         this.MP3File = MP3File;
     }
 
     public void play() {
-        close();
         try {
             FileInputStream fileInputStream = new FileInputStream(MP3File);
             BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
@@ -39,7 +39,6 @@ public class FilePlayer {
     }
 
     public void playLoop() {
-        close();
         loop = true;
         new Thread  () {
             @Override
@@ -68,5 +67,13 @@ public class FilePlayer {
             jlPlayer.close();
             loop = false;
         } 
+    }
+
+    public boolean getPlaying() {
+        return playing;
+    }
+
+    public void setPlaying(boolean play) {
+        playing = play;
     }
 }

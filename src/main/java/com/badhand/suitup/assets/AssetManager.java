@@ -9,11 +9,13 @@ import java.io.*;
 import processing.core.*;
 
 public class AssetManager {
+    private final int CHANNELS = 4;
     private static AssetManager single_instance = null;
     private HashMap<String, File> assets = null;
     private HashMap<String, File> backupAssets = null;
     private WindowManager winManager = WindowManager.getInstance();
-    private FilePlayer channels[] = new FilePlayer[4];
+    private FilePlayer channels[] = new FilePlayer[CHANNELS];
+    private boolean playing[] = new boolean[CHANNELS];
 
     private AssetManager() {
         File dir;
@@ -34,6 +36,9 @@ public class AssetManager {
             System.out.println("Failed to grab backupAssets folder");
         }
         remapAssets();
+        for(int i = 0; i < playing.length; i++) {
+            playing[i] = false;
+        }
     }
 
     public void remapAssets() {
@@ -157,10 +162,15 @@ public class AssetManager {
             System.out.println("No channel by that value!");
             return;
         }
+        else if (playing[channel]) {
+            System.out.println("Channel already playing!");
+            return;
+        }
         else if(StringUtils.containsAny(fileName, ".mp3")) {
             try {
                 channels[channel] = new FilePlayer(hold.getPath());
                 channels[channel].play();
+                playing[channel] = true;
             } catch (Exception e) {
                 System.out.println("Failed to grab mp3 file");
             }
@@ -180,10 +190,15 @@ public class AssetManager {
             System.out.println("No channel by that value!");
             return;
         }
+        else if (playing[channel]) {
+            System.out.println("Channel already playing!");
+            return;
+        }
         else if(StringUtils.containsAny(fileName, ".mp3")) {
             try {
                 channels[channel] = new FilePlayer(hold.getPath());
                 channels[channel].playLoop();
+                playing[channel] = true;
             } catch (Exception e) {
                 System.out.println("Failed to grab mp3 file");
             }
@@ -194,7 +209,10 @@ public class AssetManager {
     }
 
     public void stopSound(int channel) {
-        channels[channel].close();
+        if(playing[channel]) {
+            channels[channel].close();
+            playing[channel] = false;
+        }
     }
     
 }
