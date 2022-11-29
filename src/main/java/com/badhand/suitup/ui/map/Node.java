@@ -225,6 +225,9 @@ public class Node implements GUI {
         player = null;
 
     }
+    public boolean isDebug(){
+        return debug;
+    }
 
     private void setEntityPositions(){
         if(player != null && entity != null){

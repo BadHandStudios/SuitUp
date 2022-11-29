@@ -1,6 +1,6 @@
 package com.badhand.suitup.game.Scenes;
 
-import com.badhand.suitup.events.Event;
+import com.badhand.suitup.events.*;
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.ui.*;
 import com.badhand.suitup.ui.map.*;
@@ -15,28 +15,46 @@ public class MapScene implements Scene {
 
     private static AssetManager am = AssetManager.getInstance();
 
-    private Map map;
+    private static EventManager em = EventManager.getInstance();
 
-    private boolean doubleBack = true;
+    private static Map map;
+
+    private static boolean doubleBack;
 
     private int maxMoves = 10;
-    private int movesRemaining = maxMoves;
+    private static int movesRemaining;
 
-    private int cloudOffsetY = 0;
-    private boolean cloudOffsetYIncreasing = true;
+    private static int cloudOffsetY;
+    private static boolean cloudOffsetYIncreasing;
 
-    private ProgressBar movesRemainingBar;
+    private static ProgressBar movesRemainingBar;
 
 
-    private GraphicsWrapper[] cloudElements = new GraphicsWrapper[2];
+    private static GraphicsWrapper[] cloudElements = new GraphicsWrapper[2];
 
     private Random rand = new Random();
 
-    Player p = Player.getInstance();
+    private static Player p = Player.getInstance();
 
     public void initialize() {
         wm.clear();
         wm.setBackground(new Color(80, 80, 80));
+
+        if(map != null){
+            wm.put(p);
+            wm.put(map);
+            wm.put(cloudElements[0]);
+            wm.put(cloudElements[1]);
+            wm.put(movesRemainingBar);
+            return;
+        }
+
+        movesRemaining = maxMoves;
+        cloudOffsetY = 0;
+        cloudOffsetYIncreasing = true;
+        doubleBack = true;
+
+        
 
         map = new Map();
         p.move(map.getNode(1, 0));
@@ -79,7 +97,6 @@ public class MapScene implements Scene {
     }
 
     public void update() {
-
         Node n = p.getCurrentNode();
         if(map.isEdge(n) && n.connectingEdges() != 0) {
             map.pan(false);
@@ -112,6 +129,18 @@ public class MapScene implements Scene {
                 Node requested = (Node)(e.getData());
                 // Move character if possible
                 Node current = p.getCurrentNode();
+                if(requested == current){
+                    if(current.getEntity() != null){
+                        // if(current.getEntity() instanceof SlotMachine){
+                        //     current.removeEntity();
+                        //     em.push(new Event(Events.SCENE_CHANGE, GameState.SLOT_SCENE));
+                        // }
+                        
+                    }
+                    if(current.isDebug()){
+                        em.push(new Event(Events.SCENE_CHANGE, GameState.SCENE_BATTLE));
+                    }
+                }
                 if(map.connected(current, requested)) {
                     movesRemaining--;
                     movesRemainingBar.setValue(movesRemaining);
