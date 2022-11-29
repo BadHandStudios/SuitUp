@@ -15,17 +15,19 @@ public class Card implements GUI{
     private int value;
 
     private boolean faceUp = true;
-    private PGraphics cardBack;
+    private static PGraphics cardBack;
 
     private int x,y; //position
-    private int width = 250;
-    private int height = 350;
+    private static int width = 200;
+    private static int height = 300;
     private int textSize = 50;
     private boolean visible = true;
     private Event e;
     private String name;
 
     private PGraphics texture;
+
+    private static Hashtable<String, PGraphics> cardFaces = new Hashtable<String, PGraphics>();
 
     private WindowManager wm = WindowManager.getInstance();
     private AssetManager am = AssetManager.getInstance();
@@ -34,12 +36,40 @@ public class Card implements GUI{
 
     private LinkedList<GUI> enumeration;
 
+
+    public static void preInitialize(){
+        new Thread(new Runnable(){
+            public void run(){
+                preInit();
+            }
+        }).start();
+    }
+
+    private static void preInit(){
+        for(String value : "2;3;4;5;6;7;8;9;10;A;J;Q;K".split(";")){
+            for(String suit : "Clubs;Dmnds;Spades;Hearts".split(";")){
+                String name = value + "of" + suit + ".png";
+                PGraphics texture = WindowManager.getInstance().newGraphic(width, height);
+                PImage image = AssetManager.getInstance().getImage(name);
+                texture.beginDraw();
+                texture.beginDraw();
+                texture.image(image, 0, 0, width, height);
+                texture.endDraw();
+                cardFaces.put(name, texture);
+            }
+        }
+    }
+
+
     public Card(Suit suit, int value, int x, int y, int width, int height){
         
-        cardBack = wm.newGraphic(width, height);
-        cardBack.beginDraw();
-        cardBack.image(am.getImage("CardBack1.png"), 0, 0, width, height);
-        cardBack.endDraw();
+        if(cardBack == null){
+            cardBack = wm.newGraphic(width, height);
+            cardBack.beginDraw();
+            cardBack.image(am.getImage("CardBack1.png"), 0, 0, width, height);
+            cardBack.endDraw();
+        }
+        
 
         String textureFile;
         this.suit = suit;
@@ -50,11 +80,19 @@ public class Card implements GUI{
         this.name = String.valueOf(value) + " of " + suit.toString(); //Change this?
 
         textureFile = this.toString() + ".png";
-        PImage image = am.getImage(textureFile);
-        this.texture = wm.newGraphic(width, height);
-        this.texture.beginDraw();
-        this.texture.image(image, 0, 0, width, height);
-        this.texture.endDraw();
+        PImage image;
+        if(cardFaces.containsKey(textureFile)){
+            texture = cardFaces.get(textureFile);
+        } else {
+            image = am.getImage(textureFile);
+            this.texture = wm.newGraphic(width, height);
+            this.texture.beginDraw();
+            this.texture.image(image, 0, 0, width, height);
+            this.texture.endDraw();
+
+            cardFaces.put(textureFile, texture);
+        }
+        
         
         
 
