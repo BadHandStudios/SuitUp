@@ -58,9 +58,13 @@ public class SceneBattle implements Scene {
 
         player.setTexture(new ImageElement("Player", 150, height - 200, 200, 300, am.getImage("Player.png")));
 
-        playerHealthText = new TextElement("Health: " + player.getHealth(),36,150,height/2 + 140);
+        ImageElement playerHeart = new ImageElement("playerHeart", 150, height/2 + 140, 100, 100, am.getImage("heart.png"));
+        wm.put(playerHeart);
+        ImageElement enemyHeart = new ImageElement("enemyHeart", width - 150, height/2 - 140, 100, 100, am.getImage("heart.png"));
+        wm.put(enemyHeart);
+        playerHealthText = new TextElement("" + player.getHealth(),36,150,height/2 + 140);
         wm.put(playerHealthText);
-        enemyHealthText = new TextElement("Health: " + enemy.getHealth(),36,width-150,height/2 - 140);
+        enemyHealthText = new TextElement("" + enemy.getHealth(),36,width-150,height/2 - 140);
         wm.put(enemyHealthText);
 
         player.drawCard();
@@ -84,10 +88,9 @@ public class SceneBattle implements Scene {
             switch ("" + e.getData()) {
                 case "Stay":
                     playerTurn = false;
-                    enemyTurn();
                     wm.remove(hit);
                     wm.remove(stay);
-                    gameLogic();
+                    enemyTurn();
                     wm.put(reset);
                     break;
                 case "Hit":
@@ -101,7 +104,6 @@ public class SceneBattle implements Scene {
                         em.push(end);
                     }
                     wm.remove(reset);
-                    wm.remove(winner);
                     reset();
                     break;
             }
@@ -109,12 +111,13 @@ public class SceneBattle implements Scene {
     }
 
     public void reset() {
+        wm.remove(winner);
         playerTurn = true;
         playerPositions = new int[]{0,0,0,0,0};
         enemyPositions = new int[]{0,0,0,0,0};
 
-        playerHealthText.setText("Health: " + player.getHealth());
-        enemyHealthText.setText("Health: " + enemy.getHealth());
+        playerHealthText.setText("" + player.getHealth());
+        enemyHealthText.setText("" + enemy.getHealth());
 
         player.setHand(new ArrayList<Card>());
         enemy.setHand(new ArrayList<Card>());
@@ -199,13 +202,16 @@ public class SceneBattle implements Scene {
         if (bjai.hit()) {
             enemy.drawCard();
             drawHands();
+            bjai.updateTotals();
             if (bjai.getEnemyTotal() > 21) {
                 gameLogic();
             }
-            enemyTurn();
+            else {
+                enemyTurn();
+            }
         }
         else {
-            enemy.getHand().get(0).flip();
+            gameLogic();
         }
     }
 
@@ -214,99 +220,70 @@ public class SceneBattle implements Scene {
         bjai.setPlayerHand(player.getHand());
         bjai.updateTotals();
 
-        if (player.getHand().size() == 5 && bjai.playerTotal < 21) {
+        if (player.getHand().size() == 5 && bjai.playerTotal <= 21) {
             enemy.setHealth(enemy.getHealth() - 5);
             bjai.setEnemyHealth(enemy.getHealth());
-            enemyHealthText.setText("Health: " + enemy.getHealth());
+            enemyHealthText.setText("" + enemy.getHealth());
             winner = new TextElement("Player Wins!",64, 200, height/2);
             wm.put(winner);
+            wm.remove(hit);
+            wm.remove(stay);
+            wm.put(reset);
+            enemy.getHand().get(0).flip();
         }
-        else if (enemy.getHand().size() == 5 && bjai.enemyTotal < 21) {
+        else if (enemy.getHand().size() == 5 && bjai.enemyTotal <= 21) {
             player.setHealth(player.getHealth() - 5);
             bjai.setPlayerHealth(player.getHealth());
-            playerHealthText.setText("Health: " + player.getHealth());
+            playerHealthText.setText("" + player.getHealth());
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
             wm.put(winner);
+            enemy.getHand().get(0).flip();
         }
         else if (bjai.playerTotal <= 21 && !playerTurn) {
             if (bjai.enemyTotal > 21) {
+                System.out.println("Enemy Busts");
                 enemy.setHealth(enemy.getHealth() - 5);
                 bjai.setEnemyHealth(enemy.getHealth());
-                enemyHealthText.setText("Health: " + enemy.getHealth());
+                enemyHealthText.setText("" + enemy.getHealth());
                 winner = new TextElement("Player Wins!",64, 200, height/2);
+                // This is causing the issue
                 wm.put(winner);
+                enemy.getHand().get(0).flip();
             }
             else {
-                if (bjai.getEnemyTotal() > bjai.getPlayerTotal()) {
+                if (bjai.getEnemyTotal() > bjai.getPlayerTotal() && bjai.getEnemyTotal() <= 21) {
                     player.setHealth(player.getHealth() - 5);
                     bjai.setPlayerHealth(player.getHealth());
-                    playerHealthText.setText("Health: " + player.getHealth());
+                    playerHealthText.setText("" + player.getHealth());
                     winner = new TextElement("Enemy Wins!",64, 200, height/2);
                     wm.put(winner);
+                    enemy.getHand().get(0).flip();
                 }
-                else if (bjai.getEnemyTotal() < bjai.getPlayerTotal()) {
+                else if (bjai.getEnemyTotal() < bjai.getPlayerTotal() && bjai.getPlayerTotal() <= 21) {
                     enemy.setHealth(enemy.getHealth() - 5);
                     bjai.setEnemyHealth(enemy.getHealth());
-                    enemyHealthText.setText("Health: " + enemy.getHealth());
+                    enemyHealthText.setText("" + enemy.getHealth());
                     winner = new TextElement("Player Wins!",64, 200, height/2);
                     wm.put(winner);
+                    enemy.getHand().get(0).flip();
                 }
                 else {
                     winner = new TextElement("Draw!",64, 200, height/2);
                     wm.put(winner);
+                    enemy.getHand().get(0).flip();
                 }
             }
         }
         else if (bjai.playerTotal > 21) {
             player.setHealth(player.getHealth() - 5);
             bjai.setPlayerHealth(player.getHealth());
-            playerHealthText.setText("Health: " + player.getHealth());
+            playerHealthText.setText("" + player.getHealth());
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
             wm.put(winner);
-            wm.put(reset);
             wm.remove(hit);
             wm.remove(stay);
+            wm.put(reset);
+            enemy.getHand().get(0).flip();
         }
-
-        /*playerTotal = handValue(playerHand);
-        enemyTotal = handValue(enemyHand);
-
-        if (playerHand.size() >= 5) {
-            playerTurn = false;
-            if (playerTotal <= 21) {
-                roundEnd = true;
-                winner = new TextElement("Player Wins!",64, 200, height/2);
-                //enemyHealth -= 5;
-            }
-        }
-        if (playerTotal > 21) {
-            playerTurn = false;
-            roundEnd = true;
-            winner = new TextElement("Enemy Wins!",64, 200, height/2);
-            //playerHealth -= 5;
-        }
-        if (!playerTurn && !roundEnd) {
-            enemyTurn();
-            if (battle) {
-                roundEnd = true;
-            }
-            else {
-                gameLogic();
-            }
-        }
-
-        if (battle) {
-            if (playerTotal > enemyTotal) {
-                winner = new TextElement("Player Wins!",64, 200, height/2);
-                //enemyHealth -= 5;
-            }
-            else {
-                winner = new TextElement("Enemy Wins!",64, 200, height/2);
-                //playerHealth -= 5;
-            }
-            battle = false;
-        }
-
-        update();*/
     }
 }
