@@ -15,6 +15,7 @@ public class FilePlayer {
     }
 
     public void play() {
+        close();
         try {
             FileInputStream fileInputStream = new FileInputStream(MP3File);
             BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
@@ -38,6 +39,7 @@ public class FilePlayer {
     }
 
     public void playLoop() {
+        close();
         loop = true;
         new Thread  () {
             @Override
