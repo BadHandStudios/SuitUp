@@ -377,7 +377,15 @@ public class Map implements GUI {
                 viewportOffsetX = 0;
                 panning = false;
             }
-            updateViewport();
+        }
+        updateViewport();
+    }
+
+    public void replaceEntities(){
+        for(Node[] c : columns){
+            for(Node n : c){
+                n.replaceEntities();
+            }
         }
     }
 }

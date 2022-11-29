@@ -15,57 +15,89 @@ public class SlotScene implements Scene {
     private static WindowManager wm = WindowManager.getInstance();
     private static AssetManager am = AssetManager.getInstance();
 
-    private ImageElement slotMachine;
-    private Glow glow;
-    private ImageElement heart;
-    private ImageElement chip;
+    private static ImageElement slotMachine;
+    private static Glow glow;
 
-    private PImage[] slotImages = new PImage[2];
+    private static PImage[] slotImages = new PImage[2];
     private ImageElement[] slotResults = new ImageElement[3];
-    private Glow[] slotGlow = new Glow[3];
+    private static Glow[] slotGlow = new Glow[3];
 
     private static Random rand = new Random();
     private int timerAmt = 100;
     private int timer = 100;
     private int slot = 0;
 
+    private static boolean preInitializing = false;
+
     private float blur = 0;
 
-    private TextButton collect;
+    private static TextButton collect;
 
 
 
+    public static void preInitialize(){
+        Thread t = new Thread(new Runnable(){
+            public void run(){
+               preInit();
+            }
+        });
 
+        t.start();
+    }  
 
-    public void initialize(){
+    private synchronized static void preInit(){
+        preInitializing = true;
+        slotImages[0] = am.getImage("heart.png");
+        slotImages[1] = am.getImage("chipBlueWhite.png");
+        for(int i = 0; i < slotGlow.length; i++){
+            slotGlow[i] = new Glow(-500, -500, 800, 800, 50, new Color(170, 180, 20));
+        }
+        glow = new Glow(wm.getWidth()/2, wm.getHeight()/2 + 100, 1000, 500, 50, new Color(255,255,255));
+        slotMachine = new ImageElement(wm.getWidth()/2, wm.getHeight()/3, 400, 600, "slotmachine_big.png");
+        collect = new TextButton("Collect", 64, wm.getWidth()/2, wm.getHeight() - 200, new Event(Events.SCENE_CHANGE, GameState.MAP_SCENE));
+        System.out.println("Preinit done");
+        preInitializing = false;
+    }
+
+    public synchronized void initialize(){
+        while(preInitializing){
+            try{
+                Thread.sleep(100);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
         wm.clear();
         wm.setBackground(new Color(0, 0, 0));
 
-        glow = new Glow(wm.getWidth()/2, wm.getHeight()/2 + 100, 1000, 500, 50, new Color(255,255,255));
+
+
+        if(slotImages[0] == null){
+            slotImages[0] = am.getImage("heart.png");
+            slotImages[1] = am.getImage("chipBlueWhite.png");
+            for(int i = 0; i < slotResults.length; i++){
+                slotGlow[i] = new Glow(-500, -500, 800, 800, 50, new Color(170, 180, 20));
+            }
+            glow = new Glow(wm.getWidth()/2, wm.getHeight()/2 + 100, 1000, 500, 50, new Color(255,255,255));
+            slotMachine = new ImageElement(wm.getWidth()/2, wm.getHeight()/3, 400, 600, "slotmachine_big.png");
+            collect = new TextButton("Collect", 64, wm.getWidth()/2, wm.getHeight() - 200, new Event(Events.SCENE_CHANGE, GameState.MAP_SCENE));
+        }
+
         wm.put(glow);
-
-        slotMachine =  new ImageElement(wm.getWidth()/2, wm.getHeight()/3, 400, 600, "slotmachine_big.png");
         wm.put(slotMachine);
-
-        slotImages[0] = am.getImage("heart.png");
-        slotImages[1] = am.getImage("chipBlueWhite.png");
 
         for(int i = 0; i < slotResults.length; i++){
             slotResults[i] = new ImageElement(-500, -500, 300, 300, slotImages[rand.nextInt(slotImages.length)]);
             slotResults[i].setPos(-500, -500);
-            slotGlow[i] = new Glow(-500, -500, 800, 800, 50, new Color(170, 180, 20));
             wm.put(slotGlow[i]);
             wm.put(slotResults[i]);
         }
 
-        collect = new TextButton("Collect", 64, wm.getWidth()/2, wm.getHeight() - 200, new Event(Events.SCENE_CHANGE, GameState.MAP_SCENE));
+        
         wm.put(collect);
         collect.setVisibility(false);
-        
-
-
-
-        
+   
     }
 
     public void update(){

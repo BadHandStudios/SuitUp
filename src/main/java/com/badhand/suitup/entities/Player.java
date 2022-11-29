@@ -117,7 +117,7 @@ public class Player extends Entity {
         return currentNode;
     }
     public void move(Node node) {
-        if(currentNode != null) currentNode.removeEntity();
+        if(currentNode != null) currentNode.removePlayer();
         currentNode = node;
         node.setEntity(this);
     }

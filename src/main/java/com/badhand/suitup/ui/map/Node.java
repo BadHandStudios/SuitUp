@@ -13,6 +13,7 @@ import java.util.*;
 
 public class Node implements GUI {
     private static AssetManager am = AssetManager.getInstance();
+    private static WindowManager wm = WindowManager.getInstance();
 
 
     private static ShuffleBag<PImage> decoBag;
@@ -183,12 +184,14 @@ public class Node implements GUI {
         this.shadow.setVisibility(visible);
         if(this.entity != null) this.entity.setVisibility(visible);
 
-        if(this.filled = true){
-            if(this.canDisplayUnfilledDecoration) this.unfilledDecoration.setVisibility(false);
-            enumeration.add(this);
-        }else{
-            if(this.canDisplayUnfilledDecoration) this.unfilledDecoration.setVisibility(true);
-            enumeration.remove(this);
+        synchronized(this){
+            if(this.filled = true){
+                if(this.canDisplayUnfilledDecoration) this.unfilledDecoration.setVisibility(false);
+                enumeration.add(this);
+            }else{
+                if(this.canDisplayUnfilledDecoration) this.unfilledDecoration.setVisibility(true);
+                enumeration.remove(this);
+            }
         }
     }
 
@@ -223,16 +226,24 @@ public class Node implements GUI {
     }
 
     public void removeEntity() {
+        this.entity.setVisibility(false);
         entity = null;
+        setEntityPositions();
 
     }
     public void removePlayer() {
         player = null;
+        setEntityPositions();
 
     }
     public boolean isDebug(){
         return debug;
     }
+
+    public boolean full(){
+        return entity != null && player != null;
+    }
+
 
     private void setEntityPositions(){
         if(player != null && entity != null){
@@ -256,8 +267,11 @@ public class Node implements GUI {
                 debugTexture.endDraw();
             }
             debug = true;
-
     }
 
+
+    public void replaceEntities(){
+        if(entity != null) wm.put(entity);
+    }
 
 }

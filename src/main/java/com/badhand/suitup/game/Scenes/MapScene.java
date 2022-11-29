@@ -20,12 +20,14 @@ public class MapScene implements Scene {
     private static Map map;
 
     private static boolean doubleBack;
+    private static boolean preInit = false;
 
     private int maxMoves = 10;
     private static int movesRemaining;
 
     private static int cloudOffsetY;
     private static boolean cloudOffsetYIncreasing;
+    private int moveDelay = 100;
 
     private static ProgressBar movesRemainingBar;
 
@@ -36,29 +38,23 @@ public class MapScene implements Scene {
 
     private static Player p = Player.getInstance();
 
+
+
     public void initialize() {
+
+        if(!preInit){
+            SlotScene.preInitialize();
+            preInit = true;
+        }
+
+
         wm.clear();
         wm.setBackground(new Color(80, 80, 80));
 
         if(map != null){
             wm.put(p);
             wm.put(map);
-            wm.put(cloudElements[0]);
-            wm.put(cloudElements[1]);
-            wm.put(movesRemainingBar);
-            return;
-        }
-
-        movesRemaining = maxMoves;
-        cloudOffsetY = 0;
-        cloudOffsetYIncreasing = true;
-        doubleBack = true;
-
-        
-
-        if(map != null){
-            wm.put(p);
-            wm.put(map);
+            map.replaceEntities();
             wm.put(cloudElements[0]);
             wm.put(cloudElements[1]);
             wm.put(movesRemainingBar);
@@ -113,6 +109,9 @@ public class MapScene implements Scene {
     }
 
     public void update() {
+        map.update();
+        if(moveDelay > 0) moveDelay--;
+
         Node n = p.getCurrentNode();
         if(map.isEdge(n) && n.connectingEdges() != 0) {
             map.pan(false);
@@ -129,7 +128,7 @@ public class MapScene implements Scene {
         cloudElements[0].setPos(cloudElements[0].getX(), wm.getHeight() / 2 + cloudOffsetY);
         cloudElements[1].setPos(cloudElements[1].getX(), wm.getHeight() / 2 - cloudOffsetY);
         
-        map.update();
+        
     }
 
     public void handle(Event e) {
@@ -144,8 +143,9 @@ public class MapScene implements Scene {
             case SCENE_EVENT:
                 Node requested = (Node)(e.getData());
                 // Move character if possible
+                if(moveDelay > 0) return;
                 Node current = p.getCurrentNode();
-                if(requested == current){
+                if(current == requested && current.full()){
                     if(current.getEntity() != null){
                         if(current.getEntity() instanceof SlotMachine){
                             current.removeEntity();
@@ -153,12 +153,13 @@ public class MapScene implements Scene {
                         }
                     }
                 }
+
                 if(map.connected(current, requested)) {
                     movesRemaining--;
+                    moveDelay = 10;
                     movesRemainingBar.setValue(movesRemaining);
                     if(movesRemaining < maxMoves * 0.25) movesRemainingBar.setColor(new Color(255, 100, 100));
                     p.move(requested);
-
                     if(movesRemaining == 0) {
                         map.stopGeneration();
                     }

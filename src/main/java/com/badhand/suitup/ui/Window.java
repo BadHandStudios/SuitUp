@@ -65,7 +65,7 @@ public class Window extends PApplet {
         background(bg.toProcessingColor());
         LinkedList<GUI> differ = new LinkedList<GUI>();
 
-        synchronized(Window.class){
+        synchronized(this){
             for(GUI g : guiBuffer) {
                 
                 for(GUI e : g.enumerate()){
@@ -140,7 +140,6 @@ public class Window extends PApplet {
                     e.click(mouseX, mouseY);
                 }
             }
-            
         }
     }
 

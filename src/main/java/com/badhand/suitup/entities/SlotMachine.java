@@ -18,14 +18,11 @@ public class SlotMachine extends Entity {
     int x,y;
 
     public SlotMachine() {
-        if(enumeration == null) {
-            enumeration = new LinkedList<GUI>();
-            texture = new ImageElement(0, 0, 100, 120, "slotmachine_big.png");
-            enumeration.add(texture);
-            wm.registerDiffered(texture);
-            wm.put(this);
-        }
-        
+        texture = new ImageElement(0, 0, 100, 120, "slotmachine_big.png");
+        enumeration = new LinkedList<GUI>();
+        enumeration.add(texture);
+        wm.registerDiffered(texture);
+        wm.put(this);
     }
 
     public int getWidth() {
@@ -55,7 +52,7 @@ public class SlotMachine extends Entity {
     }
 
     public boolean visible() {
-        return true;
+        return false;
     }
 
     public void setVisibility(boolean visible) {
