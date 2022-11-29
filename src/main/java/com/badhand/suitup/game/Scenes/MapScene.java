@@ -97,6 +97,8 @@ public class MapScene implements Scene {
 
         cloudElements[0] = new GraphicsWrapper(clouds, 250, wm.getHeight() / 2);
         cloudElements[1] = new GraphicsWrapper(clouds2, 1920 - 250, wm.getHeight() / 2);
+        wm.registerDiffered(cloudElements[0], 1);
+        wm.registerDiffered(cloudElements[1], 1);
         
         wm.put(cloudElements[0]);
         wm.put(cloudElements[1]);
