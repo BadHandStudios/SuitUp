@@ -37,15 +37,24 @@ public class MapScene implements Scene {
     private static Player p = Player.getInstance();
 
     public void initialize() {
-        if(map != null) return;
+        wm.clear();
+        wm.setBackground(new Color(80, 80, 80));
+
+        if(map != null){
+            wm.put(p);
+            wm.put(map);
+            wm.put(cloudElements[0]);
+            wm.put(cloudElements[1]);
+            wm.put(movesRemainingBar);
+            return;
+        }
 
         movesRemaining = maxMoves;
         cloudOffsetY = 0;
         cloudOffsetYIncreasing = true;
         doubleBack = true;
 
-        wm.clear();
-        wm.setBackground(new Color(80, 80, 80));
+        
 
         if(map != null){
             wm.put(p);
@@ -139,6 +148,7 @@ public class MapScene implements Scene {
                 if(requested == current){
                     if(current.getEntity() != null){
                         if(current.getEntity() instanceof SlotMachine){
+                            current.removeEntity();
                             em.push(new Event(Events.SCENE_CHANGE, GameState.SLOT_SCENE));
                         }
                     }

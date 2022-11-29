@@ -23,6 +23,7 @@ public class MenuMain implements Scene{
     private double chipAcceleration = 0.5;
 
     private Random rand = new Random();
+    
 
     public MenuMain(){
         
