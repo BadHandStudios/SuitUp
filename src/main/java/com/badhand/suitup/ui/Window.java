@@ -18,7 +18,7 @@ public class Window extends PApplet {
 
     private LinkedList<GUI> guiBuffer = new LinkedList<GUI>();
     
-    private Hashtable<GUI, Boolean> differedRegistry = new Hashtable<GUI, Boolean>();
+    private ArrayList<HashSet<GUI>> differedRegistries = new ArrayList<HashSet<GUI>>();
 
 
     private PFont font;
@@ -74,9 +74,11 @@ public class Window extends PApplet {
                         a.update();
                     }
 
-                    if(differedRegistry.containsKey(e)) {
-                        differ.add(e);
-                        continue;
+
+                    for(HashSet<GUI> registry : differedRegistries){
+                        if(registry.contains(e)){
+                            differ.add(e);
+                        }
                     }
 
                     place(e);
@@ -130,7 +132,14 @@ public class Window extends PApplet {
     }
 
     public synchronized void registerDiffered(GUI g) {
-        differedRegistry.put(g, Boolean.TRUE);
+        registerDiffered(g, 0);
+    }
+
+    public synchronized void registerDiffered(GUI g, int index) {
+        while(differedRegistries.size() <= index){
+            differedRegistries.add(new HashSet<GUI>());
+        }
+        differedRegistries.get(index).add(g);
     }
 
     public void mousePressed() {
