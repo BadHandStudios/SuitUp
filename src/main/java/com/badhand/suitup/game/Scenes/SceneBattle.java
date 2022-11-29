@@ -18,9 +18,7 @@ public class SceneBattle implements Scene {
     int width = 1920;
     int height = 1080;
     int health = 25;
-
-    //ArrayList<Integer> playerHand = new ArrayList<Integer>();
-    //ArrayList<Integer> enemyHand = new ArrayList<Integer>();
+    
     int[] playerPositions = {0,0,0,0,0};
     int[] enemyPositions = {0,0,0,0,0};
     ArrayList<Card> playerHand = new ArrayList<Card>();
@@ -245,7 +243,6 @@ public class SceneBattle implements Scene {
                 bjai.setEnemyHealth(enemy.getHealth());
                 enemyHealthText.setText("" + enemy.getHealth());
                 winner = new TextElement("Player Wins!",64, 200, height/2);
-                // This is causing the issue
                 wm.put(winner);
                 enemy.getHand().get(0).flip();
             }
