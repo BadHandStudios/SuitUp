@@ -1,5 +1,7 @@
 package com.badhand.suitup.ui;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.BeforeClass;
 //import org.apache.commons.lang3.ObjectUtils.Null;
 import org.junit.jupiter.api.*;
@@ -14,7 +16,7 @@ import com.badhand.suitup.game.Suit;
 
 import junit.framework.TestCase;
 
-public class CardTest extends TestCase
+public class CardTest
 {  
     private static WindowManager wm;
     //private static AssetManager am;
@@ -53,9 +55,9 @@ public class CardTest extends TestCase
     }
 
     @BeforeAll
-    public static void Init()
+    public static void Setup()
     {
-        //System.out.print("BeforeAll start\n");
+        System.out.print("BeforeAll start\n");
 
         wm = WindowManager.getInstance();
 
@@ -70,5 +72,11 @@ public class CardTest extends TestCase
         _testCard = new Card(cardSuit, cardValue, 0, 0, 250, 250);
         
         // System.out.print("BeforeAll: "+ _testCard+"\n");
+    }
+
+    @AfterAll
+    public static void TearDown()
+    {
+        wm.destroyWindow();
     }
 }
