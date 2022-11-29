@@ -1,55 +1,55 @@
 package com.badhand.suitup.ui;
-
 import static org.junit.Assert.assertEquals;
-
-import org.junit.BeforeClass;
-//import org.apache.commons.lang3.ObjectUtils.Null;
 import org.junit.jupiter.api.*;
-
-// import org.junit.jupiter.api.DisplayName;
-// import org.junit.jupiter.api.Test;
-
-//import com.badhand.suitup.*;
-import com.badhand.suitup.assets.AssetManager;
-import com.badhand.suitup.game.GameManager;
 import com.badhand.suitup.game.Suit;
 
-import junit.framework.TestCase;
-
+@DisplayName("Card Tests")
 public class CardTest
 {  
     private static WindowManager wm;
     //private static AssetManager am;
     //private static GameManager gm;
 
-    public static int cardValue = 5;
-    public static Suit cardSuit = Suit.SPADES;
+    public static int cardValue = 11;
+    public static Suit cardSuit = Suit.CLUBS;
     private static Card _testCard;
 
+    @DisplayName("Get Value Test")
     @Test
     public void getValueTest() 
     {
-        String msg = "Expected card value vs. card's getValue() result";
+        String msg = "Expected card value vs. card's getValue().";
         int expected = cardValue;
+        if(expected == 1){
+            expected = 11;
+        }
+        else if(expected > 10){
+            expected = 10;
+        }
         int actual = _testCard.getValue();
         assertEquals(msg, expected, actual);
     }
 
+    @DisplayName("Suit Name Test")
     @Test
     public void suitNameTest()
     {
-        String msg = "Expected card suit vs. card's suitName() result";
+        String msg = "Expected card suit vs. card's suitName().";
         String expected = "ERROR";
         String actual = _testCard.suitName();
         switch(cardSuit){
             case CLUBS:
                 expected = "Clubs";
+                break;
             case DIAMONDS:
                 expected = "Dmnds";
+                break;
             case HEARTS:
                 expected = "Hearts";
+                break;
             case SPADES:
-                expected =  "Spades";
+                expected = "Spades";
+                break;
         }
         assertEquals(msg, expected, actual);
     }
@@ -57,21 +57,10 @@ public class CardTest
     @BeforeAll
     public static void Setup()
     {
-        System.out.print("BeforeAll start\n");
-
         wm = WindowManager.getInstance();
-
         wm.createWindow(250, 350);
-
-        //am = AssetManager.getInstance();
-
-        while(!wm.isReady()){}
-
-        //gm = GameManager.getInstance();
-
+        while(!wm.isReady()){};
         _testCard = new Card(cardSuit, cardValue, 0, 0, 250, 250);
-        
-        // System.out.print("BeforeAll: "+ _testCard+"\n");
     }
 
     @AfterAll
