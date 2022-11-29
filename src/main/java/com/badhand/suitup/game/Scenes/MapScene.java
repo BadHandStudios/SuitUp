@@ -4,7 +4,7 @@ import com.badhand.suitup.events.Event;
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.ui.*;
 import com.badhand.suitup.ui.map.*;
-import com.badhand.suitup.game.entities.*;
+import com.badhand.suitup.entities.*;
 import com.badhand.suitup.assets.*;
 
 import processing.core.*;
@@ -32,7 +32,7 @@ public class MapScene implements Scene {
 
     private Random rand = new Random();
 
-    Player p = new Player();
+    Player p = Player.getInstance();
 
     public void initialize() {
         wm.clear();
