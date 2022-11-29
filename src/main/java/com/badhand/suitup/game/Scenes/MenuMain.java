@@ -40,6 +40,7 @@ public class MenuMain implements Scene{
             am.getImage("chipBlueWhite.png"),
             am.getImage("chipRedWhite.png"),
         };
+        
         am.loopSound("catchit.mp3", 0);
 
 

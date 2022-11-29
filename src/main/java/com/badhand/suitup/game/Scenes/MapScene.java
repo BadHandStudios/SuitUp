@@ -35,6 +35,7 @@ public class MapScene implements Scene {
     Player p = new Player();
 
     public void initialize() {
+        am.stopSound(0);
         wm.clear();
         wm.setBackground(new Color(80, 80, 80));
 
