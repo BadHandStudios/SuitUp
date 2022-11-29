@@ -99,6 +99,10 @@ public class Card implements GUI{
         return name;
     }
 
+    public Suit getSuit(){
+        return suit;
+    }
+
     public boolean click(int x, int y){
         if(!(x > this.x - (width/2) && x < this.x + width/2 && y > this.y - height/2 && y < this.y + height/2)) return false;
         return true;
@@ -106,6 +110,10 @@ public class Card implements GUI{
 
     public List<GUI> enumerate(){
         return enumeration;
+    }
+    
+    public int getRawValue(){
+        return value;
     }
 
     public int getValue(){
