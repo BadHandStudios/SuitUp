@@ -65,10 +65,8 @@ public class MenuLevelSelect implements Scene {
         wm.put(prev);
 
         // Create a play button
-        TextButton play = new TextButton("Play", 64, 1920/2, 1080 - 200, new Event(Events.SCENE_CHANGE, GameState.MAP_SCENE));
+        TextButton play = new TextButton("Play", 64, 1920/2, 1080 - 200, new Event(Events.SCENE_CHANGE, GameState.SCENE_BATTLE));
         wm.put(play);
-
-
 
         
     }

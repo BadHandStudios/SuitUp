@@ -52,7 +52,6 @@ public class GameManager {
                     break;
             }
         }
-        
 
 
     }
@@ -72,6 +71,9 @@ public class GameManager {
                 break;
             case MENU_LEVEL_SELECT:
                 currentScene = new MenuLevelSelect();
+                break;
+            case SCENE_BATTLE:
+                currentScene = new SceneBattle();
                 break;
             case DEBUG:
                 currentScene = new Debug();
