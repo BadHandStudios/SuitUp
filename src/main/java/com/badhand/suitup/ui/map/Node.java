@@ -118,9 +118,8 @@ public class Node implements GUI {
         shadow.setPos(this.x, this.y + (int)(height * 0.25));
         if(this.canDisplayUnfilledDecoration) this.unfilledDecoration.setPos(x, y);
 
-        if(!(entity == null) || !(player == null)) {
-            setEntityPositions();
-        }
+        setEntityPositions();
+        
     }
 
     public boolean isFilled() {
