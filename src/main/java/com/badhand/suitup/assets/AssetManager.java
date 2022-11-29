@@ -169,8 +169,9 @@ public class AssetManager {
         else if(StringUtils.containsAny(fileName, ".mp3")) {
             try {
                 channels[channel] = new FilePlayer(hold.getPath());
-                channels[channel].play();
                 playing[channel] = true;
+                channels[channel].play();
+                playing[channel] = false;
             } catch (Exception e) {
                 System.out.println("Failed to grab mp3 file");
             }
