@@ -241,7 +241,6 @@ public class SceneBattle implements Scene {
         }
         else if (bjai.playerTotal <= 21 && !playerTurn) {
             if (bjai.enemyTotal > 21) {
-                System.out.println("Enemy Busts");
                 enemy.setHealth(enemy.getHealth() - 5);
                 bjai.setEnemyHealth(enemy.getHealth());
                 enemyHealthText.setText("" + enemy.getHealth());
