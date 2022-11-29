@@ -1,5 +1,6 @@
 package com.badhand.suitup.ui;
 
+import org.junit.BeforeClass;
 //import org.apache.commons.lang3.ObjectUtils.Null;
 import org.junit.jupiter.api.*;
 
@@ -16,25 +17,16 @@ import junit.framework.TestCase;
 public class CardTest extends TestCase
 {  
     private static WindowManager wm;
-    private static AssetManager am;
-    private static GameManager gm;
+    //private static AssetManager am;
+    //private static GameManager gm;
 
     public static int cardValue = 5;
     public static Suit cardSuit = Suit.SPADES;
-
     private static Card _testCard;
 
     @Test
     public void getValueTest() 
     {
-        System.out.print("getValueTest start\n");
-
-        // wm = WindowManager.getInstance();
-        // wm.createWindow(250, 350);
-        // am = AssetManager.getInstance();
-        // while(!wm.isReady()){}
-        // gm = GameManager.getInstance();
-        //_testCard = new Card(cardSuit, cardValue, 0, 0, 250, 350);
         String msg = "Expected card value vs. card's getValue() result";
         int expected = cardValue;
         int actual = _testCard.getValue();
@@ -63,19 +55,20 @@ public class CardTest extends TestCase
     @BeforeAll
     public static void Init()
     {
-        System.out.print("BeforeAll start\n");
+        //System.out.print("BeforeAll start\n");
 
         wm = WindowManager.getInstance();
+
         wm.createWindow(250, 350);
 
-        am = AssetManager.getInstance();
+        //am = AssetManager.getInstance();
 
         while(!wm.isReady()){}
 
-        gm = GameManager.getInstance();
+        //gm = GameManager.getInstance();
 
         _testCard = new Card(cardSuit, cardValue, 0, 0, 250, 250);
         
-        System.out.print("BeforeAll: "+ _testCard+"\n");
+        // System.out.print("BeforeAll: "+ _testCard+"\n");
     }
 }
