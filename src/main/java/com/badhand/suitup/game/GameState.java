@@ -8,4 +8,5 @@ public enum GameState {
     SCENE_BATTLE,
     DEBUG,
     MAP_SCENE,
+    SLOT_SCENE,
 }

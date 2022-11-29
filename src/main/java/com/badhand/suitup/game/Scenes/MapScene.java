@@ -37,6 +37,13 @@ public class MapScene implements Scene {
     private static Player p = Player.getInstance();
 
     public void initialize() {
+        if(map != null) return;
+
+        movesRemaining = maxMoves;
+        cloudOffsetY = 0;
+        cloudOffsetYIncreasing = true;
+        doubleBack = true;
+
         wm.clear();
         wm.setBackground(new Color(80, 80, 80));
 
