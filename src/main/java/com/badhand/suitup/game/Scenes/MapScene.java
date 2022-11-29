@@ -118,6 +118,7 @@ public class MapScene implements Scene {
                     movesRemainingBar.setValue(movesRemaining);
                     if(movesRemaining < maxMoves * 0.25) movesRemainingBar.setColor(new Color(255, 100, 100));
                     p.move(requested);
+                    map.update();
 
                     if(movesRemaining == 0) {
                         map.stopGeneration();
