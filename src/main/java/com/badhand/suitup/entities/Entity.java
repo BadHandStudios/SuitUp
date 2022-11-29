@@ -5,7 +5,7 @@ import java.util.*;
 import com.badhand.suitup.ui.*;
 import com.badhand.suitup.game.*;
 
-abstract class Entity {
+public abstract class Entity implements GUI {
 
     WindowManager wm = WindowManager.getInstance();
 
@@ -56,4 +56,5 @@ abstract class Entity {
         Card card = deck.draw();
         hand.add(card);
     }
+
 }

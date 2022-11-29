@@ -5,7 +5,7 @@ import com.badhand.suitup.assets.AssetManager;
 import com.badhand.suitup.events.Event;
 import com.badhand.suitup.events.EventManager;
 import com.badhand.suitup.events.Events;
-import com.badhand.suitup.game.entities.*;
+import com.badhand.suitup.entities.*;
 import com.badhand.suitup.game.ShuffleBag;
 
 import processing.core.*;
