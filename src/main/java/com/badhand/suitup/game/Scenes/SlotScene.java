@@ -31,7 +31,7 @@ public class SlotScene implements Scene {
 
     private float blur = 0;
 
-
+    private TextButton collect;
 
 
 
@@ -58,6 +58,9 @@ public class SlotScene implements Scene {
             wm.put(slotResults[i]);
         }
 
+        collect = new TextButton("Collect", 64, wm.getWidth()/2, wm.getHeight() - 200, new Event(Events.SCENE_CHANGE, GameState.MAP_SCENE));
+        wm.put(collect);
+        collect.setVisibility(false);
         
 
 
@@ -76,8 +79,9 @@ public class SlotScene implements Scene {
             slotGlow[slot].setPos(wm.getWidth()/2 - 600 + (600*slot), wm.getHeight()/2);
             slotResults[slot].setPos(wm.getWidth()/2 - 600 + (600*slot), wm.getHeight()/2);
             slot++;
-        }else{
-
+            if(slot == 3){
+                collect.setVisibility(true);
+            }
         }
 
 

@@ -91,6 +91,12 @@ public class Node implements GUI {
 
         offsetX = rand.nextInt(100) - 50;
         offsetY = rand.nextInt(100) - 50;
+
+        if(rand.nextInt(100) < 30){
+            Entity slotMachine = new SlotMachine();
+            this.setEntity(slotMachine);
+            setEntityPositions();   
+        }
     }   
 
     public int getMapRow() {

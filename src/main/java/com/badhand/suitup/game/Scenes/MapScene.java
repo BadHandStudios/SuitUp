@@ -138,14 +138,9 @@ public class MapScene implements Scene {
                 Node current = p.getCurrentNode();
                 if(requested == current){
                     if(current.getEntity() != null){
-                        // if(current.getEntity() instanceof SlotMachine){
-                        //     current.removeEntity();
-                        //     em.push(new Event(Events.SCENE_CHANGE, GameState.SLOT_SCENE));
-                        // }
-                        
-                    }
-                    if(current.isDebug()){
-                        em.push(new Event(Events.SCENE_CHANGE, GameState.SCENE_BATTLE));
+                        if(current.getEntity() instanceof SlotMachine){
+                            em.push(new Event(Events.SCENE_CHANGE, GameState.SLOT_SCENE));
+                        }
                     }
                 }
                 if(map.connected(current, requested)) {

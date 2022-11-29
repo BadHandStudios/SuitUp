@@ -22,6 +22,8 @@ public class TextButton implements GUI {
 
     private LinkedList<GUI> enumeration;
 
+    private TextElement buttonText;
+
     public TextButton(String text, int size, int x, int y, Event e) {
         this.text = text;
         this.size = size;
@@ -46,7 +48,7 @@ public class TextButton implements GUI {
         enumeration = new LinkedList<GUI>();
         enumeration.add(this);
 
-        TextElement buttonText = new TextElement(text, size, x, y);
+        buttonText = new TextElement(text, size, x, y);
         enumeration.add(buttonText);
 
 
@@ -74,6 +76,7 @@ public class TextButton implements GUI {
 
     public void setVisibility(boolean visible) {
         this.visible = visible;
+        this.buttonText.setVisibility(visible);
     }
     public boolean visible(){
         return visible;

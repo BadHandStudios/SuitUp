@@ -129,7 +129,7 @@ public class Window extends PApplet {
 
     }
 
-    public void registerDiffered(GUI g) {
+    public synchronized void registerDiffered(GUI g) {
         differedRegistry.put(g, Boolean.TRUE);
     }
 

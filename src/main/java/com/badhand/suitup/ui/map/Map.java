@@ -6,7 +6,6 @@ import java.util.*;
 
 import processing.core.*;
 
-
 public class Map implements GUI {
 
     private ArrayList<Node[]> columns = new ArrayList<Node[]>();
