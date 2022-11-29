@@ -20,13 +20,15 @@ public class Splash implements Scene {
 
     public void initialize() {
         logo = new ImageElement("logo", 1920/2, 1080/2, 400, 400, am.getImage("badhand.png"));
-        wm.setBackground(new Color(255,255,255));
+        // wm.setBackground(new Color(255,255,255));
+        wm.setBackground(new Color(0,0,0));
         PGraphics f = wm.newGraphic(1920, 1080);
         f.beginDraw();
         f.background(255, 255, 255, 0);
         f.endDraw();
 
         fade = new GraphicsWrapper(f, 1920/2, 1080/2);
+        wm.registerDiffered(fade);
 
         wm.put(logo);
         wm.put(fade);

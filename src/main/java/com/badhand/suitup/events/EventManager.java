@@ -23,4 +23,7 @@ public class EventManager {
     public void push(Event e) {
         eventQueue.push(e);
     }
+    public boolean isEmpty(){
+        return eventQueue.isEmpty();
+    }
 }

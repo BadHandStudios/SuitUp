@@ -41,15 +41,11 @@ public class Card implements GUI{
         cardBack.image(am.getImage("CardBack1.png"), 0, 0, width, height);
         cardBack.endDraw();
 
-        
-
-
         String textureFile;
         this.suit = suit;
         this.value = value;
         this.x = x;
         this.y = y;
-
 
         this.name = String.valueOf(value) + " of " + suit.toString(); //Change this?
 
