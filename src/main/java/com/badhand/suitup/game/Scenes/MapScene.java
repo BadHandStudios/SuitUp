@@ -48,6 +48,7 @@ public class MapScene implements Scene {
 
     public void initialize() {
         if(playMusic) {
+            am.stopSound(0);
             am.loopSound("swing.mp3", 0);
             playMusic = false;
         }
