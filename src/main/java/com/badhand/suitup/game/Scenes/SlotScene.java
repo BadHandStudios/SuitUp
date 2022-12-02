@@ -108,11 +108,13 @@ public class SlotScene implements Scene {
             }
         }else if(slot < slotResults.length){
             timer = timerAmt;
+            am.playSound("collect_" + (slot+1) +".mp3", slot + 1);
             slotGlow[slot].setPos(wm.getWidth()/2 - 600 + (600*slot), wm.getHeight()/2);
             slotResults[slot].setPos(wm.getWidth()/2 - 600 + (600*slot), wm.getHeight()/2);
             slot++;
             if(slot == 3){
                 collect.setVisibility(true);
+                
             }
         }
 
