@@ -4,6 +4,7 @@ import com.badhand.suitup.game.*;
 import com.badhand.suitup.ui.*;
 import com.badhand.suitup.events.*;
 import com.badhand.suitup.assets.*;
+import com.badhand.suitup.entities.*;
 
 import java.util.*;
 
@@ -12,13 +13,25 @@ import processing.core.*;
 
 
 public class SlotScene implements Scene {
+    private final int COIN_REWARD = 100;
+    private final int COIN_REWARD_SPREAD = 25;
+    private final int CARD_REWARD = 1;
+    private final int HEART_REWARD = 1;
+
+    private int coinReward = 0;
+    private int coinMultiplier = 1;
+
+
+    private int numCoins = 0;
+    private int numHearts = 0;
+
     private static WindowManager wm = WindowManager.getInstance();
     private static AssetManager am = AssetManager.getInstance();
 
     private static ImageElement slotMachine;
     private static Glow glow;
 
-    private static PImage[] slotImages = new PImage[2];
+    private static PImage[] slotImages = new PImage[3];
     private ImageElement[] slotResults = new ImageElement[3];
     private static Glow[] slotGlow = new Glow[3];
 
@@ -33,6 +46,8 @@ public class SlotScene implements Scene {
     private float blur = 0;
 
     private static TextButton collect;
+
+    private static Player p = Player.getInstance();
 
 
 
@@ -49,7 +64,8 @@ public class SlotScene implements Scene {
     private synchronized static void preInit(){
         preInitializing = true;
         slotImages[0] = am.getImage("heart.png");
-        slotImages[1] = am.getImage("chipBlueWhite.png");
+        slotImages[1] = am.getImage("chip_blue.png");
+
         for(int i = 0; i < slotGlow.length; i++){
             slotGlow[i] = new Glow(-500, -500, 800, 800, 50, new Color(170, 180, 20));
         }
@@ -89,16 +105,38 @@ public class SlotScene implements Scene {
             }
         }
 
+        String randomCardString = "2;3;4;5;6;7;8;9;10;J;Q;K;A".split(";")[rand.nextInt(13)] + "of" + "Clubs;Dmnds;Hearts;Spades".split(";")[rand.nextInt(4)];
+        Card randomCard = p.getDeck().getCard(randomCardString);
+        randomCard.gild();
+        PGraphics cardImage = wm.newGraphic(150, 300);
+        cardImage.beginDraw();
+        cardImage.image(randomCard.getTexture(), 0, 0, 150, 300);
+        cardImage.image(randomCard.getGildedTexture(), 0, 0, 150, 300);
+        slotImages[2] = cardImage.get();
+
+
+
+
 
         wm.put(glow);
         wm.put(slotMachine);
-
+        boolean alreadyDrawnGilded = false;
+        numCoins = 0;
+        numHearts = 0;
         for(int i = 0; i < slotResults.length; i++){
-            slotResults[i] = new ImageElement(-500, -500, 300, 300, slotImages[rand.nextInt(slotImages.length)]);
+            int value = alreadyDrawnGilded ? rand.nextInt(2) : rand.nextInt(3);
+            if(value == 2) alreadyDrawnGilded = true;
+            if(value == 1) numCoins++;
+            if(value == 0) numHearts++;
+            String name = value == 0 ? "heart" : value == 1 ? "chip" : "card";
+            slotResults[i] = new ImageElement(name, -500, -500, 300, 300, slotImages[value]);
             slotResults[i].setPos(-500, -500);
             wm.put(slotGlow[i]);
             wm.put(slotResults[i]);
         }
+
+
+
 
         
         wm.put(collect);
@@ -113,10 +151,25 @@ public class SlotScene implements Scene {
                 slotMachine.getTexture().filter(PConstants.BLUR, blur += 0.1f);
             }
         }else if(slot < slotResults.length){
+            TextElement rewardText = null;
+            if(slotResults[slot].getName().equals("chip")){
+                if(coinReward == 0) coinReward = COIN_REWARD + rand.nextInt(COIN_REWARD_SPREAD * 2) - COIN_REWARD_SPREAD;
+                int totalReward = coinReward * coinMultiplier;
+                rewardText = new TextElement("+" + totalReward, 64, slotResults[slot].getX(), slotResults[slot].getY());
+                wm.put(rewardText);
+                p.addChips(totalReward);
+                coinMultiplier++;
+            }else if(slotResults[slot].getName().equals("heart")){
+                p.addMaxHealth(1);
+                rewardText = new TextElement("+1 Max", 64, slotResults[slot].getX(), slotResults[slot].getY());
+                wm.put(rewardText);
+            }
+
             timer = timerAmt;
             am.playSound("collect_" + (slot+1) +".mp3", slot + 1);
             slotGlow[slot].setPos(wm.getWidth()/2 - 600 + (600*slot), wm.getHeight()/2);
             slotResults[slot].setPos(wm.getWidth()/2 - 600 + (600*slot), wm.getHeight()/2);
+            if(rewardText != null) rewardText.setPos(wm.getWidth()/2 - 600 + (600*slot), wm.getHeight()/2);
             slot++;
             if(slot == 3){
                 collect.setVisibility(true);

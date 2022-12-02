@@ -15,6 +15,7 @@ public abstract class Entity implements GUI {
     public int x;
     public int y;
     public int health;
+    public int maxHealth;
 
     public void setDeck(Deck deck) {
         this.deck = deck;
@@ -44,11 +45,26 @@ public abstract class Entity implements GUI {
         return this.y;
     }
     public void setHealth(int health) {
-        this.health = health;
+        this.health = Math.min(health, maxHealth);
+    }
+    public void addHealth(int amt){
+        this.setHealth(this.getHealth() + amt);
     }
     public int getHealth() {
         return this.health;
     }
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+        this.setHealth(maxHealth);
+    }
+    public void addMaxHealth(int amt){
+        this.setMaxHealth(this.getMaxHealth() + amt);
+        this.addHealth(amt);
+    }
+    public int getMaxHealth() {
+        return this.maxHealth;
+    }
+
     public void drawCard() {
         if (deck.cardsLeft() == 0) {
             deck.shuffle();

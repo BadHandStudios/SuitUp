@@ -33,6 +33,10 @@ public class Deck {
         cards.reshuffle();
     }
 
+    public Card getCard(String name){
+        return cards.search(name);
+    }
+
 }
 
 

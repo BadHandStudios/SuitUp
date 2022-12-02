@@ -40,6 +40,10 @@ public class MapScene implements Scene {
 
     private static Player p = Player.getInstance();
 
+    private static CaptionedImage playerHealth;
+    private static CaptionedImage playerCoins;
+
+
 
 
     public void initialize() {
@@ -64,15 +68,28 @@ public class MapScene implements Scene {
             wm.put(cloudElements[0]);
             wm.put(cloudElements[1]);
             wm.put(movesRemainingBar);
+
+            playerHealth.setCaption(""+ p.getHealth() + "/" + p.getMaxHealth());
+            playerCoins.setCaption("" + p.getChips());
+
+            wm.put(playerHealth);
+            wm.put(playerCoins);
             return;
         }
+
+
 
         movesRemaining = maxMoves;
         cloudOffsetY = 0;
         cloudOffsetYIncreasing = true;
         doubleBack = true;
 
-        
+        playerHealth = new CaptionedImage(am.getImage("heart.png"), ""+ p.getHealth() + "/" + p.getMaxHealth(), 200, 50, 64);
+        playerCoins = new CaptionedImage(am.getImage("chip_blue.png"), ""+ p.getChips(), 200, 125, 64);
+        wm.registerDiffered(playerHealth, 2);
+        wm.registerDiffered(playerCoins, 2);
+        wm.put(playerHealth);
+        wm.put(playerCoins);
 
         map = new Map();
         p.move(map.getNode(1, 0));

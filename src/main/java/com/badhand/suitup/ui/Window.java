@@ -77,7 +77,7 @@ public class Window extends PApplet {
 
 
                     for(HashSet<GUI> registry : differedRegistries){
-                        if(registry.contains(e)){
+                        if(registry.contains(e) || registry.contains(g)){
                             differ.add(e);
                         }
                     }
