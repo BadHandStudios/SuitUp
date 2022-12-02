@@ -41,7 +41,6 @@ public class Player extends Entity {
     }
     
     private int chips;
-    private String[] items = {"","","","",""};
 
     public void setChips(int amount) {
         this.chips = amount;

@@ -43,6 +43,8 @@ public class MapScene implements Scene {
     private static CaptionedImage playerHealth;
     private static CaptionedImage playerCoins;
 
+    private static TextElement movesRemainingText;
+
 
 
 
@@ -69,6 +71,7 @@ public class MapScene implements Scene {
             wm.put(cloudElements[0]);
             wm.put(cloudElements[1]);
             wm.put(movesRemainingBar);
+            wm.put(movesRemainingText);
 
             playerHealth.setCaption(""+ p.getHealth() + "/" + p.getMaxHealth());
             playerCoins.setCaption("" + p.getChips());
@@ -131,6 +134,9 @@ public class MapScene implements Scene {
         wm.registerDiffered(movesRemainingBar);
         wm.put(movesRemainingBar);
 
+        movesRemainingText = new TextElement("Moves until Boss Encounter", 32, wm.getWidth()/2, 150);
+        wm.registerDiffered(movesRemainingText);
+        wm.put(movesRemainingText);
     }
 
     public void update() {
