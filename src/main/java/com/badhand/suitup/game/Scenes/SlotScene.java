@@ -83,7 +83,12 @@ public class SlotScene implements Scene {
             glow = new Glow(wm.getWidth()/2, wm.getHeight()/2 + 100, 1000, 500, 50, new Color(255,255,255));
             slotMachine = new ImageElement(wm.getWidth()/2, wm.getHeight()/3, 400, 600, "slotmachine_big.png");
             collect = new TextButton("Collect", 64, wm.getWidth()/2, wm.getHeight() - 200, new Event(Events.SCENE_CHANGE, GameState.MAP_SCENE));
+        }else{
+            for(int i = 0; i < slotGlow.length; i++){
+                slotGlow[i].setPos(-500, -500);
+            }
         }
+
 
         wm.put(glow);
         wm.put(slotMachine);
