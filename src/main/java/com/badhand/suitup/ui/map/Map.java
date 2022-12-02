@@ -40,6 +40,7 @@ public class Map implements GUI {
     private Node mainPath;
 
     Runnable panMapLeft;
+    Runnable panMapRight;
 
     boolean finishedAdding = false;
 
@@ -89,6 +90,11 @@ public class Map implements GUI {
                 internalPan(false);
             }
         };
+        panMapRight = new Runnable(){
+            public void run(){
+                internalPan(true);
+            }
+        };
 
     }
 
@@ -126,7 +132,8 @@ public class Map implements GUI {
 
     public void pan(boolean direction){
         if(panning) return;
-        new Thread(panMapLeft).start();
+        if(direction == false) new Thread(panMapLeft).start();
+        else new Thread(panMapRight).start();
         return;
     }
 
@@ -353,6 +360,15 @@ public class Map implements GUI {
         Node[] lastColumn = viewPort.get(3);
         if(viewX == 0) lastColumn = viewPort.get(2);
         for(Node node : lastColumn){
+            if(node == n){
+                return true;
+            }
+        }
+        return false;
+    }
+    public synchronized boolean isFirst(Node n){
+        Node[] firstColumn = viewPort.get(1);
+        for(Node node : firstColumn){
             if(node == n){
                 return true;
             }

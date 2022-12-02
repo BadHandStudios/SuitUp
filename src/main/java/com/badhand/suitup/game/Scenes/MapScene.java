@@ -19,7 +19,7 @@ public class MapScene implements Scene {
 
     private static Map map;
 
-    private static boolean doubleBack;
+    private static boolean doubleBack = false;
     private static boolean preInit = false;
 
     private int maxMoves = 10;
@@ -82,7 +82,6 @@ public class MapScene implements Scene {
         movesRemaining = maxMoves;
         cloudOffsetY = 0;
         cloudOffsetYIncreasing = true;
-        doubleBack = true;
 
         playerHealth = new CaptionedImage(am.getImage("heart.png"), ""+ p.getHealth() + "/" + p.getMaxHealth(), 200, 50, 64);
         playerCoins = new CaptionedImage(am.getImage("chip_blue.png"), ""+ p.getChips(), 200, 125, 64);
@@ -140,6 +139,7 @@ public class MapScene implements Scene {
         Node n = p.getCurrentNode();
         if(map.isEdge(n) && n.connectingEdges() != 0) {
             map.pan(false);
+            doubleBack = true;
         }
 
         if(cloudOffsetYIncreasing) {
@@ -184,10 +184,15 @@ public class MapScene implements Scene {
                     moveDelay = 10;
                     movesRemainingBar.setValue(movesRemaining);
                     if(movesRemaining < maxMoves * 0.25) movesRemainingBar.setColor(new Color(255, 100, 100));
+                    if(map.isFirst(requested) && doubleBack) {
+                        doubleBack = false;
+                        map.pan(true);
+                    }
                     p.move(requested);
                     if(movesRemaining == 0) {
                         map.stopGeneration();
                     }
+                    
                 }
                 break;
             default:
