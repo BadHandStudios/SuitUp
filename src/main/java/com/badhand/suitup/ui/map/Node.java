@@ -93,11 +93,11 @@ public class Node implements GUI {
         offsetX = rand.nextInt(100) - 50;
         offsetY = rand.nextInt(100) - 50;
 
-        if(rand.nextInt(100) < 30){
-            Entity slotMachine = new SlotMachine();
-            this.setEntity(slotMachine);
-            setEntityPositions();   
-        }
+        // if(rand.nextInt(100) < 30){
+        //     Entity slotMachine = new SlotMachine();
+        //     this.setEntity(slotMachine);
+        //     setEntityPositions();   
+        // }
     }   
 
     public int getMapRow() {
@@ -187,10 +187,14 @@ public class Node implements GUI {
         synchronized(this){
             if(this.filled = true){
                 if(this.canDisplayUnfilledDecoration) this.unfilledDecoration.setVisibility(false);
-                enumeration.add(this);
+                synchronized(wm.getLock()){
+                    enumeration.add(this);
+                }
             }else{
                 if(this.canDisplayUnfilledDecoration) this.unfilledDecoration.setVisibility(true);
-                enumeration.remove(this);
+                synchronized(wm.getLock()){
+                    enumeration.remove(this);
+                }
             }
         }
     }

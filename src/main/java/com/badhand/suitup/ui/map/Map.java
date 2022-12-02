@@ -1,6 +1,7 @@
 package com.badhand.suitup.ui.map;
 
 import com.badhand.suitup.ui.*;
+import com.badhand.suitup.entities.*;
 
 import java.util.*;
 
@@ -133,6 +134,7 @@ public class Map implements GUI {
 
         Node[] prevCol = columns.get(columns.size() - 1);
         Node[] col = new Node[3];
+        int numFilled = 0;
 
         for (int r = 0; r < col.length; r++) {
             col[r] = new Node(r, columns.size());
@@ -146,9 +148,25 @@ public class Map implements GUI {
             for(int edge = 0; edge < 4; edge++){
                 if(prevCol[i].getEdge(edge)){
                    followEdge(prevCol[i], edge).setFilled(true);
+                   if(edge != 3) numFilled++;
                 }
             }
         }
+        if(numFilled > 1){
+
+            while(true){
+                Node n = col[rand.nextInt(col.length)];
+                if(!n.isFilled()) continue;
+                n.setEntity(new SlotMachine());
+                break;
+            }
+        }else{
+            Node n = col[rand.nextInt(col.length)];
+            if(n.isFilled()) n.setEntity(new SlotMachine());
+        }
+
+
+
 
         if(!generate) return;
         if(mainPath.connectingEdges() == 0){

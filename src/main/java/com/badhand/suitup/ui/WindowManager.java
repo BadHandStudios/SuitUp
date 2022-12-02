@@ -87,5 +87,9 @@ public class WindowManager {
     public int getHeight() {
         return height;
     }
+
+    public Object getLock(){
+        return w.getLock();
+    }
 }
     

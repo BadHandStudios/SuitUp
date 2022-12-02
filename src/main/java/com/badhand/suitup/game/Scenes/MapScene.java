@@ -27,7 +27,7 @@ public class MapScene implements Scene {
 
     private static int cloudOffsetY;
     private static boolean cloudOffsetYIncreasing;
-    private int moveDelay = 100;
+    private int moveDelay = 0;
     private static boolean playMusic = true;
 
 

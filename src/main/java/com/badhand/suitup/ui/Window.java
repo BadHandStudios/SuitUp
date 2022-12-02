@@ -20,7 +20,6 @@ public class Window extends PApplet {
     
     private ArrayList<HashSet<GUI>> differedRegistries = new ArrayList<HashSet<GUI>>();
 
-
     private PFont font;
 
     private Color bg = new Color(0, 0, 0);
@@ -28,6 +27,8 @@ public class Window extends PApplet {
     private GameManager gm = GameManager.getInstance();
     private static EventManager em = EventManager.getInstance();
     private static AssetManager am = AssetManager.getInstance();
+
+
 
     public Window(int width, int height) {
         this.width = width;
@@ -144,12 +145,16 @@ public class Window extends PApplet {
 
     public void mousePressed() {
         synchronized(this){
-            for(GUI g : guiBuffer) {
-                for(GUI e : g.enumerate()){
-                    if(e.visible()) {
-                        e.click(mouseX, mouseY);
+            try{
+                for(GUI g : guiBuffer) {
+                    for(GUI e : g.enumerate()){
+                        if(e.visible()) {
+                            e.click(mouseX, mouseY);
+                        }
                     }
                 }
+            }catch(Exception e){
+                
             }
         }
     }
@@ -199,4 +204,8 @@ public class Window extends PApplet {
         return g;
     }
 
+
+    public Object getLock(){
+        return this;
+    }
 }
