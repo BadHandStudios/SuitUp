@@ -28,6 +28,8 @@ public class MapScene implements Scene {
     private static int cloudOffsetY;
     private static boolean cloudOffsetYIncreasing;
     private int moveDelay = 100;
+    private static boolean playMusic = true;
+
 
     private static ProgressBar movesRemainingBar;
 
@@ -41,7 +43,11 @@ public class MapScene implements Scene {
 
 
     public void initialize() {
-
+        if(playMusic) {
+            am.loopSound("swing.mp3", 0);
+            playMusic = false;
+        }
+        
         if(!preInit){
             SlotScene.preInitialize();
             preInit = true;

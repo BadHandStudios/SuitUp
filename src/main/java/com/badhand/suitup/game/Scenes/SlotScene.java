@@ -27,6 +27,7 @@ public class SlotScene implements Scene {
     private int timer = 100;
     private int slot = 0;
 
+
     private static boolean preInitializing = false;
 
     private float blur = 0;
@@ -114,7 +115,8 @@ public class SlotScene implements Scene {
             slot++;
             if(slot == 3){
                 collect.setVisibility(true);
-                
+                am.playSound("fanfare.mp3", 1);
+
             }
         }
 

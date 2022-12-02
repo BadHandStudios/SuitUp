@@ -143,10 +143,12 @@ public class Window extends PApplet {
     }
 
     public void mousePressed() {
-        for(GUI g : guiBuffer) {
-            for(GUI e : g.enumerate()){
-                if(e.visible()) {
-                    e.click(mouseX, mouseY);
+        synchronized(this){
+            for(GUI g : guiBuffer) {
+                for(GUI e : g.enumerate()){
+                    if(e.visible()) {
+                        e.click(mouseX, mouseY);
+                    }
                 }
             }
         }
