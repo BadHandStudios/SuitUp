@@ -39,4 +39,13 @@ public class ShuffleBag<T> {
         curr = bag.size();
         Collections.shuffle(bag);
     }
+
+    public T search(String name){
+        for(T item : bag){
+            if(item.toString().equals(name)){
+                return item;
+            }
+        }
+        return null;
+    }
 }

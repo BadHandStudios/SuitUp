@@ -3,6 +3,7 @@ package com.badhand.suitup.entities;
 import java.util.*;
 import com.badhand.suitup.ui.*;
 import com.badhand.suitup.ui.map.*;
+import com.badhand.suitup.game.*;
 
 import processing.core.PGraphics;
 
@@ -24,11 +25,15 @@ public class Player extends Entity {
         this.enumeration = new LinkedList<GUI>();
         
         texture = new ImageElement(0, 0, 100, 100, "character.png");
+
+        this.setDeck(new Deck());
         
     
         enumeration.add(texture);
 
         wm.registerDiffered(texture);
+
+        this.setMaxHealth(12);
     };
     public static Player getInstance() {
         if(instance == null) instance = new Player();
@@ -53,26 +58,8 @@ public class Player extends Entity {
     public int getChips() {
         return this.chips;
     }
-    public void addItem(String item) {
-        for (int i = 0; i < 5; i++) {
-            if (items[i] == "") {
-                items[i] = item;
-            }
-        }
-    }
-    public void removeItem(int index) {
-        items[index] = "";
-        for (int i = 0; i < 5; i++) {
-            if (items[i] == "" && items[i+1] != null) {
-                items[i] = items[i+1];
-                items[i+1] = "";
-            }
-        }
-    }
 
-    public void clearItems() {
-        items = new String[]{"","","","",""};
-    }
+
 
 
 
@@ -117,7 +104,7 @@ public class Player extends Entity {
         return currentNode;
     }
     public void move(Node node) {
-        if(currentNode != null) currentNode.removeEntity();
+        if(currentNode != null) currentNode.removePlayer();
         currentNode = node;
         node.setEntity(this);
     }

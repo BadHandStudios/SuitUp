@@ -76,6 +76,7 @@ public class TextElement implements GUI {
         return text;
     }
     public void setText(String text) {
+        this.width = text.length() * 12;
         this.text = text;
     }
 

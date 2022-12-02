@@ -50,8 +50,12 @@ public class WindowManager {
     }
 
     public void registerDiffered(GUI g) {
-        w.registerDiffered(g);
+        registerDiffered(g, 0);
     } 
+
+    public void registerDiffered(GUI g, int index){
+        w.registerDiffered(g, index);
+    }
 
     
     // public boolean remove(String name) { // Returns false if window is null
@@ -82,6 +86,10 @@ public class WindowManager {
 
     public int getHeight() {
         return height;
+    }
+
+    public Object getLock(){
+        return w.getLock();
     }
 }
     

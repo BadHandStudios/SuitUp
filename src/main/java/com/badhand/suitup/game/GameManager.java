@@ -81,6 +81,9 @@ public class GameManager {
             case MAP_SCENE:
                 currentScene = new MapScene();
                 break;
+            case SLOT_SCENE:
+                currentScene = new SlotScene();
+                break;
         }
         currentScene.initialize();
     }

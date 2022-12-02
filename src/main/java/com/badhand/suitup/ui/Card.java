@@ -24,13 +24,21 @@ public class Card implements GUI{
     private boolean visible = true;
     private Event e;
     private String name;
+    private boolean gilded = false;
+    private Effect effect;
 
     private PGraphics texture;
 
+    private static  WindowManager wm = WindowManager.getInstance();
+    private static AssetManager am = AssetManager.getInstance();
+
+    private static PImage gildedTexture;
+
+    private ImageElement gildedElement;
+
+    private static Random rand = new Random();
     private static Hashtable<String, PGraphics> cardFaces = new Hashtable<String, PGraphics>();
 
-    private WindowManager wm = WindowManager.getInstance();
-    private AssetManager am = AssetManager.getInstance();
 
 
 
@@ -62,6 +70,8 @@ public class Card implements GUI{
 
 
     public Card(Suit suit, int value, int x, int y, int width, int height){
+
+        
         
         if(cardBack == null){
             cardBack = wm.newGraphic(width, height);
@@ -119,6 +129,10 @@ public class Card implements GUI{
     public void setPos(int x, int y){
         this.x = x;
         this.y = y;
+
+        if(this.gilded){
+            this.gildedElement.setPos(x, y);
+        }
     }
 
     public boolean visible(){
@@ -176,5 +190,34 @@ public class Card implements GUI{
         if(value == 12) return "Qof" + suitName();
         if(value == 13) return "Kof" + suitName();
         return String.valueOf(value) + "of" + suitName();
+    }
+
+    public void gild(){
+        if(!gilded){
+            gilded = true;
+            if(gildedTexture == null){
+                gildedTexture = am.getImage("gilded.png");
+            }
+            
+            gildedElement = new ImageElement(x, y, width, height, gildedTexture);
+            
+
+            this.effect = new Effect(Effects.values()[rand.nextInt(Effects.values().length)]);
+            this.enumeration.add(gildedElement);
+        }else{
+            this.effect.upgrade();
+        }
+    }
+
+    public boolean isGilded(){
+        return gilded;
+    }
+
+    public Effect getEffect(){
+        return effect;
+    }
+
+    public PImage getGildedTexture(){
+        return gildedTexture;
     }
 }
