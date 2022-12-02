@@ -19,6 +19,8 @@ public class Splash implements Scene {
 
 
     public void initialize() {
+        Card.preInitialize();
+
         logo = new ImageElement("logo", 1920/2, 1080/2, 400, 400, am.getImage("badhand.png"));
         // wm.setBackground(new Color(255,255,255));
         wm.setBackground(new Color(0,0,0));
