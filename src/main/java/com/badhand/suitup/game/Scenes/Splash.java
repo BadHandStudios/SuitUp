@@ -22,15 +22,14 @@ public class Splash implements Scene {
         Card.preInitialize();
 
         logo = new ImageElement("logo", 1920/2, 1080/2, 400, 400, am.getImage("badhand.png"));
-        // wm.setBackground(new Color(255,255,255));
-        wm.setBackground(new Color(0,0,0));
+        wm.setBackground(new Color(255,255,255));
         PGraphics f = wm.newGraphic(1920, 1080);
         f.beginDraw();
         f.background(255, 255, 255, 0);
         f.endDraw();
 
         fade = new GraphicsWrapper(f, 1920/2, 1080/2);
-        wm.registerDiffered(fade);
+        wm.registerDiffered(fade, 1);
 
         wm.put(logo);
         wm.put(fade);
@@ -43,7 +42,9 @@ public class Splash implements Scene {
     public void update() {
         if(opacity < 255) {
             opacity += 2;
+            fade.getTexture().beginDraw();
             fade.getTexture().background(255, 255, 255, opacity);
+            fade.getTexture().endDraw();
         }else if(opacity != 999){
             opacity = 999;
             em.push(new Event(Events.SCENE_CHANGE, GameState.MENU_MAIN));
