@@ -198,6 +198,7 @@ public class MapScene implements Scene {
                     p.move(requested);
                     if(movesRemaining == 0) {
                         map.stopGeneration();
+                        movesRemainingText.setText("Approaching Boss!");
                     }
                     
                 }
