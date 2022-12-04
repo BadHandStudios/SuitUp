@@ -29,7 +29,7 @@ public class ProgressBar implements GUI {
         this.texture.stroke(255);
         this.texture.strokeWeight(2);
         this.texture.fill(0);
-        this.texture.rect(2, 2, width, height);
+        this.texture.rect(2, 2, width, height, 5);
         this.texture.noStroke();
         this.texture.fill(this.color.toProcessingColor());
         this.texture.rect(2, 2, (value / maxValue) * width , height);

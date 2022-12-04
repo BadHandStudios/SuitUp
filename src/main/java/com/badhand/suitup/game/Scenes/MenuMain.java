@@ -23,6 +23,7 @@ public class MenuMain implements Scene{
     private double chipAcceleration = 0.5;
 
     private Random rand = new Random();
+    
 
     public MenuMain(){
         
@@ -31,6 +32,7 @@ public class MenuMain implements Scene{
     public void initialize() {
         wm.clear();
 
+        am.loopSound("catchit.mp3", 0);
         wm.setBackground(new Color(50,50,50));
 
         PImage[] chipImages = {

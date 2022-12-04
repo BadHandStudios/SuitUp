@@ -52,7 +52,6 @@ public class GameManager {
                     break;
             }
         }
-        
 
 
     }
@@ -73,11 +72,17 @@ public class GameManager {
             case MENU_LEVEL_SELECT:
                 currentScene = new MenuLevelSelect();
                 break;
+            case SCENE_BATTLE:
+                currentScene = new SceneBattle();
+                break;
             case DEBUG:
                 currentScene = new Debug();
                 break;
             case MAP_SCENE:
                 currentScene = new MapScene();
+                break;
+            case SLOT_SCENE:
+                currentScene = new SlotScene();
                 break;
         }
         currentScene.initialize();

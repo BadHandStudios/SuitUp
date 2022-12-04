@@ -5,6 +5,8 @@ public enum GameState {
     MENU_MAIN,
     MENU_SETTINGS,
     MENU_LEVEL_SELECT,
+    SCENE_BATTLE,
     DEBUG,
     MAP_SCENE,
+    SLOT_SCENE,
 }

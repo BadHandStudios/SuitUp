@@ -1,10 +1,10 @@
 package com.badhand.suitup.game.Scenes;
 
-import com.badhand.suitup.events.Event;
+import com.badhand.suitup.events.*;
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.ui.*;
 import com.badhand.suitup.ui.map.*;
-import com.badhand.suitup.game.entities.*;
+import com.badhand.suitup.entities.*;
 import com.badhand.suitup.assets.*;
 
 import processing.core.*;
@@ -15,28 +15,84 @@ public class MapScene implements Scene {
 
     private static AssetManager am = AssetManager.getInstance();
 
-    private Map map;
+    private static EventManager em = EventManager.getInstance();
 
-    private boolean doubleBack = true;
+    private static Map map;
+
+    private static boolean doubleBack = false;
+    private static boolean preInit = false;
 
     private int maxMoves = 10;
-    private int movesRemaining = maxMoves;
+    private static int movesRemaining;
 
-    private int cloudOffsetY = 0;
-    private boolean cloudOffsetYIncreasing = true;
+    private static int cloudOffsetY;
+    private static boolean cloudOffsetYIncreasing;
+    private int moveDelay = 0;
+    private static boolean playMusic = true;
 
-    private ProgressBar movesRemainingBar;
+
+    private static ProgressBar movesRemainingBar;
 
 
-    private GraphicsWrapper[] cloudElements = new GraphicsWrapper[2];
+    private static GraphicsWrapper[] cloudElements = new GraphicsWrapper[2];
 
     private Random rand = new Random();
 
-    Player p = new Player();
+    private static Player p = Player.getInstance();
+
+    private static CaptionedImage playerHealth;
+    private static CaptionedImage playerCoins;
+
+    private static TextElement movesRemainingText;
+
+
+
 
     public void initialize() {
+        if(playMusic) {
+            am.stopSound(0);
+            am.loopSound("swing.mp3", 0);
+            playMusic = false;
+        }
+        
+        if(!preInit){
+            SlotScene.preInitialize();
+            preInit = true;
+        }
+
+
         wm.clear();
         wm.setBackground(new Color(80, 80, 80));
+
+        if(map != null){
+            wm.put(p);
+            wm.put(map);
+            map.replaceEntities();
+            wm.put(cloudElements[0]);
+            wm.put(cloudElements[1]);
+            wm.put(movesRemainingBar);
+            wm.put(movesRemainingText);
+
+            playerHealth.setCaption(""+ p.getHealth() + "/" + p.getMaxHealth());
+            playerCoins.setCaption("" + p.getChips());
+
+            wm.put(playerHealth);
+            wm.put(playerCoins);
+            return;
+        }
+
+
+
+        movesRemaining = maxMoves;
+        cloudOffsetY = 0;
+        cloudOffsetYIncreasing = true;
+
+        playerHealth = new CaptionedImage(am.getImage("heart.png"), ""+ p.getHealth() + "/" + p.getMaxHealth(), 200, 50, 64);
+        playerCoins = new CaptionedImage(am.getImage("chip_blue.png"), ""+ p.getChips(), 200, 125, 64);
+        wm.registerDiffered(playerHealth, 2);
+        wm.registerDiffered(playerCoins, 2);
+        wm.put(playerHealth);
+        wm.put(playerCoins);
 
         map = new Map();
         p.move(map.getNode(1, 0));
@@ -67,6 +123,8 @@ public class MapScene implements Scene {
 
         cloudElements[0] = new GraphicsWrapper(clouds, 250, wm.getHeight() / 2);
         cloudElements[1] = new GraphicsWrapper(clouds2, 1920 - 250, wm.getHeight() / 2);
+        wm.registerDiffered(cloudElements[0], 1);
+        wm.registerDiffered(cloudElements[1], 1);
         
         wm.put(cloudElements[0]);
         wm.put(cloudElements[1]);
@@ -76,13 +134,19 @@ public class MapScene implements Scene {
         wm.registerDiffered(movesRemainingBar);
         wm.put(movesRemainingBar);
 
+        movesRemainingText = new TextElement("Moves until Boss Encounter", 32, wm.getWidth()/2, 150);
+        wm.registerDiffered(movesRemainingText);
+        wm.put(movesRemainingText);
     }
 
     public void update() {
+        map.update();
+        if(moveDelay > 0) moveDelay--;
 
         Node n = p.getCurrentNode();
         if(map.isEdge(n) && n.connectingEdges() != 0) {
             map.pan(false);
+            doubleBack = true;
         }
 
         if(cloudOffsetYIncreasing) {
@@ -96,7 +160,7 @@ public class MapScene implements Scene {
         cloudElements[0].setPos(cloudElements[0].getX(), wm.getHeight() / 2 + cloudOffsetY);
         cloudElements[1].setPos(cloudElements[1].getX(), wm.getHeight() / 2 - cloudOffsetY);
         
-        map.update();
+        
     }
 
     public void handle(Event e) {
@@ -111,16 +175,32 @@ public class MapScene implements Scene {
             case SCENE_EVENT:
                 Node requested = (Node)(e.getData());
                 // Move character if possible
+                if(moveDelay > 0) return;
                 Node current = p.getCurrentNode();
+                if(current == requested && current.full()){
+                    if(current.getEntity() != null){
+                        if(current.getEntity() instanceof SlotMachine){
+                            current.removeEntity();
+                            em.push(new Event(Events.SCENE_CHANGE, GameState.SLOT_SCENE));
+                        }
+                    }
+                }
+
                 if(map.connected(current, requested)) {
                     movesRemaining--;
+                    moveDelay = 10;
                     movesRemainingBar.setValue(movesRemaining);
                     if(movesRemaining < maxMoves * 0.25) movesRemainingBar.setColor(new Color(255, 100, 100));
+                    if(map.isFirst(requested) && doubleBack) {
+                        doubleBack = false;
+                        map.pan(true);
+                    }
                     p.move(requested);
-
                     if(movesRemaining == 0) {
                         map.stopGeneration();
+                        movesRemainingText.setText("Approaching Boss!");
                     }
+                    
                 }
                 break;
             default:

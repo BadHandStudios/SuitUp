@@ -15,31 +15,71 @@ public class Card implements GUI{
     private int value;
 
     private boolean faceUp = true;
-    private PGraphics cardBack;
+    private static PGraphics cardBack;
 
     private int x,y; //position
-    private int width = 250;
-    private int height = 350;
+    private static int width = 200;
+    private static int height = 300;
     private int textSize = 50;
     private boolean visible = true;
     private Event e;
     private String name;
+    private boolean gilded = false;
+    private Effect effect;
 
     private PGraphics texture;
 
-    private WindowManager wm = WindowManager.getInstance();
-    private AssetManager am = AssetManager.getInstance();
+    private static  WindowManager wm = WindowManager.getInstance();
+    private static AssetManager am = AssetManager.getInstance();
+
+    private static PImage gildedTexture;
+
+    private ImageElement gildedElement;
+
+    private static Random rand = new Random();
+    private static Hashtable<String, PGraphics> cardFaces = new Hashtable<String, PGraphics>();
+
 
 
 
     private LinkedList<GUI> enumeration;
 
+
+    public static void preInitialize(){
+        new Thread(new Runnable(){
+            public void run(){
+                preInit();
+            }
+        }).start();
+    }
+
+    private static void preInit(){
+        for(String value : "2;3;4;5;6;7;8;9;10;A;J;Q;K".split(";")){
+            for(String suit : "Clubs;Dmnds;Spades;Hearts".split(";")){
+                String name = value + "of" + suit + ".png";
+                PGraphics texture = WindowManager.getInstance().newGraphic(width, height);
+                PImage image = AssetManager.getInstance().getImage(name);
+                texture.beginDraw();
+                texture.beginDraw();
+                texture.image(image, 0, 0, width, height);
+                texture.endDraw();
+                cardFaces.put(name, texture);
+            }
+        }
+    }
+
+
     public Card(Suit suit, int value, int x, int y, int width, int height){
+
         
-        cardBack = wm.newGraphic(width, height);
-        cardBack.beginDraw();
-        cardBack.image(am.getImage("CardBack1.png"), 0, 0, width, height);
-        cardBack.endDraw();
+        
+        if(cardBack == null){
+            cardBack = wm.newGraphic(width, height);
+            cardBack.beginDraw();
+            cardBack.image(am.getImage("CardBack1.png"), 0, 0, width, height);
+            cardBack.endDraw();
+        }
+        
 
         String textureFile;
         this.suit = suit;
@@ -50,11 +90,19 @@ public class Card implements GUI{
         this.name = String.valueOf(value) + " of " + suit.toString(); //Change this?
 
         textureFile = this.toString() + ".png";
-        PImage image = am.getImage(textureFile);
-        this.texture = wm.newGraphic(width, height);
-        this.texture.beginDraw();
-        this.texture.image(image, 0, 0, width, height);
-        this.texture.endDraw();
+        PImage image;
+        if(cardFaces.containsKey(textureFile)){
+            texture = cardFaces.get(textureFile);
+        } else {
+            image = am.getImage(textureFile);
+            this.texture = wm.newGraphic(width, height);
+            this.texture.beginDraw();
+            this.texture.image(image, 0, 0, width, height);
+            this.texture.endDraw();
+
+            cardFaces.put(textureFile, texture);
+        }
+        
         
         
 
@@ -81,6 +129,10 @@ public class Card implements GUI{
     public void setPos(int x, int y){
         this.x = x;
         this.y = y;
+
+        if(this.gilded){
+            this.gildedElement.setPos(x, y);
+        }
     }
 
     public boolean visible(){
@@ -146,5 +198,34 @@ public class Card implements GUI{
         if(value == 12) return "Qof" + suitName();
         if(value == 13) return "Kof" + suitName();
         return String.valueOf(value) + "of" + suitName();
+    }
+
+    public void gild(){
+        if(!gilded){
+            gilded = true;
+            if(gildedTexture == null){
+                gildedTexture = am.getImage("gilded.png");
+            }
+            
+            gildedElement = new ImageElement(x, y, width, height, gildedTexture);
+            
+
+            this.effect = new Effect(Effects.values()[rand.nextInt(Effects.values().length)]);
+            this.enumeration.add(gildedElement);
+        }else{
+            this.effect.upgrade();
+        }
+    }
+
+    public boolean isGilded(){
+        return gilded;
+    }
+
+    public Effect getEffect(){
+        return effect;
+    }
+
+    public PImage getGildedTexture(){
+        return gildedTexture;
     }
 }
