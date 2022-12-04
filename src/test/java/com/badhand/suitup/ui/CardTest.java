@@ -1,8 +1,11 @@
 package com.badhand.suitup.ui;
-import processing.*;
 import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.*;
 import com.badhand.suitup.game.Deck;
+import com.badhand.suitup.game.Suit;
 
 /*
  * This class is responsible for making a test deck and testing all cards within it.
@@ -14,7 +17,7 @@ import com.badhand.suitup.game.Deck;
 public class CardTest 
 {  
     private static WindowManager wm;
-    private static Deck _testDeck;
+    private static ArrayList<Card> _mockDeck;
 
     @DisplayName("Get Value Test")
     @Test
@@ -22,9 +25,10 @@ public class CardTest
     {
         String msg = "Expected value vs. getValue().";
         int expected = -1;
-        Card testCard = _testDeck.draw();
-        while((testCard = _testDeck.draw()) != null)
-        {
+        Card testCard;
+
+        for(int i = 0; i < _mockDeck.size(); i++){
+            testCard = _mockDeck.get(i);
             expected = testCard.getRawValue();
             if(expected == 1){
                 expected = 11;
@@ -45,8 +49,9 @@ public class CardTest
         String expected = "ERROR";
         Card testCard;
         
-        while((testCard = _testDeck.draw()) != null)
+        for(int i = 0; i < _mockDeck.size(); i++)
         {
+            testCard = _mockDeck.get(i);
             switch(testCard.getSuit())
             {
                 case CLUBS:
@@ -62,6 +67,7 @@ public class CardTest
                     expected = "Spades";
                     break;
             }
+
             String actual = testCard.suitName();
             assertEquals(msg, expected, actual);
         }
@@ -76,16 +82,20 @@ public class CardTest
         wm.setBackground(new Color(0,0,0));
     }
 
-    @BeforeEach
-    public void BeforeEach()
-    {
-        _testDeck = new Deck();
-        _testDeck.shuffle();
-    }
-
     @AfterAll
     public static void TearDown()
     {
         wm.destroyWindow();
+    }
+
+    @BeforeEach
+    public void BeforeEach()
+    {
+        _mockDeck = new ArrayList<Card>();
+        for(int i = 0; i < 4; i++){
+            for (int j = 1; j <= 13; j++){
+                _mockDeck.add(new Card(Suit.values()[i], j, 0, 0, 250, 350));
+            }
+        }
     }
 }
