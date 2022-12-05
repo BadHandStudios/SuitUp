@@ -40,18 +40,20 @@ public class AssetManager {
         File soundsDir;
         File imagesDir;
         File fontsDir;
+        File animateDir;
         File JSONDir;
         File[] files;
         try {
             fontsDir = new File(SuitUp.class.getResource("/fonts/").toURI().getPath());
             soundsDir = new File(SuitUp.class.getResource("/sounds/").toURI().getPath());
             imagesDir = new File(SuitUp.class.getResource("/images/").toURI().getPath());
+            animateDir = new File(SuitUp.class.getResource("/animations/").toURI().getPath());
             JSONDir = new File(SuitUp.class.getResource("/JSONFiles/").toURI().getPath());
             int size = fontsDir.list().length + imagesDir.list().length + soundsDir.list().length + JSONDir.list().length;
 
             assets = new HashMap<>(size + 1, 1);
 
-            for(int j = 0; j < 4; j++) {
+            for(int j = 0; j < 5; j++) {
                 switch (j) {
                     case 0: files = fontsDir.listFiles();
                     break;
@@ -59,7 +61,9 @@ public class AssetManager {
                     break;
                     case 2: files = soundsDir.listFiles();
                     break;
-                    case 3: files = JSONDir.listFiles();
+                    case 3: files = animateDir.listFiles();
+                    break;
+                    case 4: files = JSONDir.listFiles();
                     break;
                     default: files = new File[0];
                 }
@@ -90,7 +94,7 @@ public class AssetManager {
             try {
                 return winManager.importImage(hold.getPath());
             }catch(Exception e) {
-                System.out.println("Failed to importImage!");
+                System.out.println("Failed to import Image!");
             }
         }
         else{
@@ -99,6 +103,41 @@ public class AssetManager {
 
         try {
             return winManager.importImage(backupAssets.get("Missing_Texture.ttf").getPath());
+        }catch(Exception e) {
+            System.out.println("Failed to grab Missing_Texture!");
+            return null;
+        }
+    }
+
+    public PImage[] getAnimation(String directory) {
+        File dir = assets.get(directory);
+        File[] animateFiles;
+        PImage[] reanimate;
+        if (dir == null) {
+            System.out.println("No directory by that name!");
+        }
+        else if(StringUtils.containsAny(directory, ".dir")) {
+            try {
+                animateFiles = dir.listFiles();
+                reanimate = new PImage[animateFiles.length];
+
+                for (int i = 0; i < animateFiles.length; i++) {
+                    reanimate[i] = winManager.importImage(animateFiles[i].getPath());
+                }
+
+                return reanimate;
+            }catch(Exception e) {
+                System.out.println("Failed to assemble animation!");
+            }
+        }
+        else{
+            System.out.println("File not in compatible format!");
+        }
+
+        try {
+            reanimate = new PImage[1];
+            reanimate[0] = winManager.importImage(backupAssets.get("Missing_Texture.ttf").getPath());
+            return reanimate;
         }catch(Exception e) {
             System.out.println("Failed to grab Missing_Texture!");
             return null;
