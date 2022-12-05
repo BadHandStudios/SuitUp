@@ -5,17 +5,71 @@ import java.util.*;
 import com.badhand.suitup.ui.*;
 import com.badhand.suitup.game.*;
 
+import processing.core.*;
+
 public abstract class Entity implements GUI {
 
     WindowManager wm = WindowManager.getInstance();
 
-    public Deck deck;
-    public ArrayList<Card> hand;
-    public ImageElement texture;
-    public int x;
-    public int y;
-    public int health;
-    public int maxHealth;
+    private Deck deck;
+    private ArrayList<Card> hand;
+    private PGraphics texture;
+    private int x;
+    private int y;
+    private int width, height;
+    private int health;
+    private int maxHealth;
+    private boolean visibility;
+
+    private LinkedList<GUI> enumeration;
+
+    public Entity(PImage texture, int x, int y, int width, int height){
+        this.texture = wm.newGraphic(width, height);
+        this.texture.beginDraw();
+        this.texture.image(texture, 0, 0, width, height);
+        this.texture.endDraw();
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.visibility = true;
+
+        enumeration = new LinkedList<GUI>();
+        enumeration.add(this);
+
+
+    }
+
+    public int getWidth(){
+        return width;
+    }
+    public int getHeight(){
+        return height;
+    }
+
+    public void setPos(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+    public PGraphics getTexture() {
+        return this.texture;
+    }
+
+    public boolean visible() {
+        return visibility;
+    }
+
+    public void setVisibility(boolean visible) {
+        this.visibility = visible;
+        
+    }
+    public boolean click(int mouseX, int mouseY) {
+        return false;
+    }
+
+    public List<GUI> enumerate() {
+        return this.enumeration;
+    }
 
     public void setDeck(Deck deck) {
         this.deck = deck;
@@ -29,15 +83,15 @@ public abstract class Entity implements GUI {
     public ArrayList<Card> getHand() {
         return this.hand;
     }
-    public void setTexture(ImageElement texture) {
-        this.texture = texture;
-        this.x = texture.getX();
-        this.y = texture.getY();
-        wm.put(texture);
-    }
-    public void removeTexture() {
-        wm.remove(texture);
-    }
+    // public void setTexture(ImageElement texture) {
+    //     this.texture = texture;
+    //     this.x = texture.getX();
+    //     this.y = texture.getY();
+    //     wm.put(texture);
+    // }
+    // public void removeTexture() {
+    //     wm.remove(texture);
+    // }
     public int getX() {
         return this.x;
     }
