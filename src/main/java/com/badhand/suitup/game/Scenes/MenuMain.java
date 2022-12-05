@@ -32,7 +32,6 @@ public class MenuMain implements Scene{
         wm.clear();
 
         wm.setBackground(new Color(50,50,50));
-        am.playSound("catchit.mp3");
         
         PImage[] chipImages = {
             am.getImage("chip_red.png"),
@@ -61,7 +60,7 @@ public class MenuMain implements Scene{
         TextButton b = new TextButton("Play", 64, width/2, height/2, new Event(Events.SCENE_CHANGE, GameState.MENU_LEVEL_SELECT));
         wm.put(b);
 
-        TextButton c = new TextButton("Options", 64, width/2, (int)(height/1.5)-16, null);
+        TextButton c = new TextButton("Shop", 64, width/2, (int)(height/1.5)-16, new Event(Events.SCENE_CHANGE, GameState.MENU_SHOP));
         wm.put(c);
 
         TextButton d = new TextButton("Quit", 64, width/2, (int) (height/1.25), new Event(Events.QUIT_GAME, null));

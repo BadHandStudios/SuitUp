@@ -73,6 +73,9 @@ public class GameManager {
             case MENU_LEVEL_SELECT:
                 currentScene = new MenuLevelSelect();
                 break;
+            case MENU_SHOP:
+                currentScene = new ShopScene();
+                break;
             case DEBUG:
                 currentScene = new Debug();
                 break;
