@@ -18,6 +18,8 @@ public class SceneBattle implements Scene {
     int width = 1920;
     int height = 1080;
     int health = 25;
+    int animWidth = width;
+    int animHeight = height/2;
 
     String playerAction;
 
@@ -39,9 +41,12 @@ public class SceneBattle implements Scene {
     TextElement playerHealthText;
     TextElement enemyHealthText;
 
+    ImageElement animCard;
+
     boolean playerTurn = true;
     boolean roundStart = true;
     boolean battle = false;
+    boolean draw = false;
 
     Enemy enemy;
     BlackJackAI bjai;
@@ -94,7 +99,22 @@ public class SceneBattle implements Scene {
     }
 
     public void update() {
+        if (draw) {
+            if (playerTurn) {
+                if (animWidth == width && animHeight == height/2) {
+                    animCard = new ImageElement(animWidth, animHeight/2, 200, 300, "CardBack2.png");
+                }
+                else {
+                    wm.remove(animCard);
+                    animCard = new ImageElement(animWidth, animHeight/2, 200, 300, "CardBack2.png");
+                }
+                wm.put(animCard);
+            }
+            else {
 
+            }
+            draw = false;
+        }
     }
 
     public void handle(Event e) {
@@ -138,7 +158,10 @@ public class SceneBattle implements Scene {
                     break;
                 case "reset":
                     if (player.getHealth() <= 0 || enemy.getHealth() <= 0) {
-                        Event end = new Event(Events.SCENE_CHANGE,GameState.MENU_LEVEL_SELECT);
+                        if (enemy.getHealth() <= 0) {
+                            player.addChips((enemy.getMaxHealth() * 10) + (cbai.random(1,enemy.getAttack()) * 10));
+                        }
+                        Event end = new Event(Events.SCENE_CHANGE,GameState.MAP_SCENE);
                         em.push(end);
                     }
                     else {
