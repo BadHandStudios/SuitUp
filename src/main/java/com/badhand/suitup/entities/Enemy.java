@@ -16,15 +16,13 @@ public class Enemy extends Entity {
     public BlackJackAI bjai = new BlackJackAI();
     public CombatAI cbai = new CombatAI();
 
-    int attack;
-
     public Enemy() {
         setTexture(new ImageElement("Enemy", (1920 - 150), 200, 200,300, am.getImage("Enemy.png")));
-        x = texture.getX();
-        y = texture.getY();
-        deck = new Deck();
-        hand = new ArrayList<Card>();
-        attack = 5;
+        this.x = texture.getX();
+        this.y = texture.getY();
+        this.deck = new Deck();
+        this.hand = new ArrayList<Card>();
+        this.attack = 5;
         setMaxHealth(25);
     }
 
@@ -33,9 +31,6 @@ public class Enemy extends Entity {
     }
     public CombatAI getCBAI() {
         return cbai;
-    }
-    public int getAttack() {
-        return attack;
     }
 
     @Override

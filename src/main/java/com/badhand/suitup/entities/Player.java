@@ -10,6 +10,7 @@ import processing.core.PGraphics;
 public class Player extends Entity {
     private int x, y;
     private int width, height;
+    int attack = 5;
     private boolean visible;
     private LinkedList<GUI> enumeration;
 
@@ -30,6 +31,7 @@ public class Player extends Entity {
 
         this.setDeck(new Deck());
         this.setHand(new ArrayList<Card>());
+        this.attack = 5;
         
     
         enumeration.add(texture);

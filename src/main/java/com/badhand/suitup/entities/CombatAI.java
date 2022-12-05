@@ -5,7 +5,7 @@ public class CombatAI extends AI {
     public String getAction() {
         String action = "";
 
-        int rand = random(1,2);
+        int rand = random(1,3);
 
         switch(rand) {
             case 1:
@@ -13,6 +13,9 @@ public class CombatAI extends AI {
                 break;
             case 2:
                 action = "Block";
+                break;
+            case 3:
+                action = "Nothing";
                 break;
         }
 
