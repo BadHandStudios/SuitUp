@@ -5,7 +5,7 @@ import com.badhand.suitup.entities.*;
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.ui.*;
 
-import processing.core.PGraphics;
+import processing.core.PImage;
 
 import java.util.*;
 
@@ -16,14 +16,12 @@ public class Enemy extends Entity {
     public BlackJackAI bjai = new BlackJackAI();
     public CombatAI cbai = new CombatAI();
 
-    public Enemy() {
-        setTexture(new ImageElement("Enemy", (1920 - 150), 200, 200,300, am.getImage("Enemy.png")));
-        this.x = texture.getX();
-        this.y = texture.getY();
-        this.deck = new Deck();
-        this.hand = new ArrayList<Card>();
-        this.attack = 5;
-        setMaxHealth(25);
+
+    public Enemy(PImage texture, String name, int health, int attack, int x, int y, BlackJackAI ai) {
+        super(texture, x, y, 200, 300);
+        this.setMaxHealth(health);
+        this.setDeck(new Deck());
+        this.setHand(new ArrayList<Card>());
     }
 
     public BlackJackAI getBJAI() {
@@ -33,53 +31,10 @@ public class Enemy extends Entity {
         return cbai;
     }
 
-    @Override
-    public int getWidth() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
 
-    @Override
-    public int getHeight() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
 
-    @Override
-    public void setPos(int x, int y) {
-        // TODO Auto-generated method stub
-        
-    }
 
-    @Override
-    public PGraphics getTexture() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public boolean visible() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void setVisibility(boolean visible) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public boolean click(int mouseX, int mouseY) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public List<GUI> enumerate() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+   
 
     
 }

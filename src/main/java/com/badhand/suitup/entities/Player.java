@@ -1,44 +1,26 @@
 package com.badhand.suitup.entities;
 
-import java.util.*;
-import com.badhand.suitup.ui.*;
 import com.badhand.suitup.ui.map.*;
 import com.badhand.suitup.game.*;
+import com.badhand.suitup.assets.*;
 
-import processing.core.PGraphics;
 
 public class Player extends Entity {
-    private int x, y;
-    private int width, height;
-    int attack = 5;
-    private boolean visible;
-    private LinkedList<GUI> enumeration;
 
-    public ImageElement texture;
+
 
     Node currentNode;
+
+    private static AssetManager am = AssetManager.getInstance();
 
 
     private static Player instance = null;
     private Player() {
-        this.visible = true;
-
-        this.enumeration = new LinkedList<GUI>();
-
-        textureName = "character.png";
-        
-        texture = new ImageElement(0, 0, 100, 100, textureName);
-
+        super(am.getImage("character.png"), -500, -500, 90, 100);
+        this.setMaxHealth(20);
         this.setDeck(new Deck());
-        this.setHand(new ArrayList<Card>());
-        this.attack = 5;
-        
-    
-        enumeration.add(texture);
+        wm.registerDiffered(this);
 
-        wm.registerDiffered(texture);
-
-        this.setMaxHealth(25);
     };
     public static Player getInstance() {
         if(instance == null) instance = new Player();
@@ -56,69 +38,24 @@ public class Player extends Entity {
     public void removeChips(int amount) {
         this.chips -= amount;
     }
+
     public void clearChips(int amount) {
         this.chips = 0;
     }
+
     public int getChips() {
         return this.chips;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setPos(int x, int y) {
-        this.x = x;
-        this.y = y;
-        texture.setPos(x, y);
-    }
-
-    public void setSize(int width, int height) {
-        this.width = width;
-        this.height = height;
-        texture = new ImageElement(x, y, width, height, textureName);
-    }
-
-    public int getWidth() {
-        return width;
-    }
-    public int getHeight() {
-        return height;
-    }
-
-    public boolean visible() {
-        return visible;
-    }
-    public void setVisibility(boolean visible) {
-        this.visible = visible;
-        texture.setVisibility(visible);
-    }
-
-    public boolean click(int x, int y) {
-        return false;
-    }
-
-    public PGraphics getTexture() {
-        return texture.getTexture();
-    }
-    
-
     public Node getCurrentNode() {
         return currentNode;
     }
+
+
     public void move(Node node) {
         if(currentNode != null) currentNode.removePlayer();
         currentNode = node;
         node.setEntity(this);
-    }
-
-
-    public LinkedList<GUI> enumerate() {
-        return enumeration;
     }
 
 }

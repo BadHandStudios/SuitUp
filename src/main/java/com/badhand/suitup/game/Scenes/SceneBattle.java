@@ -62,6 +62,8 @@ public class SceneBattle implements Scene {
         am.playSound("combat_background_music.mp3", 0);
         wm.clear();
         wm.setBackground(new Color(173,101,29));
+
+        enemy = new Enemy(am.getImage("Enemy.png"), "Mike", 20, 5, 0, 0, new BlackJackAI());
         player = Player.getInstance();
 
         bjai = enemy.getBJAI();
