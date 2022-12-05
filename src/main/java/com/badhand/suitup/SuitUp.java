@@ -21,11 +21,14 @@ public class SuitUp {
         
         // Initialize the AssetManger for the application
         am = AssetManager.getInstance();
-        
         // Wait for the window to be ready
         // TODO: Remove busy wait
         while(!wm.isReady());
         
         gm = GameManager.getInstance();
+
+        while(true){
+            gm.update();
+        }
     }
 }

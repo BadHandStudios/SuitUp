@@ -6,4 +6,5 @@ public enum GameState {
     MENU_SETTINGS,
     MENU_LEVEL_SELECT,
     DEBUG,
+    MAP_SCENE,
 }

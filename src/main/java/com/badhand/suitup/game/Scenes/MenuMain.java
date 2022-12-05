@@ -1,6 +1,9 @@
 package com.badhand.suitup.game.Scenes;
 
 import com.badhand.suitup.ui.*;
+
+import processing.core.PImage;
+
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.events.*;
 import com.badhand.suitup.assets.*;
@@ -15,8 +18,8 @@ public class MenuMain implements Scene{
     int width = 1920;
     int height = 1080;
 
-    private ImageElement[] chips = new ImageElement[6];
-    private double[] chipVelocity = new double[6];
+    private ImageElement[] chips = new ImageElement[10];
+    private double[] chipVelocity = new double[chips.length];
     private double chipAcceleration = 0.5;
 
     private Random rand = new Random();
@@ -30,6 +33,17 @@ public class MenuMain implements Scene{
 
         wm.setBackground(new Color(50,50,50));
         am.playSound("catchit.mp3");
+        
+        PImage[] chipImages = {
+            am.getImage("chip_red.png"),
+            am.getImage("chip_blue.png"),
+            am.getImage("chipBlackWhite.png"),
+            am.getImage("chipBlueWhite.png"),
+            am.getImage("chipRedWhite.png"),
+        };
+        
+        am.loopSound("catchit.mp3", 0);
+
 
         for(int i = 0; i < chips.length; i++){
             int x = rand.nextInt(width);
@@ -37,11 +51,7 @@ public class MenuMain implements Scene{
             int v = rand.nextInt(3) + 1;
             int size = rand.nextInt(100) + 70;
             chipVelocity[i] = v;
-            if(i % 2 == 0){
-                chips[i] = new ImageElement("chip"+i, x, y, size, size, am.getImage("chip_red.png"));
-            }else{
-                chips[i] = new ImageElement("chip"+i, x, y, size, size, am.getImage("chip_blue.png"));
-            }
+            chips[i] = new ImageElement(x, y, size, size, chipImages[rand.nextInt(chipImages.length)]);
             wm.put(chips[i]);
         }
 
