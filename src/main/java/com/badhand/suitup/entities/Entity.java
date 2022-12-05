@@ -16,6 +16,7 @@ public abstract class Entity implements GUI {
     public int y;
     public int health;
     public int maxHealth;
+    public String textureName;
 
     public void setDeck(Deck deck) {
         this.deck = deck;

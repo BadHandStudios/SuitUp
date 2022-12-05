@@ -12,9 +12,4 @@ public class BlackJackAI extends AI{
         }
         return result;
     }
-
-    public void updateTotals() {
-        getEnemyTotal();
-        getPlayerTotal();
-    }
 }

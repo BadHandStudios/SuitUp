@@ -18,7 +18,9 @@ public class SceneBattle implements Scene {
     int width = 1920;
     int height = 1080;
     int health = 25;
-    
+
+    String playerAction;
+
     int[] playerPositions = {0,0,0,0,0};
     int[] enemyPositions = {0,0,0,0,0};
     ArrayList<Card> playerHand = new ArrayList<Card>();
@@ -28,6 +30,8 @@ public class SceneBattle implements Scene {
 
     TextButton hit = new TextButton("Hit",64,840,height/2,new Event(Events.CLICK,"Hit"));
     TextButton stay = new TextButton("Stay",64,1080,height/2,new Event(Events.CLICK,"Stay"));
+    TextButton attack = new TextButton("Attack",64,840,height/2,new Event(Events.CLICK,"Attack"));
+    TextButton block = new TextButton("Block",64,1080,height/2,new Event(Events.CLICK,"Block"));
     TextButton reset = new TextButton("Continue",64,width/2,height/2, new Event(Events.CLICK,"reset"));
     TextElement winner = new TextElement("",64,200,height/2);
 
@@ -40,21 +44,30 @@ public class SceneBattle implements Scene {
 
     Enemy enemy;
     BlackJackAI bjai;
+    CombatAI cbai;
     Player player;
 
+    public SceneBattle(Enemy enemy) {
+        this.enemy = enemy;
+    }
+
     public void initialize() {
+        am.stopSound(0);
+        am.playSound("combat_background_music.mp3", 0);
         wm.clear();
         wm.setBackground(new Color(173,101,29));
-
-        enemy = new Enemy();
         player = Player.getInstance();
 
         bjai = enemy.getBJAI();
-        player.setHealth(25);
-        player.setDeck(new Deck());
-        player.setHand(new ArrayList<Card>());
+        cbai = enemy.getCBAI();
+        cbai.setPlayerHealth(player.getHealth());
+        cbai.setEnemyHealth(enemy.getHealth());
+        
+        player.setPos(150, height-200);
+        player.setSize(200,300);
+        wm.put(player.texture);
 
-        player.setTexture(new ImageElement("Player", 150, height - 200, 200, 300, am.getImage("Player.png")));
+        wm.put(enemy.texture);
 
         ImageElement playerHeart = new ImageElement("playerHeart", 150, height/2 + 140, 100, 100, am.getImage("heart.png"));
         wm.put(playerHeart);
@@ -73,8 +86,9 @@ public class SceneBattle implements Scene {
         enemy.getHand().get(0).flip();
         drawHands();
 
-        wm.put(hit);
-        wm.put(stay);
+
+        wm.put(attack);
+        wm.put(block);
     }
 
     public void update() {
@@ -96,13 +110,29 @@ public class SceneBattle implements Scene {
                     drawHands();
                     gameLogic();
                     break;
+                case "Attack":
+                    playerAction = "Attack";
+                    wm.remove(attack);
+                    wm.remove(block);
+                    wm.put(hit);
+                    wm.put(stay);
+                    break;
+                case "Block":
+                    playerAction = "Block";
+                    wm.remove(attack);
+                    wm.remove(block);
+                    wm.put(hit);
+                    wm.put(stay);
+                    break;
                 case "reset":
                     if (player.getHealth() <= 0 || enemy.getHealth() <= 0) {
                         Event end = new Event(Events.SCENE_CHANGE,GameState.MENU_LEVEL_SELECT);
                         em.push(end);
                     }
-                    wm.remove(reset);
-                    reset();
+                    else {
+                        wm.remove(reset);
+                        reset();
+                    }
                     break;
             }
         }
@@ -128,8 +158,8 @@ public class SceneBattle implements Scene {
         enemy.getHand().get(0).flip();
         drawHands();
 
-        wm.put(hit);
-        wm.put(stay);
+        wm.put(attack);
+        wm.put(block);
     }
 
     public int[] formatHand(int size) {
@@ -216,10 +246,14 @@ public class SceneBattle implements Scene {
     public void gameLogic() {
         bjai.setEnemyHand(enemy.getHand());
         bjai.setPlayerHand(player.getHand());
+        cbai.setEnemyHand(enemy.getHand());
+        cbai.setPlayerHand(player.getHand());
         bjai.updateTotals();
+        cbai.updateTotals();
 
         if (player.getHand().size() == 5 && bjai.playerTotal <= 21) {
-            enemy.setHealth(enemy.getHealth() - 5);
+            cbai.doActions(playerAction, cbai.getAction(), 5);
+            enemy.setHealth(cbai.getEnemyHealth());
             bjai.setEnemyHealth(enemy.getHealth());
             enemyHealthText.setText("" + enemy.getHealth());
             winner = new TextElement("Player Wins!",64, 200, height/2);
@@ -230,7 +264,8 @@ public class SceneBattle implements Scene {
             enemy.getHand().get(0).flip();
         }
         else if (enemy.getHand().size() == 5 && bjai.enemyTotal <= 21) {
-            player.setHealth(player.getHealth() - 5);
+            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack());
+            player.setHealth(cbai.getPlayerHealth());
             bjai.setPlayerHealth(player.getHealth());
             playerHealthText.setText("" + player.getHealth());
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
@@ -239,7 +274,8 @@ public class SceneBattle implements Scene {
         }
         else if (bjai.playerTotal <= 21 && !playerTurn) {
             if (bjai.enemyTotal > 21) {
-                enemy.setHealth(enemy.getHealth() - 5);
+                cbai.doActions(playerAction, cbai.getAction(), 5);
+                enemy.setHealth(cbai.getEnemyHealth());
                 bjai.setEnemyHealth(enemy.getHealth());
                 enemyHealthText.setText("" + enemy.getHealth());
                 winner = new TextElement("Player Wins!",64, 200, height/2);
@@ -248,7 +284,8 @@ public class SceneBattle implements Scene {
             }
             else {
                 if (bjai.getEnemyTotal() > bjai.getPlayerTotal() && bjai.getEnemyTotal() <= 21) {
-                    player.setHealth(player.getHealth() - 5);
+                    cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack());
+                    player.setHealth(cbai.getPlayerHealth());
                     bjai.setPlayerHealth(player.getHealth());
                     playerHealthText.setText("" + player.getHealth());
                     winner = new TextElement("Enemy Wins!",64, 200, height/2);
@@ -256,7 +293,8 @@ public class SceneBattle implements Scene {
                     enemy.getHand().get(0).flip();
                 }
                 else if (bjai.getEnemyTotal() < bjai.getPlayerTotal() && bjai.getPlayerTotal() <= 21) {
-                    enemy.setHealth(enemy.getHealth() - 5);
+                    cbai.doActions(playerAction, cbai.getAction(), 5);
+                    enemy.setHealth(cbai.getEnemyHealth());
                     bjai.setEnemyHealth(enemy.getHealth());
                     enemyHealthText.setText("" + enemy.getHealth());
                     winner = new TextElement("Player Wins!",64, 200, height/2);
@@ -271,7 +309,8 @@ public class SceneBattle implements Scene {
             }
         }
         else if (bjai.playerTotal > 21) {
-            player.setHealth(player.getHealth() - 5);
+            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack());
+            player.setHealth(cbai.getPlayerHealth());
             bjai.setPlayerHealth(player.getHealth());
             playerHealthText.setText("" + player.getHealth());
             winner = new TextElement("Enemy Wins!",64, 200, height/2);

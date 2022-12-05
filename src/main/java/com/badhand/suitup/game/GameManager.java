@@ -2,6 +2,7 @@ package com.badhand.suitup.game;
 
 import com.badhand.suitup.events.*;
 import com.badhand.suitup.game.Scenes.*;
+import com.badhand.suitup.entities.*;
 import com.badhand.suitup.ui.WindowManager;
 
 import processing.core.PConstants;
@@ -73,7 +74,7 @@ public class GameManager {
                 currentScene = new MenuLevelSelect();
                 break;
             case SCENE_BATTLE:
-                currentScene = new SceneBattle();
+                currentScene = new SceneBattle(new Enemy());
                 break;
             case DEBUG:
                 currentScene = new Debug();

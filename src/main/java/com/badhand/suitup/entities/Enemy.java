@@ -14,19 +14,28 @@ public class Enemy extends Entity {
     private AssetManager am = AssetManager.getInstance();
 
     public BlackJackAI bjai = new BlackJackAI();
+    public CombatAI cbai = new CombatAI();
 
+    int attack;
 
     public Enemy() {
-        health = 25;
         setTexture(new ImageElement("Enemy", (1920 - 150), 200, 200,300, am.getImage("Enemy.png")));
         x = texture.getX();
         y = texture.getY();
         deck = new Deck();
         hand = new ArrayList<Card>();
+        attack = 5;
+        setMaxHealth(25);
     }
 
     public BlackJackAI getBJAI() {
         return bjai;
+    }
+    public CombatAI getCBAI() {
+        return cbai;
+    }
+    public int getAttack() {
+        return attack;
     }
 
     @Override

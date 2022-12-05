@@ -13,7 +13,7 @@ public class Player extends Entity {
     private boolean visible;
     private LinkedList<GUI> enumeration;
 
-    ImageElement texture;
+    public ImageElement texture;
 
     Node currentNode;
 
@@ -23,17 +23,20 @@ public class Player extends Entity {
         this.visible = true;
 
         this.enumeration = new LinkedList<GUI>();
+
+        textureName = "character.png";
         
-        texture = new ImageElement(0, 0, 100, 100, "character.png");
+        texture = new ImageElement(0, 0, 100, 100, textureName);
 
         this.setDeck(new Deck());
+        this.setHand(new ArrayList<Card>());
         
     
         enumeration.add(texture);
 
         wm.registerDiffered(texture);
 
-        this.setMaxHealth(12);
+        this.setMaxHealth(25);
     };
     public static Player getInstance() {
         if(instance == null) instance = new Player();
@@ -58,10 +61,6 @@ public class Player extends Entity {
         return this.chips;
     }
 
-
-
-
-
     public int getX() {
         return x;
     }
@@ -74,6 +73,12 @@ public class Player extends Entity {
         this.x = x;
         this.y = y;
         texture.setPos(x, y);
+    }
+
+    public void setSize(int width, int height) {
+        this.width = width;
+        this.height = height;
+        texture = new ImageElement(x, y, width, height, textureName);
     }
 
     public int getWidth() {
@@ -98,6 +103,7 @@ public class Player extends Entity {
     public PGraphics getTexture() {
         return texture.getTexture();
     }
+    
 
     public Node getCurrentNode() {
         return currentNode;
