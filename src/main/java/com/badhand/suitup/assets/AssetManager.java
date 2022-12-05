@@ -49,7 +49,7 @@ public class AssetManager {
             imagesDir = new File(SuitUp.class.getResource("/images/").toURI().getPath());
             animateDir = new File(SuitUp.class.getResource("/animations/").toURI().getPath());
             JSONDir = new File(SuitUp.class.getResource("/JSONFiles/").toURI().getPath());
-            int size = fontsDir.list().length + imagesDir.list().length + soundsDir.list().length + JSONDir.list().length;
+            int size = fontsDir.list().length + imagesDir.list().length + soundsDir.list().length + JSONDir.list().length + animateDir.list().length;
 
             assets = new HashMap<>(size + 1, 1);
 
