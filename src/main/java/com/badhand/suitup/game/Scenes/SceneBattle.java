@@ -46,15 +46,20 @@ public class SceneBattle implements Scene {
         wm.clear();
         wm.setBackground(new Color(173,101,29));
 
-        enemy = new Enemy(am.getImage("Enemy.png"), "Mike", 20, 5, 0, 0, new BlackJackAI());
+        enemy = new Enemy(am.getImage("Enemy.png"), "Mike", 20, 5, wm.getWidth() - 150, 200, new BlackJackAI());
         player = Player.getInstance();
-
         bjai = enemy.getBJAI();
         player.setHealth(25);
         player.setDeck(new Deck());
         player.setHand(new ArrayList<Card>());
 
         player.setPos(150, height - 200);
+
+        ImageElement playerImage = new ImageElement(player.getX(), player.getY(), 200, 300, am.getImage("character.png"));
+        wm.put(enemy);
+        wm.put(playerImage);
+
+        
 
         ImageElement playerHeart = new ImageElement("playerHeart", 150, height/2 + 140, 100, 100, am.getImage("heart.png"));
         wm.put(playerHeart);
