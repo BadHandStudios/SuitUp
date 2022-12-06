@@ -24,7 +24,7 @@ public class Player extends Entity {
 
         this.enumeration = new LinkedList<GUI>();
         
-        texture = new ImageElement(0, 0, 100, 100, "character.png");
+        texture = new ImageElement(0, 0, 90, 100, "character.png");
 
         this.setDeck(new Deck());
         
