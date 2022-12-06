@@ -34,7 +34,6 @@ public class MenuMain implements Scene{
 
         am.loopSound("catchit.mp3", 0);
         wm.setBackground(new Color(50,50,50));
-        am.playSound("catchit.mp3");
         
         PImage[] chipImages = {
             am.getImage("chip_red.png"),
