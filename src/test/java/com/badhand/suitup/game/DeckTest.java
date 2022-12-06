@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.badhand.suitup.ui.Card;
@@ -27,15 +28,15 @@ public class DeckTest {
     private static Deck _deck;
 
     @Test
-    void CreateDeckTest(){
+    void createDeckTest(){
         String msg = "Pass if deck is correct no. of valid cards";
 
         int matches = 0;
         int deckSize = _deck.cardsLeft();
         int i = 0;
-        while(_deck.cardsLeft() > 0){
+        while(i < deckSize){
             Card curr = _deck.draw();
-            System.out.println("drew card: " + curr);
+            //System.out.println("Drew card no. " + i + ": " + curr);
             if (curr == null){
                 // System.out.println("curr is null at iteration number " + i);
             }
@@ -44,7 +45,7 @@ public class DeckTest {
                 matches++;
             }
             else{
-                System.out.println("Card did not match: " + curr);
+                //System.out.println("Card did not match: " + curr);
             }
             i++;
         }
@@ -53,13 +54,24 @@ public class DeckTest {
     }
 
     @Test
-    void testCardsLeft() {
-        //??
+    void cardsLeftTest() {
+        String msg = "Pass if drawing a card removes one from the deck.";
+        int initialSize = _deck.cardsLeft();
+        int expected = initialSize - 1;
+        _deck.draw();
+        assertEquals(expected, _deck.cardsLeft());
+    }
+    
+    @Test
+    void drawAllTest(){
+        String msg = "Pass if drawing all cards leaves 0 cards in the deck";
+        int initialSize = _deck.cardsLeft();
+        //TODO: Draw all cards and check if there are none left in deck.
     }
 
     @Test
     void testDraw() {
-        //??
+
     }
 
     @Test
@@ -83,7 +95,6 @@ public class DeckTest {
         _cardNames = new ArrayList<String>();
         wm = WindowManager.getInstance();
         wm.createWindow(256,256);
-        _deck = new Deck();
         String filename = "validcards.txt";
         //TODO: Read in validcards.txt, compare each.
         BufferedReader br = new BufferedReader(new FileReader(filename));
@@ -92,5 +103,10 @@ public class DeckTest {
             String cl = br.readLine();
             _cardNames.add(cl);
         }
+    }
+
+    @BeforeEach
+    public void BeforeEach(){
+        _deck = new Deck();
     }
 }
