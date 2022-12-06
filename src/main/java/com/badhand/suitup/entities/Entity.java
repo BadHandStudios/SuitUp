@@ -119,7 +119,7 @@ public abstract class Entity implements GUI {
         this.setHealth(maxHealth);
     }
     public void addMaxHealth(int amt){
-        this.setMaxHealth(this.getMaxHealth() + amt);
+        this.maxHealth = this.getMaxHealth() + amt;
         this.addHealth(amt);
     }
     public int getMaxHealth() {
