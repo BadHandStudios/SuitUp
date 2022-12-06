@@ -1,5 +1,8 @@
 package com.badhand.suitup.entities;
 
+import com.badhand.suitup.ui.Card;
+import com.badhand.suitup.game.*;
+
 public class BasicCBAI extends CombatAI{
     
     public String getAction() {
@@ -22,7 +25,7 @@ public class BasicCBAI extends CombatAI{
         return action;
     }
 
-    public void doActions(String playerAction, String EnemyAction, int Attack) {
+    public void doActions(String playerAction, String EnemyAction, int Attack, Card c) {
 
         double playerOffenseModifier = 1.0;
         double playerDefenseModifier = 1.0;
@@ -48,6 +51,22 @@ public class BasicCBAI extends CombatAI{
         if (EnemyAction == "Block") {
             enemyOffenseModifier = 0.75;
             enemyDefenseModifier = 1.25;
+        }
+        if(c != null){
+            Effect e = c.getEffect();
+            switch(e.getEffect()){
+                case DAMAGE_MODIFIER:
+                    playerOffenseModifier += e.getValue();
+                    break;
+                case HEAL:
+                    setPlayerHealth(getPlayerHealth() + (int)e.getValue());
+                    break;
+                case INSTANT_DAMAGE:
+                    break;
+                default:
+                    break;
+                
+            }
         }
 
         if (playerTotal > enemyTotal  && playerTotal <= 21 || enemyTotal > 21) {

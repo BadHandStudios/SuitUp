@@ -140,8 +140,14 @@ public class SceneBattle implements Scene {
                     break;
                 case "Hit":
                     Card c = player.drawCard();
-                    if(c.isGilded()) mostRecentGildedCard = c;
-                    if(player.getHandTotal() > 21) c.flip();
+                    if(c.isGilded()){
+                        Effect eff = c.getEffect();
+                        mostRecentGildedCard = c;
+                        if(player.getHandTotal() > 21 && eff.getEffect() == Effects.BUST_PROOF) c.flip();
+                        if(eff.getEffect() == Effects.INSTANT_DAMAGE){
+                            if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+                        }
+                    }
                     drawHands();
                     gameLogic();
                     break;
@@ -304,7 +310,7 @@ public class SceneBattle implements Scene {
         cbai.updateTotals();
 
         if (player.getHand().size() == 5 && bjai.playerTotal <= 21) {
-            cbai.doActions(playerAction, cbai.getAction(), player.getAttack());
+            cbai.doActions(playerAction, cbai.getAction(), player.getAttack(), mostRecentGildedCard);
             enemy.setHealth(cbai.getEnemyHealth());
             bjai.setEnemyHealth(enemy.getHealth());
             if (enemy.getHealth() < 0) {
@@ -319,7 +325,7 @@ public class SceneBattle implements Scene {
             enemy.getHand().get(0).flip();
         }
         else if (enemy.getHand().size() == 5 && bjai.enemyTotal <= 21) {
-            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack());
+            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), null);
             player.setHealth(cbai.getPlayerHealth());
             bjai.setPlayerHealth(player.getHealth());
             if (player.getHealth() < 0) {
@@ -332,7 +338,7 @@ public class SceneBattle implements Scene {
         }
         else if (bjai.playerTotal <= 21 && !playerTurn) {
             if (bjai.enemyTotal > 21) {
-                cbai.doActions(playerAction, cbai.getAction(), player.getAttack());
+                cbai.doActions(playerAction, cbai.getAction(), player.getAttack(), mostRecentGildedCard);
                 enemy.setHealth(cbai.getEnemyHealth());
                 bjai.setEnemyHealth(enemy.getHealth());
                 if (enemy.getHealth() < 0) {
@@ -345,7 +351,7 @@ public class SceneBattle implements Scene {
             }
             else {
                 if (bjai.getEnemyTotal() > bjai.getPlayerTotal() && bjai.getEnemyTotal() <= 21) {
-                    cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack());
+                    cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), null);
                     player.setHealth(cbai.getPlayerHealth());
                     bjai.setPlayerHealth(player.getHealth());
                     if (player.getHealth() < 0) {
@@ -357,7 +363,7 @@ public class SceneBattle implements Scene {
                     enemy.getHand().get(0).flip();
                 }
                 else if (bjai.getEnemyTotal() < bjai.getPlayerTotal() && bjai.getPlayerTotal() <= 21) {
-                    cbai.doActions(playerAction, cbai.getAction(), player.getAttack());
+                    cbai.doActions(playerAction, cbai.getAction(), player.getAttack(), mostRecentGildedCard);
                     enemy.setHealth(cbai.getEnemyHealth());
                     bjai.setEnemyHealth(enemy.getHealth());
                     if (enemy.getHealth() < 0) {
@@ -376,7 +382,7 @@ public class SceneBattle implements Scene {
             }
         }
         else if (bjai.getPlayerTotal() > 21) {
-            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack());
+            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), null);
             player.setHealth(cbai.getPlayerHealth());
             bjai.setPlayerHealth(player.getHealth());
             if (player.getHealth() < 0) {
