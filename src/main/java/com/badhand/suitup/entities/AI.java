@@ -69,6 +69,7 @@ abstract class AI {
     public int getPlayerTotal() {
         int total = 0;
         for (int i = 0; i < playerHand.size(); i++) {
+            if(playerHand.get(i).isFlipped()) continue;
             total += playerHand.get(i).getValue();
         }
         if (total > 21) {

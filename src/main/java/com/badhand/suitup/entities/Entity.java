@@ -126,12 +126,31 @@ public abstract class Entity implements GUI {
         return this.maxHealth;
     }
 
-    public void drawCard() {
+    public Card drawCard() {
         if (deck.cardsLeft() == 0) {
             deck.shuffle();
         }
         Card card = deck.draw();
         hand.add(card);
+
+        return card;
+    }
+
+
+    public int getHandTotal() {
+        int total = 0;
+        for (int i = 0; i < hand.size(); i++) {
+            if(hand.get(i).isFlipped()) continue;
+            total += hand.get(i).getValue();
+        }
+        if (total > 21) {
+            for (int i = 0; i < hand.size(); i++) {
+                if (hand.get(i).getValue() == 11 && total > 21) {
+                    total -= 10;
+                }
+            }
+        }
+        return total;
     }
 
 }

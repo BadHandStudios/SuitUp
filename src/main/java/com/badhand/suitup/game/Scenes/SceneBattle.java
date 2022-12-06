@@ -52,6 +52,8 @@ public class SceneBattle implements Scene {
     CombatAI cbai;
     Player player;
 
+    private Card mostRecentGildedCard;
+
     public SceneBattle(Enemy enemy) {
         this.enemy = enemy;
     }
@@ -90,8 +92,11 @@ public class SceneBattle implements Scene {
         enemyHealthText = new TextElement("" + enemy.getHealth(),36,width-150,height/2 - 140);
         wm.put(enemyHealthText);
 
-        player.drawCard();
-        player.drawCard();
+        mostRecentGildedCard = null;
+        Card c = player.drawCard();
+        if(c.isGilded()) mostRecentGildedCard = c;
+        c = player.drawCard();
+        if(c.isGilded()) mostRecentGildedCard = c;
         enemy.drawCard();
         enemy.drawCard();
 
@@ -134,7 +139,9 @@ public class SceneBattle implements Scene {
                     wm.put(reset);
                     break;
                 case "Hit":
-                    player.drawCard();
+                    Card c = player.drawCard();
+                    if(c.isGilded()) mostRecentGildedCard = c;
+                    if(player.getHandTotal() > 21) c.flip();
                     drawHands();
                     gameLogic();
                     break;
@@ -191,8 +198,11 @@ public class SceneBattle implements Scene {
         player.setHand(new ArrayList<Card>());
         enemy.setHand(new ArrayList<Card>());
         
-        player.drawCard();
-        player.drawCard();
+        mostRecentGildedCard = null;
+        Card c = player.drawCard();
+        if(c.isGilded()) mostRecentGildedCard = c;
+        c = player.drawCard();
+        if(c.isGilded()) mostRecentGildedCard = c;
         enemy.drawCard();
         enemy.drawCard();
 
@@ -365,7 +375,7 @@ public class SceneBattle implements Scene {
                 }
             }
         }
-        else if (bjai.playerTotal > 21) {
+        else if (bjai.getPlayerTotal() > 21) {
             cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack());
             player.setHealth(cbai.getPlayerHealth());
             bjai.setPlayerHealth(player.getHealth());

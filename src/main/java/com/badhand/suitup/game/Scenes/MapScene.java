@@ -180,8 +180,12 @@ public class MapScene implements Scene {
             case KEY_PRESS:
                 int key = (int)(e.getData());
                 // Pan map with arrow keys
-                if(key == PConstants.LEFT) map.pan(false);
-                if(key == PConstants.RIGHT) map.pan(true);
+                if(key == ' '){
+                    Deck d = p.getDeck();
+                    for(int i = 0; i < 51; i++){
+                        d.draw().gild();
+                    }
+                }
 
                 break;
             case SCENE_EVENT:

@@ -33,6 +33,7 @@ public class Card implements GUI{
     private static AssetManager am = AssetManager.getInstance();
 
     private static PImage gildedTexture;
+    private static PGraphics gildedBack;
 
     private ImageElement gildedElement;
 
@@ -78,6 +79,11 @@ public class Card implements GUI{
             cardBack.beginDraw();
             cardBack.image(am.getImage("CardBack1.png"), 0, 0, width, height);
             cardBack.endDraw();
+
+            gildedBack = wm.newGraphic(width, height);
+            gildedBack.beginDraw();
+            gildedBack.image(am.getImage("CardBack3.png"), 0, 0, width, height);
+            gildedBack.endDraw();
         }
         
 
@@ -144,7 +150,7 @@ public class Card implements GUI{
     }
 
     public PGraphics getTexture(){
-        return faceUp ? texture : cardBack;
+        return faceUp ? texture : gilded ? gildedBack : cardBack;
     }
 
     public String getName(){
@@ -215,6 +221,10 @@ public class Card implements GUI{
 
     public Effect getEffect(){
         return effect;
+    }
+
+    public boolean isFlipped(){
+        return !this.faceUp;
     }
 
     public PImage getGildedTexture(){
