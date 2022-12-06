@@ -24,16 +24,8 @@ public class ShopScene implements Scene {
         TextButton b = new TextButton("Play", 64, width/2, height/2, new Event(Events.SCENE_CHANGE, GameState.MENU_LEVEL_SELECT));
         wm.put(b);
 
-        TextButton c = new TextButton("Options", 64, width/2, (int)(height/1.5)-16, null);
-        wm.put(c);
-
-        TextButton d = new TextButton("Back", 64, 0, 0, new Event(Events.SCENE_CHANGE, GameState.MENU_MAIN));
+        TextButton d = new TextButton("Back", 64, 150, 100, new Event(Events.SCENE_CHANGE, GameState.MENU_MAIN));
         wm.put(d);
-
-        TextElement t = new TextElement("Developed by BadHandStudios", 64, 400, height - 64);
-        wm.put(t);
-
-        
     }
 
     @Override
