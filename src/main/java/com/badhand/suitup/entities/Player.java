@@ -21,6 +21,8 @@ public class Player extends Entity {
         this.setMaxHealth(20);
         this.setAttack(5);
         this.setDeck(new Deck());
+
+        
         wm.registerDiffered(this);
 
     };

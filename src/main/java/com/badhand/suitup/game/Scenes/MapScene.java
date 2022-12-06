@@ -45,7 +45,7 @@ public class MapScene implements Scene {
 
     private static TextElement movesRemainingText;
 
-    private TextElement enemyToolTip;
+    private static TextElement enemyToolTip;
 
 
 
