@@ -17,7 +17,6 @@ public class SceneBattle implements Scene {
 
     int width = 1920;
     int height = 1080;
-    int health = 25;
     int animWidth = width;
     int animHeight = height/2;
 
@@ -69,7 +68,6 @@ public class SceneBattle implements Scene {
         cbai.setPlayerHealth(player.getHealth());
         cbai.setEnemyHealth(enemy.getHealth());
 
-        player.setHealth(20);
         player.setDeck(new Deck());
         player.setHand(new ArrayList<Card>());
         
