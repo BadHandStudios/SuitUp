@@ -2,6 +2,8 @@ package com.badhand.suitup.game;
 
 import com.badhand.suitup.events.*;
 import com.badhand.suitup.game.Scenes.*;
+import com.badhand.suitup.assets.AssetManager;
+import com.badhand.suitup.entities.*;
 import com.badhand.suitup.ui.WindowManager;
 
 import processing.core.PConstants;
@@ -18,6 +20,8 @@ public class GameManager {
     private static EventManager em = EventManager.getInstance();
 
     private static WindowManager wm = WindowManager.getInstance();
+
+    private static AssetManager am = AssetManager.getInstance();
 
     private GameManager(){};
 
@@ -43,6 +47,9 @@ public class GameManager {
                 case SCENE_CHANGE:
                     changeScene((GameState)(e.getData()));
                     break;
+                case BATTLE_INITIATE:
+                    initiateBattle((Enemy)(e.getData()));
+                    break;
                 case QUIT_GAME:
                     wm.destroyWindow();
                     System.exit(0);
@@ -58,6 +65,11 @@ public class GameManager {
         updateLock = false;
     }
 
+    public void initiateBattle(Enemy e){
+        scene = GameState.SCENE_BATTLE;
+        currentScene = new SceneBattle(e);
+        currentScene.initialize();
+    }
     public void changeScene(GameState state) {
         scene = state;
         switch(scene){
@@ -71,7 +83,10 @@ public class GameManager {
                 currentScene = new MenuLevelSelect();
                 break;
             case SCENE_BATTLE:
-                currentScene = new SceneBattle();
+                currentScene = new SceneBattle(new Enemy(am.getImage("Enemy.png"), "Mike", 20, 5, wm.getWidth() - 150, 200, new BasicBJAI(), new BasicCBAI()));
+                break;
+            case MENU_SHOP:
+                currentScene = new ShopScene();
                 break;
             case DEBUG:
                 currentScene = new Debug();

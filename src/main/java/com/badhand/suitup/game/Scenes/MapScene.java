@@ -45,6 +45,8 @@ public class MapScene implements Scene {
 
     private static TextElement movesRemainingText;
 
+    private static TextElement enemyToolTip;
+
 
 
 
@@ -78,9 +80,15 @@ public class MapScene implements Scene {
 
             wm.put(playerHealth);
             wm.put(playerCoins);
+            wm.put(enemyToolTip);
             return;
         }
 
+
+        enemyToolTip = new TextElement("", 32, wm.getWidth()/2, 200);
+        enemyToolTip.setVisibility(false);
+        wm.put(enemyToolTip);
+        wm.registerDiffered(enemyToolTip, 4);
 
 
         movesRemaining = maxMoves;
@@ -123,19 +131,19 @@ public class MapScene implements Scene {
 
         cloudElements[0] = new GraphicsWrapper(clouds, 250, wm.getHeight() / 2);
         cloudElements[1] = new GraphicsWrapper(clouds2, 1920 - 250, wm.getHeight() / 2);
-        wm.registerDiffered(cloudElements[0], 1);
-        wm.registerDiffered(cloudElements[1], 1);
+        wm.registerDiffered(cloudElements[0], 2);
+        wm.registerDiffered(cloudElements[1], 2);
         
         wm.put(cloudElements[0]);
         wm.put(cloudElements[1]);
         
         movesRemainingBar = new ProgressBar(wm.getWidth() / 2, 100, 500, 50, maxMoves, movesRemaining);
         movesRemainingBar.setColor(new Color(30, 150, 250));
-        wm.registerDiffered(movesRemainingBar);
+        wm.registerDiffered(movesRemainingBar, 3);
         wm.put(movesRemainingBar);
 
         movesRemainingText = new TextElement("Moves until Boss Encounter", 32, wm.getWidth()/2, 150);
-        wm.registerDiffered(movesRemainingText);
+        wm.registerDiffered(movesRemainingText, 3);
         wm.put(movesRemainingText);
     }
 
@@ -144,6 +152,10 @@ public class MapScene implements Scene {
         if(moveDelay > 0) moveDelay--;
 
         Node n = p.getCurrentNode();
+        if(!(n.getEntity() instanceof Enemy) && enemyToolTip != null){
+            enemyToolTip.setVisibility(false);
+        }
+
         if(map.isEdge(n) && n.connectingEdges() != 0) {
             map.pan(false);
             doubleBack = true;
@@ -168,8 +180,12 @@ public class MapScene implements Scene {
             case KEY_PRESS:
                 int key = (int)(e.getData());
                 // Pan map with arrow keys
-                if(key == PConstants.LEFT) map.pan(false);
-                if(key == PConstants.RIGHT) map.pan(true);
+                if(key == ' '){
+                    Deck d = p.getDeck();
+                    for(int i = 0; i < 51; i++){
+                        d.draw().gild();
+                    }
+                }
 
                 break;
             case SCENE_EVENT:
@@ -177,16 +193,21 @@ public class MapScene implements Scene {
                 // Move character if possible
                 if(moveDelay > 0) return;
                 Node current = p.getCurrentNode();
-                if(current == requested && current.full()){
+                if(current == requested){
                     if(current.getEntity() != null){
                         if(current.getEntity() instanceof SlotMachine){
                             current.removeEntity();
                             em.push(new Event(Events.SCENE_CHANGE, GameState.SLOT_SCENE));
+                        }else if(current.getEntity() instanceof Enemy){
+                            em.push(new Event(Events.BATTLE_INITIATE, current.getEntity()));
+                            current.removeEntity();
                         }
+                    }else if(current.isDebug()){
+                        em.push(new Event(Events.SCENE_CHANGE, GameState.SCENE_BATTLE));
                     }
                 }
 
-                if(map.connected(current, requested)) {
+                if(map.connected(current, requested) && (!(current.getEntity() instanceof Enemy) || requested == p.getPreviousNode())) {
                     movesRemaining--;
                     moveDelay = 10;
                     movesRemainingBar.setValue(movesRemaining);
@@ -196,6 +217,11 @@ public class MapScene implements Scene {
                         map.pan(true);
                     }
                     p.move(requested);
+                    if(requested.getEntity() instanceof Enemy){
+                        Enemy en = (Enemy)(requested.getEntity());
+                        enemyToolTip.setText("Enemy Found! ("+ en.getName() + ", Level 1)");
+                        enemyToolTip.setVisibility(true);
+                    }
                     if(movesRemaining == 0) {
                         map.stopGeneration();
                         movesRemainingText.setText("Approaching Boss!");

@@ -5,7 +5,7 @@ import com.badhand.suitup.entities.*;
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.ui.*;
 
-import processing.core.PGraphics;
+import processing.core.*;
 
 import java.util.*;
 
@@ -13,69 +13,48 @@ public class Enemy extends Entity {
 
     private AssetManager am = AssetManager.getInstance();
 
-    public BlackJackAI bjai = new BlackJackAI();
+    private BlackJackAI bjai;
+    private CombatAI cbai;
 
+    private String name;
 
-    public Enemy() {
-        health = 25;
-        setTexture(new ImageElement("Enemy", (1920 - 150), 200, 200,300, am.getImage("Enemy.png")));
-        x = texture.getX();
-        y = texture.getY();
-        deck = new Deck();
-        hand = new ArrayList<Card>();
+    private PGraphics rawTexture;
+    
+    public Enemy(PImage texture, String name, int health, int attack, int x, int y, BlackJackAI bjai, CombatAI cbai) {
+        super(texture, x, y, 100, 100);
+        this.setMaxHealth(health);
+        this.setDeck(new Deck());
+        this.setHand(new ArrayList<Card>());
+        this.setAttack(attack);
+
+        this.rawTexture = wm.newGraphic(texture.width, texture.height);
+        rawTexture.beginDraw();
+        rawTexture.image(texture, 0, 0, texture.width, texture.height);
+        rawTexture.endDraw();
+
+        this.bjai = bjai;
+        this.cbai = cbai;
+
+        this.name = name;
     }
 
     public BlackJackAI getBJAI() {
         return bjai;
     }
-
-    @Override
-    public int getWidth() {
-        // TODO Auto-generated method stub
-        return 0;
+    public CombatAI getCBAI() {
+        return cbai;
     }
 
-    @Override
-    public int getHeight() {
-        // TODO Auto-generated method stub
-        return 0;
+
+    public PGraphics rawTexture(){
+        return this.rawTexture;
     }
 
-    @Override
-    public void setPos(int x, int y) {
-        // TODO Auto-generated method stub
-        
+    public String getName(){
+        return name;
     }
 
-    @Override
-    public PGraphics getTexture() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public boolean visible() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void setVisibility(boolean visible) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public boolean click(int mouseX, int mouseY) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public List<GUI> enumerate() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+   
 
     
 }

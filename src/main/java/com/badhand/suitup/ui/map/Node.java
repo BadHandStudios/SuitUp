@@ -218,6 +218,7 @@ public class Node implements GUI {
             e.setVisibility(filled);
             return true;
         }
+        if(e instanceof Enemy) wm.put(e);
         if(this.entity != null) return false;
         this.entity = e;
         setEntityPositions();
