@@ -52,8 +52,6 @@ public class GameManager {
                     break;
             }
         }
-
-
     }
 
     public synchronized void unlock(){
@@ -88,5 +86,8 @@ public class GameManager {
         currentScene.initialize();
     }
 
+    public Scene getCurrentScene(){
+        return currentScene;
+    }
 }
 

@@ -27,7 +27,8 @@ public class CardTest
         int expected = -1;
         Card testCard;
 
-        for(int i = 0; i < _mockDeck.size(); i++){
+        for(int i = 0; i < _mockDeck.size(); i++)
+        {
             testCard = _mockDeck.get(i);
             expected = testCard.getRawValue();
             if(expected == 1){
@@ -92,8 +93,11 @@ public class CardTest
     public void BeforeEach()
     {
         _mockDeck = new ArrayList<Card>();
-        for(int i = 0; i < 4; i++){
-            for (int j = 1; j <= 13; j++){
+
+        for(int i = 0; i < 4; i++)
+        {
+            for (int j = 1; j <= 13; j++)
+            {
                 _mockDeck.add(new Card(Suit.values()[i], j, 0, 0, 250, 350));
             }
         }

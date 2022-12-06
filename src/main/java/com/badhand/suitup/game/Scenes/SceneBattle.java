@@ -78,7 +78,7 @@ public class SceneBattle implements Scene {
     }
 
     public void update() {
-
+        
     }
 
     public void handle(Event e) {

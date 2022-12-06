@@ -19,22 +19,24 @@ public class GameTest {
     private static AssetManager am;
     private static EventManager em;
 
+    private static Scene battleScene;
+
     @Test
     public void gameplayTest2(){
-        System.out.println("Gametest test 2 happen");
+        //System.out.println("Gametest test 2 happen");
         assert(true);
     }
 
     @Test
     public void gameplayTest(){
-        System.out.println("Gametest test happen");
+        //System.out.println("Gametest test happen");
         assert(true);
     }
 
     @BeforeAll
     public static void Setup()
     {
-        System.out.println("Gametest setup happen");
+        //System.out.println("Gametest setup happen");
         wm = WindowManager.getInstance();
         wm.createWindow(1920, 1080);
 
@@ -45,7 +47,13 @@ public class GameTest {
 
         gm = GameManager.getInstance();
         em = EventManager.getInstance();
-        em.push(new Event(Events.SCENE_CHANGE, GameState.MENU_MAIN)); //Replace with gameplay scene 
+        em.push(new Event(Events.SCENE_CHANGE, GameState.SCENE_BATTLE));
+        battleScene = gm.getCurrentScene();
+        // TODO: Tests for
+        // player / enemy bust
+        // player / enemy blackjack
+        // player / enemy hand with ace
+        // player / enemy compare hand value
     }
     
     @AfterAll
@@ -57,6 +65,6 @@ public class GameTest {
     @BeforeEach
     public void BeforeEach()
     {
-        System.out.println("Gametest BeforeEach happen");
+        //System.out.println("Gametest BeforeEach happen");
     }
 }
