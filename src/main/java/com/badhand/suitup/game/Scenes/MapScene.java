@@ -123,19 +123,19 @@ public class MapScene implements Scene {
 
         cloudElements[0] = new GraphicsWrapper(clouds, 250, wm.getHeight() / 2);
         cloudElements[1] = new GraphicsWrapper(clouds2, 1920 - 250, wm.getHeight() / 2);
-        wm.registerDiffered(cloudElements[0], 1);
-        wm.registerDiffered(cloudElements[1], 1);
+        wm.registerDiffered(cloudElements[0], 2);
+        wm.registerDiffered(cloudElements[1], 2);
         
         wm.put(cloudElements[0]);
         wm.put(cloudElements[1]);
         
         movesRemainingBar = new ProgressBar(wm.getWidth() / 2, 100, 500, 50, maxMoves, movesRemaining);
         movesRemainingBar.setColor(new Color(30, 150, 250));
-        wm.registerDiffered(movesRemainingBar);
+        wm.registerDiffered(movesRemainingBar, 3);
         wm.put(movesRemainingBar);
 
         movesRemainingText = new TextElement("Moves until Boss Encounter", 32, wm.getWidth()/2, 150);
-        wm.registerDiffered(movesRemainingText);
+        wm.registerDiffered(movesRemainingText, 3);
         wm.put(movesRemainingText);
     }
 
@@ -177,12 +177,14 @@ public class MapScene implements Scene {
                 // Move character if possible
                 if(moveDelay > 0) return;
                 Node current = p.getCurrentNode();
-                if(current == requested && current.full()){
+                if(current == requested){
                     if(current.getEntity() != null){
                         if(current.getEntity() instanceof SlotMachine){
                             current.removeEntity();
                             em.push(new Event(Events.SCENE_CHANGE, GameState.SLOT_SCENE));
                         }
+                    }else if(current.isDebug()){
+                        em.push(new Event(Events.SCENE_CHANGE, GameState.SCENE_BATTLE));
                     }
                 }
 
