@@ -48,12 +48,13 @@ public class Map implements GUI {
     Runnable panMapRight;
 
     boolean finishedAdding = false;
+    private int level;
 
 
     private Random rand = new Random();
 
-    public Map() {
-
+    public Map(int level) {
+        this.level = level;
 
         // Create first column
         Node[] column = new Node[3];
@@ -149,7 +150,7 @@ public class Map implements GUI {
         int numFilled = 0;
 
         for (int r = 0; r < col.length; r++) {
-            col[r] = nf.randomNode(r, columns.size());
+            col[r] = nf.randomNode(r, columns.size(), level);
         }
         columns.add(col);
 

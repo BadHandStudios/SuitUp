@@ -48,4 +48,9 @@ public class ShuffleBag<T> {
         }
         return null;
     }
+
+    public void clear(){
+        bag.clear();
+        this.curr = 0;
+    }
 }

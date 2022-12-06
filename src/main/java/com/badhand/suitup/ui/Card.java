@@ -142,7 +142,7 @@ public class Card implements GUI{
 
         if(this.gilded){
             this.gildedElement.setPos(x, y);
-            this.toolTip.setPos(x, y + 225);
+            this.toolTip.setPos(x, y - 175);
         }
     }
 
@@ -231,13 +231,13 @@ public class Card implements GUI{
                     text = "Heal +" + (int)(effect.getValue()) + "!";
                     break;
                 case INSTANT_DAMAGE:
-                    text = "Insta-damage +" + (int)(effect.getValue());
+                    text = "" + (int)(effect.getValue()) + " damage!";
                     break;
                 default:
                     text = "ERROR!";
                     break;
             }
-            toolTip = new TextElement(text, 16, x, y + 225);
+            toolTip = new TextElement(text, 32, x, y - 175);
             toolTip.setVisibility(false);
             this.enumeration.add(toolTip);
         }else{
@@ -247,6 +247,7 @@ public class Card implements GUI{
 
     public void activate(){
         if(!gilded) return;
+        am.playSound("clang.mp3", 3);
         if(effect.getEffect() == Effects.BUST_PROOF) this.flip();
         this.toolTip.setVisibility(true);
     }

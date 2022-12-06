@@ -80,7 +80,7 @@ public class SceneBattle implements Scene {
         wm.put(enemyImage);
         wm.put(playerImage);
 
-        int offset = 120;
+        int offset = 100;
 
         ImageElement playerHeart = new ImageElement("playerHeart", 150, height/2 + offset, 100, 100, am.getImage("heart.png"));
         wm.put(playerHeart);
@@ -98,12 +98,14 @@ public class SceneBattle implements Scene {
         if(c.isGilded() && eff.getEffect() == Effects.INSTANT_DAMAGE){
             c.activate();
             if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+            updateHealth();
         }
         c = player.drawCard();
         if(c.isGilded()) mostRecentGildedCard = c;
         if(c.isGilded() && eff.getEffect() == Effects.INSTANT_DAMAGE){
             c.activate();
             if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+            updateHealth();
         }
         enemy.drawCard();
         enemy.drawCard();
@@ -155,6 +157,7 @@ public class SceneBattle implements Scene {
                         if(eff.getEffect() == Effects.INSTANT_DAMAGE){
                             c.activate();
                             if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+                            updateHealth();
                         }
                     }
                     drawHands();
@@ -220,12 +223,15 @@ public class SceneBattle implements Scene {
         if(c.isGilded() && eff.getEffect() == Effects.INSTANT_DAMAGE){
             c.activate();
             if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+            updateHealth();
         }
         c = player.drawCard();
+        eff = c.getEffect();
         if(c.isGilded()) mostRecentGildedCard = c;
         if(c.isGilded() && eff.getEffect() == Effects.INSTANT_DAMAGE){
             c.activate();
             if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+            updateHealth();
         }
         enemy.drawCard();
         enemy.drawCard();
@@ -414,5 +420,10 @@ public class SceneBattle implements Scene {
             wm.put(reset);
             enemy.getHand().get(0).flip();
         }
+    }
+
+    public void updateHealth(){
+        playerHealthText.setText("" + player.getHealth());
+        enemyHealthText.setText("" + enemy.getHealth());
     }
 }

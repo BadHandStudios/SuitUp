@@ -50,8 +50,10 @@ public class MapScene implements Scene {
     private static CaptionedImage gildedCards;
 
 
+    private static int level = 1;
+    boolean reLevel;
 
-
+    
     public void initialize() {
         if(playMusic) {
             am.stopSound(0);
@@ -68,7 +70,7 @@ public class MapScene implements Scene {
         wm.clear();
         wm.setBackground(new Color(80, 80, 80));
 
-        if(map != null){
+        if(map != null && !reLevel){
             wm.put(p);
             wm.put(map);
             map.replaceEntities();
@@ -106,7 +108,7 @@ public class MapScene implements Scene {
         wm.put(playerHealth);
         wm.put(playerCoins);
 
-        map = new Map();
+        map = new Map(level);
         p.move(map.getNode(1, 0));
         wm.put(p);
         wm.put(map);
@@ -207,7 +209,8 @@ public class MapScene implements Scene {
                             current.removeEntity();
                         }
                     }else if(current.isDebug()){
-                        em.push(new Event(Events.SCENE_CHANGE, GameState.SCENE_BATTLE));
+                        nextLevel();
+                        break;
                     }
                 }
 
@@ -239,5 +242,10 @@ public class MapScene implements Scene {
         
     }
 
+    private void nextLevel(){
+        level++;
+        reLevel = true;
+        this.initialize();
+    }
     
 }
