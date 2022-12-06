@@ -182,6 +182,9 @@ public class MapScene implements Scene {
                         if(current.getEntity() instanceof SlotMachine){
                             current.removeEntity();
                             em.push(new Event(Events.SCENE_CHANGE, GameState.SLOT_SCENE));
+                        }else if(current.getEntity() instanceof Enemy){
+                            em.push(new Event(Events.BATTLE_INITIATE, current.getEntity()));
+                            current.removeEntity();
                         }
                     }else if(current.isDebug()){
                         em.push(new Event(Events.SCENE_CHANGE, GameState.SCENE_BATTLE));

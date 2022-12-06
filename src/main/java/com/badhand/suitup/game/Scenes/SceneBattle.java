@@ -72,9 +72,12 @@ public class SceneBattle implements Scene {
         player.setHand(new ArrayList<Card>());
         
         player.setPos(150, height-200);
+        enemy.setPos(wm.getWidth() - 150, 200);
 
         ImageElement playerImage = new ImageElement(player.getX(), player.getY(), 200, 300, am.getImage("character.png"));
-        wm.put(enemy);
+        ImageElement enemyImage = new ImageElement(enemy.getX(), enemy.getY(), 200, 300, enemy.rawTexture());
+        
+        wm.put(enemyImage);
         wm.put(playerImage);
 
         

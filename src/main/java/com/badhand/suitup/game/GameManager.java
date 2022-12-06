@@ -47,6 +47,9 @@ public class GameManager {
                 case SCENE_CHANGE:
                     changeScene((GameState)(e.getData()));
                     break;
+                case BATTLE_INITIATE:
+                    initiateBattle((Enemy)(e.getData()));
+                    break;
                 case QUIT_GAME:
                     wm.destroyWindow();
                     System.exit(0);
@@ -64,6 +67,11 @@ public class GameManager {
         updateLock = false;
     }
 
+    public void initiateBattle(Enemy e){
+        scene = GameState.SCENE_BATTLE;
+        currentScene = new SceneBattle(e);
+        currentScene.initialize();
+    }
     public void changeScene(GameState state) {
         scene = state;
         switch(scene){
