@@ -35,7 +35,7 @@ public class CaptionedImage implements GUI {
         this.x = x;
         this.y = y;
         this.image.setPos(x, y);
-        this.text.setPos(x + text.getWidth() / 2 + size, y);
+        this.text.setPos(x + text.getWidth() + size, y);
     }
 
     public int getX(){

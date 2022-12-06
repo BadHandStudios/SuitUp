@@ -27,6 +27,8 @@ public class Card implements GUI{
     private boolean gilded = false;
     private Effect effect;
 
+    private Deck deck;
+
     private PGraphics texture;
 
     private static  WindowManager wm = WindowManager.getInstance();
@@ -203,6 +205,9 @@ public class Card implements GUI{
 
     public void gild(){
         if(!gilded){
+            if(this.deck != null){
+                deck.registerGilded(this);
+            }
             gilded = true;
             if(gildedTexture == null){
                 gildedTexture = am.getImage("gilded.png");
@@ -265,5 +270,9 @@ public class Card implements GUI{
 
     public PImage getGildedTexture(){
         return gildedTexture;
+    }
+
+    public void registerDeck(Deck d){
+        this.deck = d;
     }
 }

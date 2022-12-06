@@ -7,7 +7,6 @@ import com.badhand.suitup.assets.*;
 import com.badhand.suitup.entities.*;
 
 import java.util.*;
-import processing.core.*;
 
 public class SceneBattle implements Scene {
     
@@ -62,7 +61,7 @@ public class SceneBattle implements Scene {
         am.stopSound(0);
         am.playSound("combat_background_music.mp3", 0);
         wm.clear();
-        wm.setBackground(new Color(173,101,29));
+        wm.setBackground(new Color(10, 60, 20));
 
         player = Player.getInstance();
         bjai = enemy.getBJAI();
@@ -81,15 +80,15 @@ public class SceneBattle implements Scene {
         wm.put(enemyImage);
         wm.put(playerImage);
 
-        
+        int offset = 120;
 
-        ImageElement playerHeart = new ImageElement("playerHeart", 150, height/2 + 140, 100, 100, am.getImage("heart.png"));
+        ImageElement playerHeart = new ImageElement("playerHeart", 150, height/2 + offset, 100, 100, am.getImage("heart.png"));
         wm.put(playerHeart);
-        ImageElement enemyHeart = new ImageElement("enemyHeart", width - 150, height/2 - 140, 100, 100, am.getImage("heart.png"));
+        ImageElement enemyHeart = new ImageElement("enemyHeart", width - 150, height/2 - offset, 100, 100, am.getImage("heart.png"));
         wm.put(enemyHeart);
-        playerHealthText = new TextElement("" + player.getHealth(),36,150,height/2 + 140);
+        playerHealthText = new TextElement("" + player.getHealth(),36,150,height/2 + offset);
         wm.put(playerHealthText);
-        enemyHealthText = new TextElement("" + enemy.getHealth(),36,width-150,height/2 - 140);
+        enemyHealthText = new TextElement("" + enemy.getHealth(),36,width-150,height/2 - offset);
         wm.put(enemyHealthText);
 
         mostRecentGildedCard = null;

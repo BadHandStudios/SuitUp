@@ -47,6 +47,8 @@ public class MapScene implements Scene {
 
     private static TextElement enemyToolTip;
 
+    private static CaptionedImage gildedCards;
+
 
 
 
@@ -83,6 +85,8 @@ public class MapScene implements Scene {
             wm.put(enemyToolTip);
             return;
         }
+
+        gildedCards = new CaptionedImage(am.getImage("CardBack3.png"), ""+p.getDeck().numGilded(), wm.getWidth() - 200, 50, 64);
 
 
         enemyToolTip = new TextElement("", 32, wm.getWidth()/2, 200);
