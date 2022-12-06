@@ -49,6 +49,8 @@ public class SlotScene implements Scene {
 
     private static Player p = Player.getInstance();
 
+    private Card gildAward;
+
 
 
     public static void preInitialize(){
@@ -107,6 +109,7 @@ public class SlotScene implements Scene {
 
         String randomCardString = "2;3;4;5;6;7;8;9;10;J;Q;K;A".split(";")[rand.nextInt(13)] + "of" + "Clubs;Dmnds;Hearts;Spades".split(";")[rand.nextInt(4)];
         Card randomCard = p.getDeck().getCard(randomCardString);
+        gildAward = randomCard;
         randomCard.gild();
         PGraphics cardImage = wm.newGraphic(150, 300);
         cardImage.beginDraw();
@@ -157,11 +160,38 @@ public class SlotScene implements Scene {
                 int totalReward = coinReward * coinMultiplier;
                 rewardText = new TextElement("+" + totalReward, 64, slotResults[slot].getX(), slotResults[slot].getY());
                 wm.put(rewardText);
+                rewardText.setPos(wm.getWidth()/2 - 600 + (600*slot), wm.getHeight()/2);
                 p.addChips(totalReward);
                 coinMultiplier++;
             }else if(slotResults[slot].getName().equals("heart")){
                 p.addMaxHealth(1);
                 rewardText = new TextElement("+1 Max", 64, slotResults[slot].getX(), slotResults[slot].getY());
+                wm.put(rewardText);
+                rewardText.setPos(wm.getWidth()/2 - 600 + (600*slot), wm.getHeight()/2);
+            }else{
+                String text;
+                Effect e = gildAward.getEffect();
+                switch(e.getEffect()){
+                    case BUST_PROOF:
+                        text = "Bust Proof!";
+                        break;
+                    case DAMAGE_MODIFIER:
+                        text = "Damage +" + (int)(e.getValue() * 100) + "%";
+                        break;
+                    case HEAL:
+                        text = "Heal +" + (int)(e.getValue()) + "!";
+                        break;
+                    case INSTANT_DAMAGE:
+                        text = "Insta-damage +" + (int)(e.getValue());
+                        break;
+                    default:
+                        text = "ERROR!";
+                        break;
+
+                }
+
+                rewardText = new TextElement(text, 64, slotResults[slot].getX(), slotResults[slot].getY() + 150);
+                rewardText.setPos(wm.getWidth()/2 - 600 + (600*slot), wm.getHeight()/2 + 225);
                 wm.put(rewardText);
             }
 
@@ -169,7 +199,7 @@ public class SlotScene implements Scene {
             am.playSound("collect_" + (slot+1) +".mp3", slot + 1);
             slotGlow[slot].setPos(wm.getWidth()/2 - 600 + (600*slot), wm.getHeight()/2);
             slotResults[slot].setPos(wm.getWidth()/2 - 600 + (600*slot), wm.getHeight()/2);
-            if(rewardText != null) rewardText.setPos(wm.getWidth()/2 - 600 + (600*slot), wm.getHeight()/2);
+            // if(rewardText != null) rewardText.setPos(wm.getWidth()/2 - 600 + (600*slot), wm.getHeight()/2);
             slot++;
             if(slot == 3){
                 collect.setVisibility(true);
