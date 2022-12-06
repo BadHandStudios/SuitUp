@@ -45,6 +45,8 @@ public class MapScene implements Scene {
 
     private static TextElement movesRemainingText;
 
+    private TextElement enemyToolTip;
+
 
 
 
@@ -78,9 +80,15 @@ public class MapScene implements Scene {
 
             wm.put(playerHealth);
             wm.put(playerCoins);
+            wm.put(enemyToolTip);
             return;
         }
 
+
+        enemyToolTip = new TextElement("", 32, wm.getWidth()/2, 200);
+        enemyToolTip.setVisibility(false);
+        wm.put(enemyToolTip);
+        wm.registerDiffered(enemyToolTip, 4);
 
 
         movesRemaining = maxMoves;
@@ -144,6 +152,10 @@ public class MapScene implements Scene {
         if(moveDelay > 0) moveDelay--;
 
         Node n = p.getCurrentNode();
+        if(!(n.getEntity() instanceof Enemy) && enemyToolTip != null){
+            enemyToolTip.setVisibility(false);
+        }
+
         if(map.isEdge(n) && n.connectingEdges() != 0) {
             map.pan(false);
             doubleBack = true;
@@ -201,6 +213,11 @@ public class MapScene implements Scene {
                         map.pan(true);
                     }
                     p.move(requested);
+                    if(requested.getEntity() instanceof Enemy){
+                        Enemy en = (Enemy)(requested.getEntity());
+                        enemyToolTip.setText("Enemy Found! ("+ en.getName() + ", Level 1)");
+                        enemyToolTip.setVisibility(true);
+                    }
                     if(movesRemaining == 0) {
                         map.stopGeneration();
                         movesRemainingText.setText("Approaching Boss!");

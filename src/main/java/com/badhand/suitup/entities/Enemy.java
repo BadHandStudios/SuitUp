@@ -16,6 +16,8 @@ public class Enemy extends Entity {
     private BlackJackAI bjai;
     private CombatAI cbai;
 
+    private String name;
+
     private PGraphics rawTexture;
     
     public Enemy(PImage texture, String name, int health, int attack, int x, int y, BlackJackAI bjai, CombatAI cbai) {
@@ -32,6 +34,8 @@ public class Enemy extends Entity {
 
         this.bjai = bjai;
         this.cbai = cbai;
+
+        this.name = name;
     }
 
     public BlackJackAI getBJAI() {
@@ -44,6 +48,10 @@ public class Enemy extends Entity {
 
     public PGraphics rawTexture(){
         return this.rawTexture;
+    }
+
+    public String getName(){
+        return name;
     }
 
    

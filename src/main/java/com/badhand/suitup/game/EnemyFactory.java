@@ -1,12 +1,7 @@
 package com.badhand.suitup.game;
 
 import com.badhand.suitup.assets.AssetManager;
-import com.badhand.suitup.entities.BasicBJAI;
-import com.badhand.suitup.entities.BasicCBAI;
-import com.badhand.suitup.entities.BlackJackAI;
-import com.badhand.suitup.entities.Enemy;
-import com.badhand.suitup.entities.RandomBJAI;
-import com.badhand.suitup.entities.SmartBJAI;
+import com.badhand.suitup.entities.*;
 import com.badhand.suitup.ui.WindowManager;
 
 import processing.core.PImage;
@@ -24,7 +19,7 @@ public class EnemyFactory {
     
     private EnemyFactory(){
         loadTextures();
-        loadAI();
+        loadAI(1);
         loadNames();
     }
 
@@ -52,10 +47,23 @@ public class EnemyFactory {
         }
     }
 
-    private void loadAI(){
-        enemyAI.add(new RandomBJAI(), 3);
-        enemyAI.add(new BasicBJAI(), 2);
-        enemyAI.add(new SmartBJAI());
+    private void loadAI(int level){
+        switch(level){
+            case 1:
+                enemyAI.add(new RandomBJAI());
+                enemyAI.add(new SmartRandomAI(), 2);
+                enemyAI.add(new BasicBJAI());
+                enemyAI.add(new ByTheBooksAI());
+                enemyAI.add(new SmartBJAI());
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+
+        }
+        
     }
 
     private void loadNames(){
