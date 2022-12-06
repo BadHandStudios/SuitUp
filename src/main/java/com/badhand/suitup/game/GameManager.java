@@ -87,6 +87,9 @@ public class GameManager {
             case SCENE_BATTLE:
                 currentScene = new SceneBattle(new Enemy(am.getImage("Enemy.png"), "Mike", 20, 5, wm.getWidth() - 150, 200, new BasicBJAI(), new BasicCBAI()));
                 break;
+            case MENU_SHOP:
+                currentScene = new ShopScene();
+                break;
             case DEBUG:
                 currentScene = new Debug();
                 break;
