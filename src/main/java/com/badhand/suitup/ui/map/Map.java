@@ -2,7 +2,7 @@ package com.badhand.suitup.ui.map;
 
 import com.badhand.suitup.ui.*;
 import com.badhand.suitup.entities.*;
-import com.badhand.suitup.game.EnemyFactory;
+import com.badhand.suitup.game.*;
 
 import java.util.*;
 
@@ -13,6 +13,8 @@ public class Map implements GUI {
     private ArrayList<Node[]> columns = new ArrayList<Node[]>();
 
     private static EnemyFactory ef = EnemyFactory.getInstance();
+
+    private static NodeFactory nf = NodeFactory.getInstance();
 
     private static final int INITIAL_SIZE = 10;
     private static final int COLUMNS_PER_GEN = 2;
@@ -147,7 +149,7 @@ public class Map implements GUI {
         int numFilled = 0;
 
         for (int r = 0; r < col.length; r++) {
-            col[r] = new Node(r, columns.size());
+            col[r] = nf.randomNode(r, columns.size());
         }
         columns.add(col);
 
@@ -162,18 +164,18 @@ public class Map implements GUI {
                 }
             }
         }
-        if(numFilled > 1){
+        // if(numFilled > 1){
 
-            while(true){
-                Node n = col[rand.nextInt(col.length)];
-                if(!n.isFilled()) continue;
-                n.setEntity(rand.nextBoolean() ? ef.getEnemy(1, 1) : new SlotMachine());
-                break;
-            }
-        }else{
-            Node n = col[rand.nextInt(col.length)];
-            if(n.isFilled()) n.setEntity(rand.nextBoolean() ? ef.getEnemy(1, 1) : new SlotMachine());
-        }
+        //     while(true){
+        //         Node n = col[rand.nextInt(col.length)];
+        //         if(!n.isFilled()) continue;
+        //         n.setEntity(rand.nextBoolean() ? ef.getEnemy(1, 1) : new SlotMachine());
+        //         break;
+        //     }
+        // }else{
+        //     Node n = col[rand.nextInt(col.length)];
+        //     if(n.isFilled()) n.setEntity(rand.nextBoolean() ? ef.getEnemy(1, 1) : new SlotMachine());
+        // }
 
 
 

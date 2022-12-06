@@ -1,6 +1,6 @@
 package com.badhand.suitup.ui;
 
-import com.badhand.suitup.ui.*;
+
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.events.*;
 import com.badhand.suitup.assets.*;
@@ -40,6 +40,8 @@ public class Card implements GUI{
     private static Random rand = new Random();
     private static Hashtable<String, PGraphics> cardFaces = new Hashtable<String, PGraphics>();
 
+
+    private TextElement toolTip;
 
 
 
@@ -138,6 +140,7 @@ public class Card implements GUI{
 
         if(this.gilded){
             this.gildedElement.setPos(x, y);
+            this.toolTip.setPos(x, y + 225);
         }
     }
 
@@ -210,9 +213,42 @@ public class Card implements GUI{
 
             this.effect = new Effect(Effects.values()[rand.nextInt(Effects.values().length)]);
             this.enumeration.add(gildedElement);
+
+            String text;
+            switch(effect.getEffect()){
+                case BUST_PROOF:
+                    text = "Bust Proof!";
+                    break;
+                case DAMAGE_MODIFIER:
+                    text = "Damage +" + (int)(effect.getValue() * 100) + "%";
+                    break;
+                case HEAL:
+                    text = "Heal +" + (int)(effect.getValue()) + "!";
+                    break;
+                case INSTANT_DAMAGE:
+                    text = "Insta-damage +" + (int)(effect.getValue());
+                    break;
+                default:
+                    text = "ERROR!";
+                    break;
+            }
+            toolTip = new TextElement(text, 16, x, y + 225);
+            toolTip.setVisibility(false);
+            this.enumeration.add(toolTip);
         }else{
             this.effect.upgrade();
         }
+    }
+
+    public void activate(){
+        if(!gilded) return;
+        if(effect.getEffect() == Effects.BUST_PROOF) this.flip();
+        this.toolTip.setVisibility(true);
+    }
+
+    public void deactivate(){
+        if(!gilded) return;
+        this.toolTip.setVisibility(false);
     }
 
     public boolean isGilded(){

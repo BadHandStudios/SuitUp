@@ -94,9 +94,18 @@ public class SceneBattle implements Scene {
 
         mostRecentGildedCard = null;
         Card c = player.drawCard();
+        Effect eff = c.getEffect();
         if(c.isGilded()) mostRecentGildedCard = c;
+        if(c.isGilded() && eff.getEffect() == Effects.INSTANT_DAMAGE){
+            c.activate();
+            if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+        }
         c = player.drawCard();
         if(c.isGilded()) mostRecentGildedCard = c;
+        if(c.isGilded() && eff.getEffect() == Effects.INSTANT_DAMAGE){
+            c.activate();
+            if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+        }
         enemy.drawCard();
         enemy.drawCard();
 
@@ -143,8 +152,9 @@ public class SceneBattle implements Scene {
                     if(c.isGilded()){
                         Effect eff = c.getEffect();
                         mostRecentGildedCard = c;
-                        if(player.getHandTotal() > 21 && eff.getEffect() == Effects.BUST_PROOF) c.flip();
+                        if(player.getHandTotal() > 21 && eff.getEffect() == Effects.BUST_PROOF) c.activate();
                         if(eff.getEffect() == Effects.INSTANT_DAMAGE){
+                            c.activate();
                             if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
                         }
                     }
@@ -206,9 +216,18 @@ public class SceneBattle implements Scene {
         
         mostRecentGildedCard = null;
         Card c = player.drawCard();
+        Effect eff = c.getEffect();
         if(c.isGilded()) mostRecentGildedCard = c;
+        if(c.isGilded() && eff.getEffect() == Effects.INSTANT_DAMAGE){
+            c.activate();
+            if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+        }
         c = player.drawCard();
         if(c.isGilded()) mostRecentGildedCard = c;
+        if(c.isGilded() && eff.getEffect() == Effects.INSTANT_DAMAGE){
+            c.activate();
+            if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+        }
         enemy.drawCard();
         enemy.drawCard();
 

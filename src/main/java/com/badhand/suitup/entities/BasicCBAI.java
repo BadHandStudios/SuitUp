@@ -57,9 +57,11 @@ public class BasicCBAI extends CombatAI{
             switch(e.getEffect()){
                 case DAMAGE_MODIFIER:
                     playerOffenseModifier += e.getValue();
+                    c.activate();
                     break;
                 case HEAL:
                     setPlayerHealth(getPlayerHealth() + (int)e.getValue());
+                    c.activate();
                     break;
                 case INSTANT_DAMAGE:
                     break;

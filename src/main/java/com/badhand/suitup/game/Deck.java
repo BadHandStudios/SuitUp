@@ -26,7 +26,9 @@ public class Deck {
     public Card draw(){
         cardsLeft--;
         if(cardsLeft == 0) shuffle();
-        return cards.next();
+        Card c = cards.next();
+        c.deactivate();
+        return c;
     }
 
     public void shuffle(){
