@@ -18,6 +18,7 @@ public class Player extends Entity {
     private Player() {
         super(am.getImage("character.png"), -500, -500, 90, 100);
         this.setMaxHealth(20);
+        this.setAttack(5);
         this.setDeck(new Deck());
         wm.registerDiffered(this);
 

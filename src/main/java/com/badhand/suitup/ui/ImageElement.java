@@ -41,6 +41,16 @@ public class ImageElement implements GUI {
         this("", x, y, width, height, am.getImage(fileName));
     }
 
+    public void redraw() {
+        this.texture = WindowManager.getInstance().newGraphic(width, height);
+        this.texture.beginDraw();
+        this.texture.image(texture, 0, 0, width, height);
+        this.texture.endDraw();
+
+        enumeration = new LinkedList<GUI>();
+        enumeration.add(this);
+    }
+
 
 
     public int getWidth() {
@@ -60,6 +70,11 @@ public class ImageElement implements GUI {
     public void setPos(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+    public void setSize(int width, int height) {
+        this.width = width;
+        this.height = height;
+        //this.redraw();
     }
 
     public boolean visible() {
