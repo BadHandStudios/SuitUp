@@ -35,7 +35,7 @@ public class EnemyFactory {
         PImage texture = enemyTextures.next();
         String name = enemyNames.next();
         int health = 15 + 5 * level;
-        int attack = 5 + level;
+        int attack = 4 + level;
         Enemy e = new Enemy(texture, name, health, attack, 0, 0, ai, new BasicCBAI());
         wm.registerDiffered(e);
         return e;

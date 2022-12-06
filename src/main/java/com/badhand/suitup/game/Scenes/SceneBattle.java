@@ -68,7 +68,6 @@ public class SceneBattle implements Scene {
         cbai.setPlayerHealth(player.getHealth());
         cbai.setEnemyHealth(enemy.getHealth());
 
-        player.setDeck(new Deck());
         player.setHand(new ArrayList<Card>());
         
         player.setPos(150, height-200);
