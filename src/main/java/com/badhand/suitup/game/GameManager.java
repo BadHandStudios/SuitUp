@@ -2,6 +2,7 @@ package com.badhand.suitup.game;
 
 import com.badhand.suitup.events.*;
 import com.badhand.suitup.game.Scenes.*;
+import com.badhand.suitup.assets.AssetManager;
 import com.badhand.suitup.entities.*;
 import com.badhand.suitup.ui.WindowManager;
 
@@ -19,6 +20,8 @@ public class GameManager {
     private static EventManager em = EventManager.getInstance();
 
     private static WindowManager wm = WindowManager.getInstance();
+
+    private static AssetManager am = AssetManager.getInstance();
 
     private GameManager(){};
 
@@ -74,7 +77,7 @@ public class GameManager {
                 currentScene = new MenuLevelSelect();
                 break;
             case SCENE_BATTLE:
-                currentScene = new SceneBattle(new Enemy());
+                currentScene = new SceneBattle(new Enemy(am.getImage("Enemy.png"), "Mike", 20, 5, wm.getWidth() - 150, 200, new BasicBJAI(), new BasicCBAI()));
                 break;
             case DEBUG:
                 currentScene = new Debug();

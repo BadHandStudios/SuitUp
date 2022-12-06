@@ -19,6 +19,7 @@ public abstract class Entity implements GUI {
     private int width, height;
     private int health;
     private int maxHealth;
+    private int attack;
     private boolean visibility;
 
     private LinkedList<GUI> enumeration;
@@ -97,6 +98,9 @@ public abstract class Entity implements GUI {
     }
     public int getY() {
         return this.y;
+    }
+    public void setAttack(int attack) {
+        this.attack = attack;
     }
     public int getAttack() {
         return this.attack;
