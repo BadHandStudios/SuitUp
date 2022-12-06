@@ -9,7 +9,8 @@ public class Player extends Entity {
 
 
 
-    Node currentNode;
+    private Node currentNode;
+    private Node prevNode;
 
     private static AssetManager am = AssetManager.getInstance();
 
@@ -51,10 +52,14 @@ public class Player extends Entity {
     public Node getCurrentNode() {
         return currentNode;
     }
+    public Node getPreviousNode(){
+        return prevNode;
+    }
 
 
     public void move(Node node) {
         if(currentNode != null) currentNode.removePlayer();
+        prevNode = currentNode;
         currentNode = node;
         node.setEntity(this);
     }

@@ -191,7 +191,7 @@ public class MapScene implements Scene {
                     }
                 }
 
-                if(map.connected(current, requested)) {
+                if(map.connected(current, requested) && (!(current.getEntity() instanceof Enemy) || requested == p.getPreviousNode())) {
                     movesRemaining--;
                     moveDelay = 10;
                     movesRemainingBar.setValue(movesRemaining);
