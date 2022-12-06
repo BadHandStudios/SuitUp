@@ -49,7 +49,7 @@ public class SceneBattle implements Scene {
         enemy = new Enemy(am.getImage("Enemy.png"), "Mike", 20, 5, wm.getWidth() - 150, 200, new BlackJackAI());
         player = Player.getInstance();
         bjai = enemy.getBJAI();
-        player.setHealth(25);
+        player.setHealth(20);
         player.setDeck(new Deck());
         player.setHand(new ArrayList<Card>());
 
