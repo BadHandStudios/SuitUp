@@ -8,7 +8,9 @@ public class RandomBJAI extends BlackJackAI{
         int rand = random(1,2);
 
         if (rand == 1) {
-            result = true;
+            if (getEnemyTotal() != 21) {
+                result = true;
+            }
         }
 
         return result;
