@@ -71,7 +71,7 @@ public class BasicCBAI extends CombatAI{
             }
         }
 
-        if (playerTotal > enemyTotal  && playerTotal <= 21 || enemyTotal > 21) {
+        if ((playerTotal > enemyTotal  && playerTotal <= 21 || enemyTotal > 21) || (getPlayerHand().size() == 5 && playerTotal <= 21)) {
             int attack = Attack;
 
             attack *= playerOffenseModifier;
@@ -79,7 +79,7 @@ public class BasicCBAI extends CombatAI{
 
             setEnemyHealth(getEnemyHealth() - (int)attack);
         }
-        else if (playerTotal < enemyTotal && enemyTotal <= 21 || playerTotal > 21) {
+        else if ((playerTotal < enemyTotal && enemyTotal <= 21 || playerTotal > 21) || (getEnemyHand().size() == 5 && enemyTotal <= 21)) {
             int attack = Attack;
 
             attack *= enemyOffenseModifier;
