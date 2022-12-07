@@ -18,7 +18,7 @@ public class SceneBattle implements Scene {
     int height = 1080;
     int animWidth = width;
     int animHeight = height/2;
-    int timer = 50;
+    int timer = 30;
     int enemyHandIndex = 0;
     int playerHandIndex = 0;
 
@@ -48,6 +48,8 @@ public class SceneBattle implements Scene {
     boolean playerTurn = true;
     boolean roundStart = true;
     boolean battle = false;
+    boolean hitVisible = false;
+    boolean resetRound = false;
 
     Enemy enemy;
     BlackJackAI bjai;
@@ -66,7 +68,7 @@ public class SceneBattle implements Scene {
         wm.clear();
         wm.setBackground(new Color(10, 60, 20));
 
-        timer = 50;
+        timer = 30;
         playerHandIndex = 0;
         enemyHandIndex = 0;
 
@@ -131,49 +133,63 @@ public class SceneBattle implements Scene {
             timer--;
         }
         else {
-            int rand = cbai.random(0,3);
-            switch (rand) {
-                case 0:
-                    filename = "cardPlace1.mp3";
-                    break;
-                case 1:
-                    filename = "cardPlace2.mp3";
-                    break;
-                case 2:
-                    filename = "cardPlace3.mp3";
-                    break;
-                case 3:
-                    filename = "cardSlide1.mp3";
-                    break;
-            }
-
-            timer = 50;
+            timer = 30;
 
             if (playerHandIndex < playerHand.size()) {
+                int rand = cbai.random(0,3);
+                switch (rand) {
+                    case 0:
+                        filename = "cardPlace1.mp3";
+                        break;
+                    case 1:
+                        filename = "cardPlace2.mp3";
+                        break;
+                    case 2:
+                        filename = "cardPlace3.mp3";
+                        break;
+                    case 3:
+                        filename = "cardSlide1.mp3";
+                        break;
+                }
+
                 if (!playerHand.get(playerHandIndex).visible()) {
                     playerHand.get(playerHandIndex).setVisibility(true);
                     playerHandIndex++;
                     am.playSound(filename,1);
                 }
                 else {
+                    playerHandIndex++;
                     if (enemyHandIndex < enemyHand.size()) {
                         if (!enemyHand.get(enemyHandIndex).visible()) {
                             enemyHand.get(enemyHandIndex).setVisibility(true);
                             enemyHandIndex++;
                             am.playSound(filename,1);
                         }
+                        else {
+                            enemyHandIndex++;
+                        }
                     }
                     else {
                         enemyHandIndex = 0;
-                        if (playerTurn) {
+                        if (playerTurn && !hitVisible) {
                             wm.put(attack);
                             wm.put(block);
                             wm.put(nothing);
+                        }
+                        else if (resetRound) {
+                            wm.put(winner);
+                            wm.put(reset);
+                            resetRound = false;
                         }
                     }
                 }
             }
             else {
+                if (resetRound && playerTurn) {
+                    wm.put(winner);
+                    wm.put(reset);
+                    resetRound = false;
+                }
                 playerHandIndex = 0;
             }
         }
@@ -187,7 +203,6 @@ public class SceneBattle implements Scene {
                     wm.remove(hit);
                     wm.remove(stay);
                     enemyTurn();
-                    wm.put(reset);
                     break;
                 case "Hit":
                     Card c = player.drawCard();
@@ -211,6 +226,7 @@ public class SceneBattle implements Scene {
                     wm.remove(nothing);
                     wm.put(hit);
                     wm.put(stay);
+                    hitVisible = true;
                     break;
                 case "Block":
                     playerAction = "Block";
@@ -219,6 +235,7 @@ public class SceneBattle implements Scene {
                     wm.remove(nothing);
                     wm.put(hit);
                     wm.put(stay);
+                    hitVisible = true;
                     break;
                 case "Nothing":
                     playerAction = "Nothing";
@@ -227,6 +244,7 @@ public class SceneBattle implements Scene {
                     wm.remove(nothing);
                     wm.put(hit);
                     wm.put(stay);
+                    hitVisible = true;
                     break;
                 case "reset":
                     if (player.getHealth() <= 0 || enemy.getHealth() <= 0) {
@@ -253,10 +271,16 @@ public class SceneBattle implements Scene {
     }
 
     public void reset() {
+        System.out.println("");
         wm.remove(winner);
         playerTurn = true;
         playerPositions = new int[]{0,0,0,0,0};
         enemyPositions = new int[]{0,0,0,0,0};
+
+        timer = 30;
+        playerHandIndex = 0;
+        enemyHandIndex = 0;
+        hitVisible = false;
 
         playerHealthText.setText("" + player.getHealth());
         enemyHealthText.setText("" + enemy.getHealth());
@@ -317,7 +341,7 @@ public class SceneBattle implements Scene {
     }
 
     public void drawHands() {
-        timer = 50;
+        timer = 30;
         drawPlayerHand();
         drawEnemyHand();
     }
@@ -364,11 +388,11 @@ public class SceneBattle implements Scene {
         }
         if (enemyHandIndex > 1 && !playerTurn) {
             enemyHand.get(enemyHandIndex).setVisibility(false);
+            enemyHandIndex = 2;
         }
     }
 
     public void enemyTurn() {
-        System.out.println(timer);
         bjai.setEnemyHand(enemy.getHand());
         bjai.setPlayerHand(player.getHand());
         if (bjai.hit()) {
@@ -404,11 +428,10 @@ public class SceneBattle implements Scene {
             }
             enemyHealthText.setText("" + enemy.getHealth());
             winner = new TextElement("Player Wins!",64, 200, height/2);
-            wm.put(winner);
             wm.remove(hit);
             wm.remove(stay);
-            wm.put(reset);
             enemy.getHand().get(0).flip();
+            resetRound = true;
         }
         else if (enemy.getHand().size() == 5 && bjai.enemyTotal <= 21) {
             cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), null);
@@ -419,8 +442,8 @@ public class SceneBattle implements Scene {
             }
             playerHealthText.setText("" + player.getHealth());
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
-            wm.put(winner);
             enemy.getHand().get(0).flip();
+            resetRound = true;
         }
         else if (bjai.playerTotal <= 21 && !playerTurn) {
             if (bjai.enemyTotal > 21) {
@@ -432,8 +455,8 @@ public class SceneBattle implements Scene {
                 }
                 enemyHealthText.setText("" + enemy.getHealth());
                 winner = new TextElement("Player Wins!",64, 200, height/2);
-                wm.put(winner);
                 enemy.getHand().get(0).flip();
+                resetRound = true;
             }
             else {
                 if (bjai.getEnemyTotal() > bjai.getPlayerTotal() && bjai.getEnemyTotal() <= 21) {
@@ -445,8 +468,8 @@ public class SceneBattle implements Scene {
                     }
                     playerHealthText.setText("" + player.getHealth());
                     winner = new TextElement("Enemy Wins!",64, 200, height/2);
-                    wm.put(winner);
                     enemy.getHand().get(0).flip();
+                    resetRound = true;
                 }
                 else if (bjai.getEnemyTotal() < bjai.getPlayerTotal() && bjai.getPlayerTotal() <= 21) {
                     cbai.doActions(playerAction, cbai.getAction(), player.getAttack(), mostRecentGildedCard);
@@ -457,13 +480,13 @@ public class SceneBattle implements Scene {
                     }
                     enemyHealthText.setText("" + enemy.getHealth());
                     winner = new TextElement("Player Wins!",64, 200, height/2);
-                    wm.put(winner);
                     enemy.getHand().get(0).flip();
+                    resetRound = true;
                 }
                 else {
                     winner = new TextElement("Draw!",64, 200, height/2);
-                    wm.put(winner);
                     enemy.getHand().get(0).flip();
+                    resetRound = true;
                 }
             }
         }
@@ -476,11 +499,10 @@ public class SceneBattle implements Scene {
             }
             playerHealthText.setText("" + player.getHealth());
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
-            wm.put(winner);
             wm.remove(hit);
             wm.remove(stay);
-            wm.put(reset);
             enemy.getHand().get(0).flip();
+            resetRound = true;
         }
     }
 
