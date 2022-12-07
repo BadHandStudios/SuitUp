@@ -1,9 +1,10 @@
 package com.badhand.suitup.assets;
 
+import java.io.File;
 import java.io.FileWriter;
+import java.util.Scanner;
 
 import org.json.*;
-import org.json.simple.parser.JSONParser;
 
 public class DataManager {
     private static DataManager instance;
@@ -14,13 +15,24 @@ public class DataManager {
 
     private DataManager(){
         String saveFileName = am.getJSON("save.json");
-
-        JSONParser jsonParser = new JSONParser();
+        Scanner scanner;
         try{
-            saveData = (JSONObject) jsonParser.parse(saveFileName);
+            scanner = new Scanner(new File(saveFileName));
         }catch(Exception e){
-            e.printStackTrace();
+            System.out.println("Save file not found. Creating new save file.");
+            saveData = new JSONObject();
+            save();
+            return;
         }
+        String saveText = "";
+        while(scanner.hasNextLine()){
+            saveText += scanner.nextLine();
+        }
+        scanner.close();
+        System.out.println(saveText);
+
+        saveData = new JSONObject(saveText);
+
     }
 
     public static DataManager getInstance(){
@@ -31,17 +43,27 @@ public class DataManager {
 
     public void saveData(String key, String value){
         saveData.put(key, value);
+        save();
     }
     public void saveData(String key, int value){
         saveData.put(key, value);
+        save();
     }
 
     public int getInt(String key){
-        return (int) saveData.get(key);
+        try {
+            return (int) saveData.get(key);
+        }catch(Exception e){
+            return 0;
+        }
     }
 
     public String getString(String key){
-        return (String) saveData.get(key);
+        try {
+            return (String) saveData.get(key);
+        }catch(Exception e){
+            return "";
+        }
     }
 
     private void save(){

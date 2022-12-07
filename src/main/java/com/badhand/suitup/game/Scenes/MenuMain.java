@@ -25,9 +25,7 @@ public class MenuMain implements Scene{
     private Random rand = new Random();
     
 
-    public MenuMain(){
-        
-    }
+    public MenuMain(){}
 
     public void initialize() {
         wm.clear();
