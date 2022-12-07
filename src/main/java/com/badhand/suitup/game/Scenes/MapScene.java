@@ -111,6 +111,8 @@ public class MapScene implements Scene {
 
 
             return;
+        }else{
+            reLevel = false;
         }
 
         switch(episode){
