@@ -16,13 +16,19 @@ public class EnemyFactory {
     private final int ENEMY_TEXTURE_FILES = 5;
     
     private static ShuffleBag<PImage> enemyTextures = new ShuffleBag<PImage>();
+    private static ShuffleBag<PImage> bossTextures = new ShuffleBag<PImage>();
     private static ShuffleBag<BlackJackAI> enemyAI = new ShuffleBag<BlackJackAI>();
+    private static ShuffleBag<BlackJackAI> bossAI = new ShuffleBag<BlackJackAI>();
     private static ShuffleBag<String> enemyNames = new ShuffleBag<String>();
+    private static ShuffleBag<String> bossNames = new ShuffleBag<String>();
     
     private EnemyFactory(){
         
         loadAI(1);
         loadNames();
+
+        bossAI.add(new CheaterBJAI(), 2);
+        bossAI.add(new ByTheBooksAI(), 1);
     }
 
     private AssetManager am = AssetManager.getInstance();
@@ -30,6 +36,26 @@ public class EnemyFactory {
     public static EnemyFactory getInstance(){
         if(instance == null) instance = new EnemyFactory();
         return instance;
+    }
+
+    public Enemy getBoss(int episode){
+        BlackJackAI ai = bossAI.next();
+        PImage texture = bossTextures.next();
+        String name = bossNames.next();
+        int health = 50;
+        int attack = 8;
+
+        switch(episode){
+            case 2:
+                health += 20;
+                attack += 2;
+                break;
+            default:
+        }
+
+        Enemy e = new Enemy(texture, name, health, attack, 0, 0, ai, new BasicCBAI());
+        wm.registerDiffered(e);
+        return e;
     }
 
     public Enemy getEnemy(int episode, int level){
@@ -109,6 +135,15 @@ public class EnemyFactory {
         };
 
         for(String n : names) enemyNames.add(n);
+
+        final String[] boss = {
+            "Jack (Himself)",
+            "The Joker",
+            "King of Cards",
+            "Queen of Jacks",
+        };
+
+        for(String n : boss) bossNames.add(n);
     }
 
 }

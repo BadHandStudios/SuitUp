@@ -185,7 +185,7 @@ public class MapScene implements Scene {
         wm.registerDiffered(movesRemainingBar, 3);
         wm.put(movesRemainingBar);
 
-        movesRemainingText = new TextElement("Moves until Boss Encounter", 32, wm.getWidth()/2, 150);
+        movesRemainingText = new TextElement("Moves until level end", 32, wm.getWidth()/2, 150);
         wm.registerDiffered(movesRemainingText, 3);
         wm.put(movesRemainingText);
     }

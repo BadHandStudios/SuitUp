@@ -59,7 +59,7 @@ public class GameManager {
                     System.exit(0);
                     break;
                 case BOSS_FIGHT:
-                    initiateBattle((ef.getEnemy(episode, (int)e.getData())));
+                    initiateBattle((ef.getBoss((int)e.getData())));
                     break;
                 default:
                     currentScene.handle(e);
