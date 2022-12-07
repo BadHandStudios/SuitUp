@@ -19,7 +19,7 @@ public class ShopScene implements Scene {
         wm.clear();
         wm.setBackground(new Color(116,173,229));
 
-        TextElement logo = new TextElement("Shop",128,width/2,height/4);
+        TextElement logo = new TextElement("Shop",128,width/2,height/5);
         wm.put(logo);
 
         TextButton b = new TextButton("Play", 64, width/2, height/2, new Event(Events.SCENE_CHANGE, GameState.MENU_LEVEL_SELECT));
