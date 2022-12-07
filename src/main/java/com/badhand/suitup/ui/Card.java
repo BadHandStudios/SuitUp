@@ -257,6 +257,7 @@ public class Card implements GUI{
 
     public void deactivate(){
         if(!gilded) return;
+        faceUp = true;
         this.toolTip.setVisibility(false);
     }
 
