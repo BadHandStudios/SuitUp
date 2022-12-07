@@ -17,6 +17,7 @@ public class ShopScene implements Scene {
     @Override
     public void initialize() {
         wm.clear();
+        wm.setBackground(new Color(116,173,229));
 
         TextElement logo = new TextElement("Shop",128,width/2,height/4);
         wm.put(logo);
