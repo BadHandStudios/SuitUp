@@ -30,6 +30,7 @@ public class MenuMain implements Scene{
     public void initialize() {
         wm.clear();
 
+        
         am.loopSound("catchit.mp3", 0);
         wm.setBackground(new Color(50,50,50));
         
@@ -40,9 +41,6 @@ public class MenuMain implements Scene{
             am.getImage("chipBlueWhite.png"),
             am.getImage("chipRedWhite.png"),
         };
-        
-        am.loopSound("catchit.mp3", 0);
-
 
         for(int i = 0; i < chips.length; i++){
             int x = rand.nextInt(width);
