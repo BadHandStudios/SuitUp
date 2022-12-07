@@ -18,8 +18,12 @@ public class SceneBattle implements Scene {
     int height = 1080;
     int animWidth = width;
     int animHeight = height/2;
+    int timer = 50;
+    int enemyHandIndex = 0;
+    int playerHandIndex = 0;
 
     String playerAction;
+    String filename = "";
 
     int[] playerPositions = {0,0,0,0,0};
     int[] enemyPositions = {0,0,0,0,0};
@@ -44,7 +48,6 @@ public class SceneBattle implements Scene {
     boolean playerTurn = true;
     boolean roundStart = true;
     boolean battle = false;
-    boolean draw = false;
 
     Enemy enemy;
     BlackJackAI bjai;
@@ -62,6 +65,10 @@ public class SceneBattle implements Scene {
         am.loopSound("combat_background_music.mp3", 0);
         wm.clear();
         wm.setBackground(new Color(10, 60, 20));
+
+        timer = 50;
+        playerHandIndex = 0;
+        enemyHandIndex = 0;
 
         player = Player.getInstance();
         bjai = enemy.getBJAI();
@@ -113,29 +120,62 @@ public class SceneBattle implements Scene {
 
         enemy.getHand().get(0).flip();
         drawHands();
-
-
-        wm.put(attack);
-        wm.put(block);
-        wm.put(nothing);
+        playerHand.get(0).setVisibility(false);
+        playerHand.get(1).setVisibility(false);
+        enemyHand.get(0).setVisibility(false);
+        enemyHand.get(1).setVisibility(false);
     }
 
     public void update() {
-        if (draw) {
-            if (playerTurn) {
-                if (animWidth == width && animHeight == height/2) {
-                    animCard = new ImageElement(animWidth, animHeight/2, 200, 300, "CardBack2.png");
+        if (timer > 0) {
+            timer--;
+        }
+        else {
+            int rand = cbai.random(0,3);
+            switch (rand) {
+                case 0:
+                    filename = "cardPlace1.mp3";
+                    break;
+                case 1:
+                    filename = "cardPlace2.mp3";
+                    break;
+                case 2:
+                    filename = "cardPlace3.mp3";
+                    break;
+                case 3:
+                    filename = "cardSlide1.mp3";
+                    break;
+            }
+
+            timer = 50;
+
+            if (playerHandIndex < playerHand.size()) {
+                if (!playerHand.get(playerHandIndex).visible()) {
+                    playerHand.get(playerHandIndex).setVisibility(true);
+                    playerHandIndex++;
+                    am.playSound(filename,1);
                 }
                 else {
-                    wm.remove(animCard);
-                    animCard = new ImageElement(animWidth, animHeight/2, 200, 300, "CardBack2.png");
+                    if (enemyHandIndex < enemyHand.size()) {
+                        if (!enemyHand.get(enemyHandIndex).visible()) {
+                            enemyHand.get(enemyHandIndex).setVisibility(true);
+                            enemyHandIndex++;
+                            am.playSound(filename,1);
+                        }
+                    }
+                    else {
+                        enemyHandIndex = 0;
+                        if (playerTurn) {
+                            wm.put(attack);
+                            wm.put(block);
+                            wm.put(nothing);
+                        }
+                    }
                 }
-                wm.put(animCard);
             }
             else {
-
+                playerHandIndex = 0;
             }
-            draw = false;
         }
     }
 
@@ -239,10 +279,10 @@ public class SceneBattle implements Scene {
 
         enemy.getHand().get(0).flip();
         drawHands();
-
-        wm.put(attack);
-        wm.put(block);
-        wm.put(nothing);
+        playerHand.get(0).setVisibility(false);
+        playerHand.get(1).setVisibility(false);
+        enemyHand.get(0).setVisibility(false);
+        enemyHand.get(1).setVisibility(false);
     }
 
     public int[] formatHand(int size) {
@@ -270,6 +310,7 @@ public class SceneBattle implements Scene {
     }
 
     public void drawHands() {
+        timer = 50;
         drawPlayerHand();
         drawEnemyHand();
     }
@@ -288,6 +329,12 @@ public class SceneBattle implements Scene {
             playerHand.add(player.getHand().get(i));
             playerHand.get(i).setPos(positions[i], height - 200);
             wm.put(playerHand.get(i));
+            if (i > 1) {
+                playerHandIndex = i;
+            }
+        }
+        if (playerHandIndex > 1 && playerTurn) {
+            playerHand.get(playerHandIndex).setVisibility(false);
         }
     }
     public void drawEnemyHand() {
@@ -304,10 +351,17 @@ public class SceneBattle implements Scene {
             enemyHand.add(enemy.getHand().get(i));
             enemyHand.get(i).setPos(positions[i], 200);
             wm.put(enemyHand.get(i));
+            if (i > 1) {
+                enemyHandIndex = i;
+            }
+        }
+        if (enemyHandIndex > 1 && !playerTurn) {
+            enemyHand.get(enemyHandIndex).setVisibility(false);
         }
     }
 
     public void enemyTurn() {
+        System.out.println(timer);
         bjai.setEnemyHand(enemy.getHand());
         bjai.setPlayerHand(player.getHand());
         if (bjai.hit()) {
