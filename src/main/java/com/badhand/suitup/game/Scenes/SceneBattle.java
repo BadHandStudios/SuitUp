@@ -51,6 +51,7 @@ public class SceneBattle implements Scene {
     boolean battle = false;
     boolean hitVisible = false;
     boolean resetRound = false;
+    boolean animate = false;
 
     Enemy enemy;
     BlackJackAI bjai;
@@ -136,10 +137,10 @@ public class SceneBattle implements Scene {
 
         enemy.getHand().get(0).flip();
         drawHands();
-        //playerHand.get(0).setVisibility(false);
-        //playerHand.get(1).setVisibility(false);
-        //enemyHand.get(0).setVisibility(false);
-        //enemyHand.get(1).setVisibility(false);
+        playerHand.get(0).setVisibility(false);
+        playerHand.get(1).setVisibility(false);
+        enemyHand.get(0).setVisibility(false);
+        enemyHand.get(1).setVisibility(false);
 
         wm.put(attack);
         wm.put(nothing);
@@ -147,70 +148,74 @@ public class SceneBattle implements Scene {
     }
 
     public void update() {
-        /*if (timer > 0) {
-            timer--;
-        }
-        else {
-            timer = 30;
-
-            if (playerHandIndex < playerHand.size()) {
-                int rand = cbai.random(0,3);
-                switch (rand) {
-                    case 0:
-                        filename = "cardPlace1.mp3";
-                        break;
-                    case 1:
-                        filename = "cardPlace2.mp3";
-                        break;
-                    case 2:
-                        filename = "cardPlace3.mp3";
-                        break;
-                    case 3:
-                        filename = "cardSlide1.mp3";
-                        break;
-                }
-
-                if (!playerHand.get(playerHandIndex).visible()) {
-                    playerHand.get(playerHandIndex).setVisibility(true);
-                    playerHandIndex++;
-                    am.playSound(filename,1);
-                }
-                else {
-                    playerHandIndex++;
-                    if (enemyHandIndex < enemyHand.size()) {
-                        if (!enemyHand.get(enemyHandIndex).visible()) {
-                            enemyHand.get(enemyHandIndex).setVisibility(true);
-                            enemyHandIndex++;
-                            am.playSound(filename,1);
-                        }
-                        else {
-                            enemyHandIndex++;
-                        }
-                    }
-                    else {
-                        enemyHandIndex = 0;
-                        if (playerTurn && !hitVisible) {
-                            wm.put(attack);
-                            wm.put(block);
-                            wm.put(nothing);
-                        }
-                        else if (resetRound) {
-                            wm.put(winner);
-                            wm.put(reset);
-                            resetRound = false;
-                        }
-                    }
-                }
+        if (animate) {
+            if (timer > 0) {
+                timer--;
             }
             else {
-                if (resetRound && playerTurn) {
-                    wm.put(winner);
-                    wm.put(reset);
-                    resetRound = false;
+                timer = 30;
+    
+                if (playerHandIndex < playerHand.size()) {
+                    int rand = cbai.random(0,3);
+                    switch (rand) {
+                        case 0:
+                            filename = "cardPlace1.mp3";
+                            break;
+                        case 1:
+                            filename = "cardPlace2.mp3";
+                            break;
+                        case 2:
+                            filename = "cardPlace3.mp3";
+                            break;
+                        case 3:
+                            filename = "cardSlide1.mp3";
+                            break;
+                    }
+    
+                    if (!playerHand.get(playerHandIndex).visible()) {
+                        playerHand.get(playerHandIndex).setVisibility(true);
+                        playerHandIndex++;
+                        am.playSound(filename,1);
+                    }
+                    else {
+                        playerHandIndex++;
+                        if (enemyHandIndex < enemyHand.size()) {
+                            if (!enemyHand.get(enemyHandIndex).visible()) {
+                                enemyHand.get(enemyHandIndex).setVisibility(true);
+                                enemyHandIndex++;
+                                am.playSound(filename,1);
+                            }
+                            else {
+                                enemyHandIndex++;
+                            }
+                        }
+                        else {
+                            enemyHandIndex = 0;
+                            animate = false;
+                            if (playerTurn && !hitVisible) {
+                                //wm.put(attack);
+                                //wm.put(block);
+                                //wm.put(nothing);
+                            }
+                            else if (resetRound) {
+                                //wm.put(winner);
+                                //wm.put(reset);
+                                //resetRound = false;
+                            }
+                        }
+                    }
                 }
-                playerHandIndex = 0;
+                else {
+                    if (resetRound && playerTurn) {
+                        //wm.put(winner);
+                        //wm.put(reset);
+                        //resetRound = false;
+                    }
+                    playerHandIndex = 0;
+                    animate = false;
+                }
             }
-        }*/
+        }
     }
 
     public void handle(Event e) {
@@ -347,10 +352,10 @@ public class SceneBattle implements Scene {
 
         enemy.getHand().get(0).flip();
         drawHands();
-        //playerHand.get(0).setVisibility(false);
-        //playerHand.get(1).setVisibility(false);
-        //enemyHand.get(0).setVisibility(false);
-        //enemyHand.get(1).setVisibility(false);
+        playerHand.get(0).setVisibility(false);
+        playerHand.get(1).setVisibility(false);
+        enemyHand.get(0).setVisibility(false);
+        enemyHand.get(1).setVisibility(false);
 
         wm.put(attack);
         wm.put(nothing);
@@ -382,6 +387,7 @@ public class SceneBattle implements Scene {
     }
 
     public void drawHands() {
+        animate = true;
         drawPlayerHand();
         drawEnemyHand();
     }
@@ -401,15 +407,15 @@ public class SceneBattle implements Scene {
             playerHand.get(i).setPos(positions[i], height - 200);
             wm.put(playerHand.get(i));
             if (i > 1) {
-                //playerHandIndex = i;
+                playerHandIndex = i;
             }
         }
         //if (playerHandIndex > 1 && playerTurn) {
         //    playerHand.get(playerHandIndex).setVisibility(false);
         //}
         if (playerHandIndex > 1 && playerTurn) {
-            //playerHand.get(playerHandIndex).setVisibility(false);
-            //playerHandIndex = 2;
+            playerHand.get(playerHandIndex).setVisibility(false);
+            playerHandIndex = 2;
         }
     }
     public void drawEnemyHand() {
@@ -427,12 +433,12 @@ public class SceneBattle implements Scene {
             enemyHand.get(i).setPos(positions[i], 200);
             wm.put(enemyHand.get(i));
             if (i > 1) {
-                //enemyHandIndex = i;
+                enemyHandIndex = i;
             }
         }
         if (enemyHandIndex > 1 && !playerTurn) {
-            //enemyHand.get(enemyHandIndex).setVisibility(false);
-            //enemyHandIndex = 2;
+            enemyHand.get(enemyHandIndex).setVisibility(false);
+            enemyHandIndex = 2;
         }
     }
 
