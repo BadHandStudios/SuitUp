@@ -59,7 +59,7 @@ public class SceneBattle implements Scene {
 
     public void initialize() {
         am.stopSound(0);
-        am.playSound("combat_background_music.mp3", 0);
+        am.loopSound("combat_background_music.mp3", 0);
         wm.clear();
         wm.setBackground(new Color(10, 60, 20));
 
@@ -193,6 +193,7 @@ public class SceneBattle implements Scene {
                         if (enemy.getHealth() <= 0) {
                             player.addChips((enemy.getMaxHealth() * 10) + (cbai.random(1,enemy.getAttack()) * 10));
                         }
+                        am.stopSound(0);
                         Event end = new Event(Events.SCENE_CHANGE,GameState.MAP_SCENE);
                         em.push(end);
                     }
