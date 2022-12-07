@@ -253,6 +253,9 @@ public class MapScene implements Scene {
                             p.addHealth(5);
                             playerHealth.setCaption(""+ p.getHealth() + "/" + p.getMaxHealth());
                             current.removeEntity();
+                        }else if(current.getEntity() instanceof Shop){
+                            current.removeEntity();
+                            em.push(new Event(Events.SCENE_CHANGE, GameState.MENU_SHOP));
                         }
                     }else if(current.isDebug()){
                         nextLevel();
