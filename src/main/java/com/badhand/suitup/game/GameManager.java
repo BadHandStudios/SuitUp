@@ -23,6 +23,10 @@ public class GameManager {
 
     private static AssetManager am = AssetManager.getInstance();
 
+    private static EnemyFactory ef = EnemyFactory.getInstance();
+
+    private static int episode = 1;
+
     private GameManager(){};
 
     private boolean updateLock = false;
@@ -54,6 +58,9 @@ public class GameManager {
                     wm.destroyWindow();
                     System.exit(0);
                     break;
+                case BOSS_FIGHT:
+                    initiateBattle((ef.getEnemy(episode, (int)e.getData())));
+                    break;
                 default:
                     currentScene.handle(e);
                     break;
@@ -61,6 +68,14 @@ public class GameManager {
         }
 
 
+    }
+
+    public int getEpisode(){
+        return episode;
+    }
+
+    public void setEpisode(int ep){
+        episode = ep;
     }
 
     public synchronized void unlock(){

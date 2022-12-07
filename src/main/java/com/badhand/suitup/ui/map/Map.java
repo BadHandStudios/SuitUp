@@ -11,9 +11,6 @@ import processing.core.*;
 public class Map implements GUI {
 
     private ArrayList<Node[]> columns = new ArrayList<Node[]>();
-
-    private static EnemyFactory ef = EnemyFactory.getInstance();
-
     private static NodeFactory nf = NodeFactory.getInstance();
 
     private static final int INITIAL_SIZE = 10;
@@ -49,12 +46,14 @@ public class Map implements GUI {
 
     boolean finishedAdding = false;
     private int level;
+    private int episode;
 
 
     private Random rand = new Random();
 
-    public Map(int level) {
+    public Map(int level, int episode) {
         this.level = level;
+        this.episode = episode;
 
         // Create first column
         Node[] column = new Node[3];
@@ -150,7 +149,7 @@ public class Map implements GUI {
         int numFilled = 0;
 
         for (int r = 0; r < col.length; r++) {
-            col[r] = nf.randomNode(r, columns.size(), level);
+            col[r] = nf.randomNode(r, columns.size(), level, episode);
         }
         columns.add(col);
 

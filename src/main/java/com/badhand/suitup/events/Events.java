@@ -7,4 +7,5 @@ public enum Events {
     BATTLE_INITIATE,
     KEY_PRESS,
     QUIT_GAME,
+    BOSS_FIGHT,
 }

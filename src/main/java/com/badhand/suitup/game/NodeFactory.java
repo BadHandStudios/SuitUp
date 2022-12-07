@@ -8,7 +8,7 @@ public class NodeFactory {
 
     private static EnemyFactory ef = EnemyFactory.getInstance();
 
-    public static int level = 1;
+    public int level = 1;
 
     private NodeFactory(){
         setLevel(level);
@@ -45,7 +45,7 @@ public class NodeFactory {
 
     }
 
-    public Node randomNode(int i, int j, int level){
+    public Node randomNode(int i, int j, int level, int episode){
         if(this.level != level) this.setLevel(level);
         Node n = new Node(i, j);
         switch(nodeContents.next()){
@@ -53,7 +53,7 @@ public class NodeFactory {
                 n.setEntity(new SlotMachine());
                 break;
             case 2:
-                n.setEntity(ef.getEnemy(1, 1));
+                n.setEntity(ef.getEnemy(episode, 1));
                 break;
             default:
         }

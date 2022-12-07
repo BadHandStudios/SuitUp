@@ -10,7 +10,7 @@ import processing.core.PGraphics;
 public class MenuLevelSelect implements Scene {
 
     private static WindowManager wm = WindowManager.getInstance();
-    private static EventManager em = EventManager.getInstance();
+    private static GameManager gm = GameManager.getInstance();
 
     private GraphicsWrapper bg;
     private TextButton back;
@@ -18,7 +18,7 @@ public class MenuLevelSelect implements Scene {
     
     private String[] episodes = {
         "The Base Experience, fight your way through each level to reach the boss",
-        "Coming soon...",
+        "\nThe Gilded Age approaches! All cards are pre-guilded, \nbut enemies are stronger!",
     };
 
     private int selected = 0 ;
@@ -91,9 +91,11 @@ public class MenuLevelSelect implements Scene {
                 desc.setText(episodes[selected]);
                 switch(selected){
                     case 0:
+                        gm.setEpisode(1);
                         episodeTitle.setText("Episode I");
                         break;
                     case 1:
+                        gm.setEpisode(2);
                         episodeTitle.setText("Episode II");
                         break;
                 }
