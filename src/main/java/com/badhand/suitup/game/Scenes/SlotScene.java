@@ -184,6 +184,9 @@ public class SlotScene implements Scene {
                     case INSTANT_DAMAGE:
                         text = "Insta-damage +" + (int)(e.getValue());
                         break;
+                    case DEFENSE_BONUS:
+                        text = "Defense +" + (int)(e.getValue() * 100) + "%";
+                        break;
                     default:
                         text = "ERROR!";
                         break;

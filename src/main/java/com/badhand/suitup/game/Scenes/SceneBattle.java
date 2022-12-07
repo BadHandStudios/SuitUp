@@ -357,7 +357,7 @@ public class SceneBattle implements Scene {
             enemy.getHand().get(0).flip();
         }
         else if (enemy.getHand().size() == 5 && bjai.enemyTotal <= 21) {
-            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), null);
+            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), mostRecentGildedCard);
             player.setHealth(cbai.getPlayerHealth());
             bjai.setPlayerHealth(player.getHealth());
             if (player.getHealth() < 0) {
@@ -383,7 +383,7 @@ public class SceneBattle implements Scene {
             }
             else {
                 if (bjai.getEnemyTotal() > bjai.getPlayerTotal() && bjai.getEnemyTotal() <= 21) {
-                    cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), null);
+                    cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), mostRecentGildedCard);
                     player.setHealth(cbai.getPlayerHealth());
                     bjai.setPlayerHealth(player.getHealth());
                     if (player.getHealth() < 0) {
@@ -414,7 +414,7 @@ public class SceneBattle implements Scene {
             }
         }
         else if (bjai.getPlayerTotal() > 21) {
-            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), null);
+            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), mostRecentGildedCard);
             player.setHealth(cbai.getPlayerHealth());
             bjai.setPlayerHealth(player.getHealth());
             if (player.getHealth() < 0) {

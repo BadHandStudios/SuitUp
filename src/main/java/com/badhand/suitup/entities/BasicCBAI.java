@@ -5,6 +5,8 @@ import com.badhand.suitup.game.*;
 
 public class BasicCBAI extends CombatAI{
     
+    private Player player = Player.getInstance();
+
     public String getAction() {
         String action = "";
 
@@ -60,7 +62,11 @@ public class BasicCBAI extends CombatAI{
                     c.activate();
                     break;
                 case HEAL:
-                    setPlayerHealth(getPlayerHealth() + (int)e.getValue());
+                    player.addHealth((int)e.getValue());
+                    c.activate();
+                    break;
+                case DEFENSE_BONUS:
+                    playerDefenseModifier += e.getValue();
                     c.activate();
                     break;
                 case INSTANT_DAMAGE:

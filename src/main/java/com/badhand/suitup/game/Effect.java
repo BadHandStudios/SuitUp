@@ -19,6 +19,9 @@ public class Effect {
             case INSTANT_DAMAGE:
                 value = 1f;
                 break;
+            case DEFENSE_BONUS:
+                value = 0.25f;
+                break;
             default:
                 value = 1f;
                 break;
