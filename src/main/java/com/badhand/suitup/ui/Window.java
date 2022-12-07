@@ -16,7 +16,7 @@ public class Window extends PApplet {
 
     private boolean ready = false;
 
-    private LinkedList<GUI> guiBuffer = new LinkedList<GUI>();
+    private ArrayList<GUI> guiBuffer = new ArrayList<GUI>();
     
     private ArrayList<HashSet<GUI>> differedRegistries = new ArrayList<HashSet<GUI>>();
 
@@ -150,7 +150,9 @@ public class Window extends PApplet {
     public void mousePressed() {
         synchronized(this){
             try{
-                for(GUI g : guiBuffer) {
+                GUI g;
+                for(int i = 0 ; i < guiBuffer.size(); i++){
+                    g = guiBuffer.get(i);
                     for(GUI e : g.enumerate()){
                         if(e.visible()) {
                             e.click(mouseX, mouseY);
