@@ -88,6 +88,8 @@ public class MapScene implements Scene {
         }
 
         if(map != null && !reLevel){
+            gildedCards.setCaption(""+p.getDeck().numGilded());
+            
             wm.put(p);
             wm.put(map);
             map.replaceEntities();
