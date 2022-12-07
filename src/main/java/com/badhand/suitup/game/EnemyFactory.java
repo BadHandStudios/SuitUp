@@ -46,13 +46,13 @@ public class EnemyFactory {
         int health = 15 + 5 * level;
         int attack = 4 + level;
 
-        // switch(episode){
-        //     case 2:
-        //         health = 25 + 5 * level;
-        //         attack = 5 + level;
-        //         break;
-        //     default:
-        // }
+        switch(episode){
+            case 2:
+                health = 25 + 5 * level;
+                attack = 5 + level;
+                break;
+            default:
+        }
 
         Enemy e = new Enemy(texture, name, health, attack, 0, 0, ai, new BasicCBAI());
         wm.registerDiffered(e);

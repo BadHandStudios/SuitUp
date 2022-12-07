@@ -18,7 +18,7 @@ public class CaptionedImage implements GUI {
         this.size = size;
         this.image = new ImageElement(x, y, size, size, image);
         this.text = new TextElement(caption, size, x, y);
-        text.setPos(x + text.getWidth() / 2 + size, y);
+        text.setPos(x + text.getWidth() + size, y);
         this.x = x;
         this.y = y;
 
