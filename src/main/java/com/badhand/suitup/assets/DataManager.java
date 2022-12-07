@@ -29,7 +29,6 @@ public class DataManager {
             saveText += scanner.nextLine();
         }
         scanner.close();
-        System.out.println(saveText);
 
         saveData = new JSONObject(saveText);
 

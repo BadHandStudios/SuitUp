@@ -107,16 +107,7 @@ public class SlotScene implements Scene {
             }
         }
 
-        String randomCardString = "2;3;4;5;6;7;8;9;10;J;Q;K;A".split(";")[rand.nextInt(13)] + "of" + "Clubs;Dmnds;Hearts;Spades".split(";")[rand.nextInt(4)];
-        Card randomCard = p.getDeck().getCard(randomCardString);
-        gildAward = randomCard;
-        randomCard.gild();
-        PGraphics cardImage = wm.newGraphic(150, 300);
-        cardImage.beginDraw();
-        cardImage.image(randomCard.getTexture(), 0, 0, 150, 300);
-        cardImage.image(randomCard.getGildedTexture(), 0, 0, 150, 300);
-        slotImages[2] = cardImage.get();
-
+        
 
 
 
@@ -132,6 +123,7 @@ public class SlotScene implements Scene {
             if(value == 1) numCoins++;
             if(value == 0) numHearts++;
             String name = value == 0 ? "heart" : value == 1 ? "chip" : "card";
+            if(name.equals("card")) gild();
             slotResults[i] = new ImageElement(name, -500, -500, 300, 300, slotImages[value]);
             slotResults[i].setPos(-500, -500);
             wm.put(slotGlow[i]);
@@ -184,6 +176,9 @@ public class SlotScene implements Scene {
                     case INSTANT_DAMAGE:
                         text = "Insta-damage +" + (int)(e.getValue());
                         break;
+                    case DEFENSE_BONUS:
+                        text = "Defense +" + (int)(e.getValue() * 100) + "%";
+                        break;
                     default:
                         text = "ERROR!";
                         break;
@@ -213,6 +208,19 @@ public class SlotScene implements Scene {
     }
 
     public void handle(Event e){
+
+    }
+
+    private void gild(){
+        String randomCardString = "2;3;4;5;6;7;8;9;10;J;Q;K;A".split(";")[rand.nextInt(13)] + "of" + "Clubs;Dmnds;Hearts;Spades".split(";")[rand.nextInt(4)];
+        Card randomCard = p.getDeck().getCard(randomCardString);
+        gildAward = randomCard;
+        randomCard.gild();
+        PGraphics cardImage = wm.newGraphic(150, 300);
+        cardImage.beginDraw();
+        cardImage.image(randomCard.getTexture(), 0, 0, 150, 300);
+        cardImage.image(randomCard.getGildedTexture(), 0, 0, 150, 300);
+        slotImages[2] = cardImage.get();
 
     }
     

@@ -29,17 +29,20 @@ public class NodeFactory {
                 nodeContents.add(1, 2); // Slot Machine
                 nodeContents.add(2, 3); // Enemies
                 nodeContents.add(3, 2); // Hearts
+                nodeContents.add(4, 2); // Shops
                 break;
             case 2:
                 nodeContents.add(0, 2); // Nothing
                 nodeContents.add(1, 2); // Slot Machine
                 nodeContents.add(2, 3); // Enemies
                 nodeContents.add(3, 2); // Hearts
+                nodeContents.add(3, 2); // Shops
             case 3:
                 nodeContents.add(0, 2); // Nothing
                 nodeContents.add(1, 2); // Slot Machine
                 nodeContents.add(2, 4); // Enemies
                 nodeContents.add(3, 2); // Hearts
+                nodeContents.add(5); // Shops
             default:
                 break;
 
@@ -60,6 +63,9 @@ public class NodeFactory {
                 break;
             case 3:
                 n.setEntity(new Heart());
+                break;
+            case 4:
+                n.setEntity(new Shop());
                 break;
             default:
         }

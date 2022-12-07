@@ -103,19 +103,32 @@ public class SceneBattle implements Scene {
         mostRecentGildedCard = null;
         Card c = player.drawCard();
         Effect eff = c.getEffect();
-        if(c.isGilded()) mostRecentGildedCard = c;
-        if(c.isGilded() && eff.getEffect() == Effects.INSTANT_DAMAGE){
-            c.activate();
-            if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
-            updateHealth();
+        if(c.isGilded()){
+            if(eff.getEffect() == Effects.INSTANT_DAMAGE){
+                c.activate();
+                if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+                updateHealth();
+            }else if(eff.getEffect() == Effects.HEAL){
+                c.activate();
+                player.addHealth((int) eff.getValue());
+                updateHealth();
+            }
+            else  mostRecentGildedCard = c;
         }
+        
         c = player.drawCard();
         eff = c.getEffect();
-        if(c.isGilded()) mostRecentGildedCard = c;
-        if(c.isGilded() && eff.getEffect() == Effects.INSTANT_DAMAGE){
-            c.activate();
-            if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
-            updateHealth();
+        if(c.isGilded()){
+            if(eff.getEffect() == Effects.INSTANT_DAMAGE){
+                c.activate();
+                if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+                updateHealth();
+            }else if(eff.getEffect() == Effects.HEAL){
+                c.activate();
+                player.addHealth((int) eff.getValue());
+                updateHealth();
+            }
+            else  mostRecentGildedCard = c;
         }
         enemy.drawCard();
         enemy.drawCard();
@@ -210,10 +223,17 @@ public class SceneBattle implements Scene {
                         Effect eff = c.getEffect();
                         mostRecentGildedCard = c;
                         if(player.getHandTotal() > 21 && eff.getEffect() == Effects.BUST_PROOF) c.activate();
-                        if(eff.getEffect() == Effects.INSTANT_DAMAGE){
-                            c.activate();
-                            if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
-                            updateHealth();
+                        if(c.isGilded()){
+                            if(eff.getEffect() == Effects.INSTANT_DAMAGE){
+                                c.activate();
+                                if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+                                updateHealth();
+                            }else if(eff.getEffect() == Effects.HEAL){
+                                c.activate();
+                                player.addHealth((int) eff.getValue());
+                                updateHealth();
+                            }
+                            else  mostRecentGildedCard = c;
                         }
                     }
                     drawHands();
@@ -291,19 +311,31 @@ public class SceneBattle implements Scene {
         mostRecentGildedCard = null;
         Card c = player.drawCard();
         Effect eff = c.getEffect();
-        if(c.isGilded()) mostRecentGildedCard = c;
-        if(c.isGilded() && eff.getEffect() == Effects.INSTANT_DAMAGE){
-            c.activate();
-            if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
-            updateHealth();
+        if(c.isGilded()){
+            if(eff.getEffect() == Effects.INSTANT_DAMAGE){
+                c.activate();
+                if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+                updateHealth();
+            }else if(eff.getEffect() == Effects.HEAL){
+                c.activate();
+                player.addHealth((int) eff.getValue());
+                updateHealth();
+            }
+            else  mostRecentGildedCard = c;
         }
         c = player.drawCard();
         eff = c.getEffect();
-        if(c.isGilded()) mostRecentGildedCard = c;
-        if(c.isGilded() && eff.getEffect() == Effects.INSTANT_DAMAGE){
-            c.activate();
-            if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
-            updateHealth();
+        if(c.isGilded()){
+            if(eff.getEffect() == Effects.INSTANT_DAMAGE){
+                c.activate();
+                if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+                updateHealth();
+            }else if(eff.getEffect() == Effects.HEAL){
+                c.activate();
+                player.addHealth((int) eff.getValue());
+                updateHealth();
+            }
+            else  mostRecentGildedCard = c;
         }
         enemy.drawCard();
         enemy.drawCard();
@@ -434,7 +466,7 @@ public class SceneBattle implements Scene {
             resetRound = true;
         }
         else if (enemy.getHand().size() == 5 && bjai.enemyTotal <= 21) {
-            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), null);
+            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), mostRecentGildedCard);
             player.setHealth(cbai.getPlayerHealth());
             bjai.setPlayerHealth(player.getHealth());
             if (player.getHealth() < 0) {
@@ -460,7 +492,7 @@ public class SceneBattle implements Scene {
             }
             else {
                 if (bjai.getEnemyTotal() > bjai.getPlayerTotal() && bjai.getEnemyTotal() <= 21) {
-                    cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), null);
+                    cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), mostRecentGildedCard);
                     player.setHealth(cbai.getPlayerHealth());
                     bjai.setPlayerHealth(player.getHealth());
                     if (player.getHealth() < 0) {
@@ -491,7 +523,7 @@ public class SceneBattle implements Scene {
             }
         }
         else if (bjai.getPlayerTotal() > 21) {
-            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), null);
+            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), mostRecentGildedCard);
             player.setHealth(cbai.getPlayerHealth());
             bjai.setPlayerHealth(player.getHealth());
             if (player.getHealth() < 0) {

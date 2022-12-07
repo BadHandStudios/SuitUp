@@ -233,6 +233,9 @@ public class Card implements GUI{
                 case INSTANT_DAMAGE:
                     text = "" + (int)(effect.getValue()) + " damage!";
                     break;
+                case DEFENSE_BONUS:
+                    text = "Defense +" + (int)(effect.getValue() * 100) + "%";
+                    break;
                 default:
                     text = "ERROR!";
                     break;

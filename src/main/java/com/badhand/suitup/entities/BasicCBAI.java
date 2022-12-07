@@ -5,6 +5,8 @@ import com.badhand.suitup.game.*;
 
 public class BasicCBAI extends CombatAI{
     
+    private Player player = Player.getInstance();
+
     public String getAction() {
         String action = "";
 
@@ -37,20 +39,20 @@ public class BasicCBAI extends CombatAI{
 
         if (playerAction == "Attack") {
             playerOffenseModifier = 1.25;
-            playerDefenseModifier = 0.75;
+            playerDefenseModifier = 1.25;
         }
         if (playerAction == "Block") {
             playerOffenseModifier = 0.75;
-            playerDefenseModifier = 1.25;
+            playerDefenseModifier = 0.75;
         }
 
         if (EnemyAction == "Attack") {
             enemyOffenseModifier = 1.25;
-            enemyDefenseModifier = 0.75;
+            enemyDefenseModifier = 1.25;
         }
         if (EnemyAction == "Block") {
             enemyOffenseModifier = 0.75;
-            enemyDefenseModifier = 1.25;
+            enemyDefenseModifier = 0.75;
         }
         if(c != null){
             Effect e = c.getEffect();
@@ -60,7 +62,9 @@ public class BasicCBAI extends CombatAI{
                     c.activate();
                     break;
                 case HEAL:
-                    setPlayerHealth(getPlayerHealth() + (int)e.getValue());
+                    break;
+                case DEFENSE_BONUS:
+                    playerDefenseModifier -= Math.max(0.25, e.getValue());
                     c.activate();
                     break;
                 case INSTANT_DAMAGE:
@@ -74,16 +78,14 @@ public class BasicCBAI extends CombatAI{
         if ((playerTotal > enemyTotal  && playerTotal <= 21 || enemyTotal > 21) || (getPlayerHand().size() == 5 && playerTotal <= 21)) {
             int attack = Attack;
 
-            attack *= playerOffenseModifier;
-            attack /= enemyDefenseModifier;
+            attack = (int)(attack * playerOffenseModifier * enemyDefenseModifier);
 
             setEnemyHealth(getEnemyHealth() - (int)attack);
         }
         else if ((playerTotal < enemyTotal && enemyTotal <= 21 || playerTotal > 21) || (getEnemyHand().size() == 5 && enemyTotal <= 21)) {
             int attack = Attack;
 
-            attack *= enemyOffenseModifier;
-            attack /= playerDefenseModifier;
+            attack = (int)(attack * enemyOffenseModifier * playerDefenseModifier);
 
             setPlayerHealth(getPlayerHealth() - (int)attack);
         }
