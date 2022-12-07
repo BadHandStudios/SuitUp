@@ -61,8 +61,9 @@ public class MapScene implements Scene {
     
     public void initialize() {
         if(finalBoss){
-            // push end game 
-            // return
+            em.push(new Event(Events.END_GAME, episode));
+            finalBoss = false;
+            return;
         }
         this.episode = gm.getEpisode();
         if(playMusic) {
