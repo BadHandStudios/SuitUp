@@ -8,4 +8,5 @@ public enum Events {
     KEY_PRESS,
     QUIT_GAME,
     BOSS_FIGHT,
+    END_GAME
 }

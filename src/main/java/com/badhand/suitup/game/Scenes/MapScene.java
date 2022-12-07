@@ -56,13 +56,14 @@ public class MapScene implements Scene {
 
     private int level = 1;
     private int episode;
-    private boolean reLevel;
+    private static boolean reLevel;
 
     
     public void initialize() {
         if(finalBoss){
-            // push end game 
-            // return
+            em.push(new Event(Events.END_GAME, episode));
+            finalBoss = false;
+            return;
         }
         this.episode = gm.getEpisode();
         if(playMusic) {
@@ -88,6 +89,8 @@ public class MapScene implements Scene {
         }
 
         if(map != null && !reLevel){
+            gildedCards.setCaption(""+p.getDeck().numGilded());
+            
             wm.put(p);
             wm.put(map);
             map.replaceEntities();
@@ -108,6 +111,8 @@ public class MapScene implements Scene {
 
 
             return;
+        }else{
+            reLevel = false;
         }
 
         switch(episode){
@@ -295,4 +300,7 @@ public class MapScene implements Scene {
         this.initialize();
     }
     
+    public static void playerDeath(){
+        reLevel = true;
+    }
 }
