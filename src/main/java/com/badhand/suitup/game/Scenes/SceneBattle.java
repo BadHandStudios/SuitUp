@@ -101,6 +101,7 @@ public class SceneBattle implements Scene {
             updateHealth();
         }
         c = player.drawCard();
+        eff = c.getEffect();
         if(c.isGilded()) mostRecentGildedCard = c;
         if(c.isGilded() && eff.getEffect() == Effects.INSTANT_DAMAGE){
             c.activate();
