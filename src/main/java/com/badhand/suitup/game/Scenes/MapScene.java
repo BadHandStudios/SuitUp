@@ -124,7 +124,7 @@ public class MapScene implements Scene {
 
         finalBoss = false;
 
-        gildedCards = new CaptionedImage(am.getImage("CardBack3.png"), ""+p.getDeck().numGilded(), wm.getWidth() - 200, 50, 64);
+        gildedCards = new CaptionedImage(am.getImage("CardBack3.png"), ""+p.getDeck().numGilded(), wm.getWidth() - 275, 50, 64);
         wm.registerDiffered(gildedCards, 4);
         wm.put(gildedCards);
 
