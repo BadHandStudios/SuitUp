@@ -68,7 +68,7 @@ public class Window extends PApplet {
 
         synchronized(this){
             for(GUI g : guiBuffer) {
-                
+                try{
                 for(GUI e : g.enumerate()){
                     if(e instanceof Animation){
                         Animation a = (Animation) e;
@@ -83,6 +83,10 @@ public class Window extends PApplet {
                     }
 
                     place(e);
+                }
+                
+                }catch(Exception exception){
+                    // :(
                 }
             }
         }

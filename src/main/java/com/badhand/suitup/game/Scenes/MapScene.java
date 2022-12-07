@@ -99,7 +99,7 @@ public class MapScene implements Scene {
             playerHealth.setCaption(""+ p.getHealth() + "/" + p.getMaxHealth());
             playerCoins.setCaption("" + p.getChips());
 
-            p.setHealth(p.getMaxHealth());
+            
 
             wm.put(playerHealth);
             wm.put(playerCoins);
@@ -244,6 +244,10 @@ public class MapScene implements Scene {
                         }else if(current.getEntity() instanceof Enemy){
                             em.push(new Event(Events.BATTLE_INITIATE, current.getEntity()));
                             current.removeEntity();
+                        }else if(current.getEntity() instanceof Heart){
+                            p.addHealth(5);
+                            playerHealth.setCaption(""+ p.getHealth() + "/" + p.getMaxHealth());
+                            current.removeEntity();
                         }
                     }else if(current.isDebug()){
                         nextLevel();
@@ -284,7 +288,9 @@ public class MapScene implements Scene {
         if(level > 3){
             em.push(new Event(Events.BOSS_FIGHT, episode));
             finalBoss = true;
+            return;
         }
+        p.setHealth(p.getMaxHealth());
         reLevel = true;
         this.initialize();
     }
