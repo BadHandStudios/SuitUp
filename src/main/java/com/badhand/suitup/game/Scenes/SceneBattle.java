@@ -193,7 +193,6 @@ public class SceneBattle implements Scene {
                         if (enemy.getHealth() <= 0) {
                             player.addChips((enemy.getMaxHealth() * 10) + (cbai.random(1,enemy.getAttack()) * 10));
                         }
-                        am.stopSound(0);
                         Event end = new Event(Events.SCENE_CHANGE,GameState.MAP_SCENE);
                         em.push(end);
                     }
