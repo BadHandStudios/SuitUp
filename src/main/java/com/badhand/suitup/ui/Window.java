@@ -210,7 +210,6 @@ public class Window extends PApplet {
         return g;
     }
 
-
     public Object getLock(){
         return this;
     }

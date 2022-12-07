@@ -62,8 +62,6 @@ public class BasicCBAI extends CombatAI{
                     c.activate();
                     break;
                 case HEAL:
-                    player.addHealth((int)e.getValue());
-                    c.activate();
                     break;
                 case DEFENSE_BONUS:
                     playerDefenseModifier -= Math.max(0.25, e.getValue());
