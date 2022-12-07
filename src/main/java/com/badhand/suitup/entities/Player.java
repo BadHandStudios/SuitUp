@@ -66,4 +66,11 @@ public class Player extends Entity {
         node.setEntity(this);
     }
 
+    public void reset(){
+        this.setMaxHealth(20);
+        this.setAttack(5);
+        this.setDeck(new Deck());
+        this.setChips(0);
+    }
+
 }

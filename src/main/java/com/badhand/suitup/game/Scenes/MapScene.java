@@ -56,7 +56,7 @@ public class MapScene implements Scene {
 
     private int level = 1;
     private int episode;
-    private boolean reLevel;
+    private static boolean reLevel;
 
     
     public void initialize() {
@@ -298,4 +298,7 @@ public class MapScene implements Scene {
         this.initialize();
     }
     
+    public static void playerDeath(){
+        reLevel = true;
+    }
 }

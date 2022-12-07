@@ -193,6 +193,9 @@ public class SceneBattle implements Scene {
                         if (enemy.getHealth() <= 0) {
                             player.addChips((enemy.getMaxHealth() * 10) + (cbai.random(1,enemy.getAttack()) * 10));
                         }else if(player.getHealth() <= 0){
+                            MapScene.playerDeath();
+                            player.reset();
+
                             Event end = new Event(Events.SCENE_CHANGE,GameState.MENU_MAIN);
                             em.push(end);
                             break;
