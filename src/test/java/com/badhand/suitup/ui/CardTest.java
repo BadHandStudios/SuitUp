@@ -134,7 +134,7 @@ public class CardTest
     	for(int i = 0; i < _mockDeck.size(); i++) {
     		testCard = _mockDeck.get(i);
     		testCard.gild();
-    		assertTrue(msg, testCard.);
+    		//assertTrue(msg, testCard.);
     	}
     }
     
