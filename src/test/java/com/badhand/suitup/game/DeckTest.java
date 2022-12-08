@@ -96,8 +96,19 @@ public class DeckTest {
     }
 
     @Test
-    void testShuffle() {
-        assert(false);
+    void numGildedTest(){
+        String msg = "Pass if registerGilded succeeds in incrementing numGilded";
+        int initialSize = _deck.cardsLeft();
+        int initialGilded = _deck.numGilded();
+        int totalGilded = 0;
+        for(int i = 0; i < initialSize; i++){
+            Card curr = _deck.draw();
+            _deck.registerGilded(curr);
+            totalGilded++;
+            assertEquals(_deck.numGilded(), totalGilded, msg);
+        }
+        msg = "Pass if all cards were gilded successfully";
+        assertEquals(_deck.numGilded(), initialSize, msg);
     }
 
     @BeforeAll

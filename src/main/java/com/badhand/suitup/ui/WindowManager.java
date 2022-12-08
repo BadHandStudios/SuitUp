@@ -91,5 +91,7 @@ public class WindowManager {
     public Object getLock(){
         return w.getLock();
     }
+
+    public Window getWindow(){return w;}
 }
     
