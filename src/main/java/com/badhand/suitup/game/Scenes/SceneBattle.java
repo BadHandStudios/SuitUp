@@ -312,6 +312,7 @@ public class SceneBattle implements Scene {
                         Card c = player.drawCard();
                         am.playSound(filename, 1);
                         animPlayerCard();
+                        
                         if(c.isGilded()){
                             Effect eff = c.getEffect();
                             mostRecentGildedCard = c;

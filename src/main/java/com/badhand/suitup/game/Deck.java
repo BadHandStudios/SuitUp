@@ -1,13 +1,18 @@
 package com.badhand.suitup.game;
 
 import com.badhand.suitup.ui.*;
+import com.badhand.suitup.assets.*;
 
 import java.util.*;
+
+
 
 public class Deck {
     private ShuffleBag<Card> cards;
     private ArrayList<Card> gildedCards;
     private int cardsLeft = 52;
+
+    private static AssetManager am = AssetManager.getInstance();
 
     public Deck(){
         gildedCards = new ArrayList<Card>();
@@ -39,6 +44,7 @@ public class Deck {
 
     public void shuffle(){
         cardsLeft = 52;
+        am.playSound("shuffle.mp3", 3);
         cards.reshuffle();
     }
 
