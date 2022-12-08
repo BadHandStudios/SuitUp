@@ -2,7 +2,7 @@ package com.badhand.suitup.ui;
 
 
 import com.badhand.suitup.game.*;
-import com.badhand.suitup.events.*;
+//import com.badhand.suitup.events.*;
 import com.badhand.suitup.assets.*;
 
 import processing.core.*;
@@ -22,7 +22,7 @@ public class Card implements GUI{
     private static int height = 300;
     private int textSize = 50;
     private boolean visible = true;
-    private Event e;
+    //private Event e;
     private String name;
     private boolean gilded = false;
     private Effect effect;

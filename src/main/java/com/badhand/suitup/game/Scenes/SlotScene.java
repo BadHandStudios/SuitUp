@@ -22,8 +22,8 @@ public class SlotScene implements Scene {
     private int coinMultiplier = 1;
 
 
-    private int numCoins = 0;
-    private int numHearts = 0;
+    //private int numCoins = 0;
+    //private int numHearts = 0;
 
     private static WindowManager wm = WindowManager.getInstance();
     private static AssetManager am = AssetManager.getInstance();
@@ -115,13 +115,13 @@ public class SlotScene implements Scene {
         wm.put(glow);
         wm.put(slotMachine);
         boolean alreadyDrawnGilded = false;
-        numCoins = 0;
-        numHearts = 0;
+        //numCoins = 0;
+        //numHearts = 0;
         for(int i = 0; i < slotResults.length; i++){
             int value = alreadyDrawnGilded ? rand.nextInt(2) : rand.nextInt(3);
             if(value == 2) alreadyDrawnGilded = true;
-            if(value == 1) numCoins++;
-            if(value == 0) numHearts++;
+            //if(value == 1) numCoins++;
+            //if(value == 0) numHearts++;
             String name = value == 0 ? "heart" : value == 1 ? "chip" : "card";
             if(name.equals("card")) gild();
             slotResults[i] = new ImageElement(name, -500, -500, 300, 300, slotImages[value]);
