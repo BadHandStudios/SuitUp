@@ -53,6 +53,10 @@ public class SceneBattle implements Scene {
     boolean resetRound = false;
     boolean animate = false;
 
+    boolean optionsShowing = false;
+    boolean hitStayShowing = false;
+    boolean continueShowing = false;
+
     Enemy enemy;
     BlackJackAI bjai;
     CombatAI cbai;
@@ -142,13 +146,14 @@ public class SceneBattle implements Scene {
         enemyHand.get(0).setVisibility(false);
         enemyHand.get(1).setVisibility(false);
 
-        wm.put(attack);
-        wm.put(nothing);
-        wm.put(block);
+        // wm.put(attack);
+        // wm.put(nothing);
+        // wm.put(block);
     }
 
     public void update() {
         if (animate) {
+            // if(optionsShowing) hidePlayerOptions();
             if (timer > 0) {
                 timer--;
             }
@@ -193,7 +198,9 @@ public class SceneBattle implements Scene {
                             if (!playerTurn) {
                                 animate = false;
                             }
+                            if(!optionsShowing && !hitStayShowing && !continueShowing) showPlayerOptions();
                             enemyHandIndex = 0;
+                            
                         }
                     }
                 }
@@ -204,6 +211,7 @@ public class SceneBattle implements Scene {
         }
         else {
             timer = 0;
+            
         }
     }
 
@@ -212,8 +220,7 @@ public class SceneBattle implements Scene {
             switch ("" + e.getData()) {
                 case "Stay":
                     playerTurn = false;
-                    wm.remove(hit);
-                    wm.remove(stay);
+                    hideHitStay();
                     enemyTurn();
                     break;
                 case "Hit":
@@ -256,29 +263,20 @@ public class SceneBattle implements Scene {
                     break;
                 case "Attack":
                     playerAction = "Attack";
-                    wm.remove(attack);
-                    wm.remove(block);
-                    wm.remove(nothing);
-                    wm.put(hit);
-                    wm.put(stay);
+                    hidePlayerOptions();
+                    showHitStay();
                     hitVisible = true;
                     break;
                 case "Block":
                     playerAction = "Block";
-                    wm.remove(attack);
-                    wm.remove(block);
-                    wm.remove(nothing);
-                    wm.put(hit);
-                    wm.put(stay);
+                    hidePlayerOptions();
+                    showHitStay();
                     hitVisible = true;
                     break;
                 case "Nothing":
                     playerAction = "Nothing";
-                    wm.remove(attack);
-                    wm.remove(block);
-                    wm.remove(nothing);
-                    wm.put(hit);
-                    wm.put(stay);
+                    hidePlayerOptions();
+                    showHitStay();
                     hitVisible = true;
                     break;
                 case "reset":
@@ -298,6 +296,7 @@ public class SceneBattle implements Scene {
                     }
                     else {
                         wm.remove(reset);
+                        continueShowing = false;
                         reset();
                     }
                     break;
@@ -361,9 +360,9 @@ public class SceneBattle implements Scene {
         enemyHand.get(0).setVisibility(false);
         enemyHand.get(1).setVisibility(false);
 
-        wm.put(attack);
-        wm.put(nothing);
-        wm.put(block);
+        // wm.put(attack);
+        // wm.put(nothing);
+        // wm.put(block);
     }
 
     public int[] formatHand(int size) {
@@ -395,6 +394,7 @@ public class SceneBattle implements Scene {
             timer = 0;
         }
         animate = true;
+        // if(optionsShowing) hidePlayerOptions();
         drawPlayerHand();
         drawEnemyHand();
     }
@@ -484,10 +484,10 @@ public class SceneBattle implements Scene {
             }
             enemyHealthText.setText("" + enemy.getHealth());
             winner = new TextElement("Player Wins!",64, 200, height/2);
-            wm.remove(hit);
-            wm.remove(stay);
+            hideHitStay();
             //
             wm.put(winner);
+            continueShowing = true;
             wm.put(reset);
             enemy.getHand().get(0).flip();
             resetRound = true;
@@ -502,6 +502,7 @@ public class SceneBattle implements Scene {
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
             //
             wm.put(winner);
+            continueShowing = true;
             wm.put(reset);
             enemy.getHand().get(0).flip();
             resetRound = true;
@@ -517,6 +518,7 @@ public class SceneBattle implements Scene {
                 winner = new TextElement("Player Wins!",64, 200, height/2);
                 // 
                 wm.put(winner);
+                continueShowing = true;
                 wm.put(reset);
                 enemy.getHand().get(0).flip();
                 resetRound = true;
@@ -532,6 +534,7 @@ public class SceneBattle implements Scene {
                     winner = new TextElement("Enemy Wins!",64, 200, height/2);
                     //
                     wm.put(winner);
+                    continueShowing = true;
                     wm.put(reset);
                     enemy.getHand().get(0).flip();
                     resetRound = true;
@@ -546,6 +549,7 @@ public class SceneBattle implements Scene {
                     winner = new TextElement("Player Wins!",64, 200, height/2);
                     //
                     wm.put(winner);
+                    continueShowing = true;
                     wm.put(reset);
                     enemy.getHand().get(0).flip();
                     resetRound = true;
@@ -554,6 +558,7 @@ public class SceneBattle implements Scene {
                     winner = new TextElement("Draw!",64, 200, height/2);
                     //
                     wm.put(winner);
+                    continueShowing = true;
                     wm.put(reset);
                     enemy.getHand().get(0).flip();
                     resetRound = true;
@@ -568,10 +573,10 @@ public class SceneBattle implements Scene {
             }
             playerHealthText.setText("" + player.getHealth());
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
-            wm.remove(hit);
-            wm.remove(stay);
+            hideHitStay();
             //
             wm.put(winner);
+            continueShowing = true;
             wm.put(reset);
             enemy.getHand().get(0).flip();
             resetRound = true;
@@ -646,4 +651,34 @@ public class SceneBattle implements Scene {
             player.setHealth(player.getHealth() - (int)attack);
         }
     } 
+
+
+
+    public void hidePlayerOptions() {
+        optionsShowing = false;
+        wm.remove(attack);
+        wm.remove(block);
+        wm.remove(nothing);
+    }
+
+    public void showPlayerOptions() {
+        optionsShowing = true;
+        wm.put(attack);
+        wm.put(block);
+        wm.put(nothing);
+    }
+
+    public void showHitStay() {
+        hitStayShowing = true;
+        wm.put(hit);
+        wm.put(stay);
+    }
+
+    public void hideHitStay() {
+        hitStayShowing = false;
+        wm.remove(hit);
+        wm.remove(stay);
+    }
+
+
 }
