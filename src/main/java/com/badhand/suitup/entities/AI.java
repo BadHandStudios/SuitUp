@@ -14,6 +14,8 @@ abstract class AI {
     public int playerHealth;
     public int enemyTotal;
     public int playerTotal;
+
+    public static Random rand = new Random();
     
     public void setEnemyHand(ArrayList<Card> enemyHand) {
         this.enemyHand = enemyHand;
@@ -87,6 +89,6 @@ abstract class AI {
         getPlayerTotal();
     }
     public int random(int min, int max) {
-        return (int)Math.floor(Math.random() * (max - min + 1) + min);
+        return rand.nextInt((max - min) + 1) + min;
     }
 }
