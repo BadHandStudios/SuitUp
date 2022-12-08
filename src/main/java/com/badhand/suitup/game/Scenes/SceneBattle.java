@@ -41,6 +41,9 @@ public class SceneBattle implements Scene {
     TextButton reset = new TextButton("Continue",64,width/2,height/2, new Event(Events.CLICK,"reset"));
     TextElement winner = new TextElement("",64,200,height/2);
 
+    Card playerDeckTop;
+    Card enemyDeckTop;
+
     TextElement playerHealthText;
     TextElement enemyHealthText;
 
@@ -152,6 +155,7 @@ public class SceneBattle implements Scene {
     }
 
     public void update() {
+        
         if (animate) {
             // if(optionsShowing) hidePlayerOptions();
             if (timer > 0) {
@@ -198,7 +202,14 @@ public class SceneBattle implements Scene {
                             if (!playerTurn) {
                                 animate = false;
                             }
-                            if(!optionsShowing && !hitStayShowing && !continueShowing) showPlayerOptions();
+                            if(!optionsShowing && !hitStayShowing && !continueShowing && animate){
+                                showPlayerOptions();
+                            }else if(!optionsShowing && !hitStayShowing && !continueShowing && !animate){
+                                
+                                continueShowing = true;
+                                wm.put(winner);
+                                wm.put(reset);
+                            }
                             enemyHandIndex = 0;
                             
                         }
@@ -486,9 +497,9 @@ public class SceneBattle implements Scene {
             winner = new TextElement("Player Wins!",64, 200, height/2);
             hideHitStay();
             //
-            wm.put(winner);
-            continueShowing = true;
-            wm.put(reset);
+            // continueShowing = true;
+            // wm.put(winner);
+            // wm.put(reset);
             enemy.getHand().get(0).flip();
             resetRound = true;
         }
@@ -501,9 +512,9 @@ public class SceneBattle implements Scene {
             playerHealthText.setText("" + player.getHealth());
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
             //
-            wm.put(winner);
-            continueShowing = true;
-            wm.put(reset);
+            // wm.put(winner);
+            // continueShowing = true;
+            // wm.put(reset);
             enemy.getHand().get(0).flip();
             resetRound = true;
         }
@@ -517,9 +528,9 @@ public class SceneBattle implements Scene {
                 enemyHealthText.setText("" + enemy.getHealth());
                 winner = new TextElement("Player Wins!",64, 200, height/2);
                 // 
-                wm.put(winner);
-                continueShowing = true;
-                wm.put(reset);
+                // wm.put(winner);
+                // continueShowing = true;
+                // wm.put(reset);
                 enemy.getHand().get(0).flip();
                 resetRound = true;
             }
@@ -533,9 +544,9 @@ public class SceneBattle implements Scene {
                     playerHealthText.setText("" + player.getHealth());
                     winner = new TextElement("Enemy Wins!",64, 200, height/2);
                     //
-                    wm.put(winner);
-                    continueShowing = true;
-                    wm.put(reset);
+                    // wm.put(winner);
+                    // continueShowing = true;
+                    // wm.put(reset);
                     enemy.getHand().get(0).flip();
                     resetRound = true;
                 }
@@ -548,21 +559,20 @@ public class SceneBattle implements Scene {
                     enemyHealthText.setText("" + enemy.getHealth());
                     winner = new TextElement("Player Wins!",64, 200, height/2);
                     //
-                    wm.put(winner);
-                    continueShowing = true;
-                    wm.put(reset);
+                    // wm.put(winner);
+                    // continueShowing = true;
+                    // wm.put(reset);
                     enemy.getHand().get(0).flip();
                     resetRound = true;
                 }
                 else {
                     winner = new TextElement("Draw!",64, 200, height/2);
                     //
-                    wm.put(winner);
-                    continueShowing = true;
-                    wm.put(reset);
+
                     enemy.getHand().get(0).flip();
                     resetRound = true;
                 }
+               
             }
         }
         else if (bjai.getPlayerTotal() > 21) {
