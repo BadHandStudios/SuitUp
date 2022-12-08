@@ -122,6 +122,9 @@ public class GameManager {
             case SLOT_SCENE:
                 currentScene = new SlotScene();
                 break;
+            case GAME_OVER:
+                currentScene = new MenuGameOver();
+                break;
         }
         currentScene.initialize();
     }
