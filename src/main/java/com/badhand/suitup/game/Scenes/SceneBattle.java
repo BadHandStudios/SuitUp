@@ -204,6 +204,9 @@ public class SceneBattle implements Scene {
                 }
             }
         }
+        else {
+            timer = 0;
+        }
     }
 
     public void handle(Event e) {
@@ -375,7 +378,9 @@ public class SceneBattle implements Scene {
     }
 
     public void drawHands() {
-        timer = 0;
+        if (playerTurn) {
+            timer = 0;
+        }
         animate = true;
         drawPlayerHand();
         drawEnemyHand();
