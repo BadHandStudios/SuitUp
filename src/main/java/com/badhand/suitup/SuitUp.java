@@ -8,6 +8,8 @@ public class SuitUp {
 
     private static WindowManager wm;
     private static GameManager gm;
+
+    @SuppressWarnings("unused")
     private static AssetManager am;
     public static void main(String[] args) {
 
