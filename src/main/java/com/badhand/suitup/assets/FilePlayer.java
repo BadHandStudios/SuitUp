@@ -2,7 +2,6 @@ package com.badhand.suitup.assets;
 
 import java.io.*;
 
-import javazoom.jl.player.advanced.jlap;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 
@@ -10,7 +9,6 @@ public class FilePlayer {
     private String MP3File;
     private AdvancedPlayer jlPlayer;
     private boolean loop = true;
-    private boolean playing = false;
 
     public FilePlayer(String MP3File) {
         this.MP3File = MP3File;

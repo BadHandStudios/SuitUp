@@ -127,6 +127,8 @@ public class MenuLevelSelect implements Scene {
                     award.setVisibility(false);
                 }
                 break;
+            default:
+                break;
         }
     }
 }

@@ -7,7 +7,7 @@ import com.badhand.suitup.assets.DataManager;
 import com.badhand.suitup.entities.*;
 import com.badhand.suitup.ui.WindowManager;
 
-import processing.core.PConstants;
+//import processing.core.PConstants;
 
 
 public class GameManager {
@@ -124,6 +124,8 @@ public class GameManager {
                 break;
             case GAME_OVER:
                 currentScene = new MenuGameOver();
+                break;
+            default:
                 break;
         }
         currentScene.initialize();

@@ -4,7 +4,6 @@ import java.util.*;
 
 import processing.core.*;
 
-import com.badhand.suitup.*;
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.events.*;
 

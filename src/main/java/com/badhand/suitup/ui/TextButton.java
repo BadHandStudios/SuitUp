@@ -62,6 +62,10 @@ public class TextButton implements GUI {
         return height;
     }
 
+    public int getSize() {
+        return size;
+    }
+
     public int getX() {
         return x;
     }
@@ -88,6 +92,10 @@ public class TextButton implements GUI {
 
     public String getName(){
         return name;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public boolean click(int x, int y) {

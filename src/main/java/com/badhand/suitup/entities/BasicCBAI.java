@@ -1,11 +1,11 @@
 package com.badhand.suitup.entities;
 
-import com.badhand.suitup.ui.Card;
-import com.badhand.suitup.game.*;
+//import com.badhand.suitup.ui.Card;
+//import com.badhand.suitup.game.*;
 
 public class BasicCBAI extends CombatAI{
     
-    private Player player = Player.getInstance();
+    //private Player player = Player.getInstance();
 
     public String getAction() {
         String action = "";

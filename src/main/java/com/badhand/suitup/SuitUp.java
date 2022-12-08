@@ -3,9 +3,6 @@ package com.badhand.suitup;
 import com.badhand.suitup.ui.*;
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.assets.*;
-import com.badhand.suitup.entities.*;
-
-import processing.core.*;
 
 public class SuitUp {
 

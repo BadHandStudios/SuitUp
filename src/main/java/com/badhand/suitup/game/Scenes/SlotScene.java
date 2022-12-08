@@ -15,8 +15,8 @@ import processing.core.*;
 public class SlotScene implements Scene {
     private final int COIN_REWARD = 100;
     private final int COIN_REWARD_SPREAD = 25;
-    private final int CARD_REWARD = 1;
-    private final int HEART_REWARD = 1;
+    //private final int CARD_REWARD = 1;
+    //private final int HEART_REWARD = 1;
 
     private int coinReward = 0;
     private int coinMultiplier = 1;
@@ -208,7 +208,13 @@ public class SlotScene implements Scene {
     }
 
     public void handle(Event e){
-
+        switch(e.getType()) {
+            case SCENE_CHANGE:
+                blur = 0;
+                break;
+            default:
+            break;
+        }
     }
 
     private void gild(){

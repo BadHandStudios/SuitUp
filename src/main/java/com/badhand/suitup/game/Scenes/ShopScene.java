@@ -16,7 +16,7 @@ import com.badhand.suitup.entities.Player;
 public class ShopScene implements Scene {
     private static WindowManager wm = WindowManager.getInstance();
     private static AssetManager am = AssetManager.getInstance();
-    private static EventManager em = EventManager.getInstance();
+    //private static EventManager em = EventManager.getInstance();
     private static Player p = Player.getInstance();
 
     private static int width = 1920;
@@ -185,6 +185,8 @@ public class ShopScene implements Scene {
                 default:
                 return;
             }
+            default:
+                break;
         }
     }
     

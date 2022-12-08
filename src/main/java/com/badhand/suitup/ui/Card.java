@@ -136,6 +136,10 @@ public class Card implements GUI{
         return y;
     }
 
+    public int getTextSIze() {
+        return textSize;
+    }
+
     public void setPos(int x, int y){
         this.x = x;
         this.y = y;

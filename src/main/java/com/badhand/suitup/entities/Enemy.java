@@ -1,7 +1,6 @@
 package com.badhand.suitup.entities;
 
-import com.badhand.suitup.assets.AssetManager;
-import com.badhand.suitup.entities.*;
+//import com.badhand.suitup.assets.AssetManager;
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.ui.*;
 
@@ -11,7 +10,7 @@ import java.util.*;
 
 public class Enemy extends Entity {
 
-    private AssetManager am = AssetManager.getInstance();
+    //private AssetManager am = AssetManager.getInstance();
 
     private BlackJackAI bjai;
     private CombatAI cbai;
