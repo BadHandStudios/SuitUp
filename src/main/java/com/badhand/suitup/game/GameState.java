@@ -10,4 +10,5 @@ public enum GameState {
     DEBUG,
     MAP_SCENE,
     SLOT_SCENE,
+    GAME_OVER,
 }

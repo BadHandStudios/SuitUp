@@ -14,19 +14,24 @@ public class SceneBattle implements Scene {
     AssetManager am = AssetManager.getInstance();
     EventManager em = EventManager.getInstance();
 
-    int width = 1920;
-    int height = 1080;
+    int width = wm.getWidth();
+    int height = wm.getHeight();
     int animWidth = width;
     int animHeight = height/2;
+    int timer = 0;
+    int enemyHandIndex = 0;
+    int playerHandIndex = 0;
 
     String playerAction;
+    String enemyAction;
+    String filename = "";
 
     int[] playerPositions = {0,0,0,0,0};
     int[] enemyPositions = {0,0,0,0,0};
     ArrayList<Card> playerHand = new ArrayList<Card>();
     ArrayList<Card> enemyHand = new ArrayList<Card>();
-    Deck temp1 = new Deck();
-    Deck temp2 = new Deck();
+    // Deck temp1 = new Deck();
+    // Deck temp2 = new Deck();
 
     TextButton hit = new TextButton("Hit",64,840,height/2,new Event(Events.CLICK,"Hit"));
     TextButton stay = new TextButton("Stay",64,1080,height/2,new Event(Events.CLICK,"Stay"));
@@ -36,6 +41,17 @@ public class SceneBattle implements Scene {
     TextButton reset = new TextButton("Continue",64,width/2,height/2, new Event(Events.CLICK,"reset"));
     TextElement winner = new TextElement("",64,200,height/2);
 
+    ImageElement playerDeckGilded = new ImageElement(width - 200, height - 200,200,300,am.getImage("CardBack3.png"));
+    ImageElement enemyDeckGilded = new ImageElement(200, 200,200,300,am.getImage("CardBack3.png"));
+
+    ImageElement playerDeckTop = new ImageElement(width - 200, height - 200,200,300,am.getImage("CardBack1.png"));
+    ImageElement enemyDeckTop = new ImageElement(200, 200,200,300,am.getImage("CardBack1.png"));
+    ImageElement playerDrawnCard = new ImageElement(width - 200, height - 200,200,300,am.getImage("CardBack1.png"));
+    ImageElement playerDrawnCardGilded = new ImageElement(width - 200, height - 200,200,300,am.getImage("CardBack3.png"));
+    ImageElement enemyDrawnCard = new ImageElement(200, 200,200,300,am.getImage("CardBack1.png"));
+    boolean animatePlayerDrawnCard = false;
+    boolean animateEnemyDrawnCard = false;
+
     TextElement playerHealthText;
     TextElement enemyHealthText;
 
@@ -44,7 +60,13 @@ public class SceneBattle implements Scene {
     boolean playerTurn = true;
     boolean roundStart = true;
     boolean battle = false;
-    boolean draw = false;
+    boolean hitVisible = false;
+    boolean resetRound = false;
+    boolean animate = false;
+
+    boolean optionsShowing = false;
+    boolean hitStayShowing = false;
+    boolean continueShowing = false;
 
     Enemy enemy;
     BlackJackAI bjai;
@@ -58,10 +80,15 @@ public class SceneBattle implements Scene {
     }
 
     public void initialize() {
+
         am.stopSound(0);
         am.loopSound("combat_background_music.mp3", 0);
         wm.clear();
         wm.setBackground(new Color(10, 60, 20));
+
+        timer = 0;
+        playerHandIndex = 0;
+        enemyHandIndex = 0;
 
         player = Player.getInstance();
         bjai = enemy.getBJAI();
@@ -93,6 +120,8 @@ public class SceneBattle implements Scene {
 
         mostRecentGildedCard = null;
         Card c = player.drawCard();
+        animPlayerCard();
+        
         Effect eff = c.getEffect();
         if(c.isGilded()){
             if(eff.getEffect() == Effects.INSTANT_DAMAGE){
@@ -108,6 +137,8 @@ public class SceneBattle implements Scene {
         }
         
         c = player.drawCard();
+        animPlayerCard();
+
         eff = c.getEffect();
         if(c.isGilded()){
             if(eff.getEffect() == Effects.INSTANT_DAMAGE){
@@ -126,29 +157,130 @@ public class SceneBattle implements Scene {
 
         enemy.getHand().get(0).flip();
         drawHands();
+        playerHand.get(0).setVisibility(false);
+        playerHand.get(1).setVisibility(false);
+        enemyHand.get(0).setVisibility(false);
+        enemyHand.get(1).setVisibility(false);
+        
+        wm.put(playerDeckGilded);
+        wm.put(enemyDeckGilded);
+        wm.put(playerDrawnCard);
+        playerDrawnCard.setVisibility(false);
+        wm.registerDiffered(playerDrawnCard);
+        wm.put(playerDeckTop);
+        wm.put(enemyDeckTop);
+
+        wm.put(playerDrawnCardGilded);
+        playerDrawnCardGilded.setVisibility(false);
+        wm.registerDiffered(playerDrawnCardGilded);
+
+        wm.put(enemyDrawnCard);
+        enemyDrawnCard.setVisibility(false);
+        wm.registerDiffered(enemyDrawnCard);
 
 
-        wm.put(attack);
-        wm.put(block);
-        wm.put(nothing);
+
+
+
+        // wm.put(attack);
+        // wm.put(nothing);
+        // wm.put(block);
     }
 
     public void update() {
-        if (draw) {
-            if (playerTurn) {
-                if (animWidth == width && animHeight == height/2) {
-                    animCard = new ImageElement(animWidth, animHeight/2, 200, 300, "CardBack2.png");
-                }
-                else {
-                    wm.remove(animCard);
-                    animCard = new ImageElement(animWidth, animHeight/2, 200, 300, "CardBack2.png");
-                }
-                wm.put(animCard);
+        if(player.getDeck().peek().isGilded()) playerDeckTop.setVisibility(false);
+        else playerDeckTop.setVisibility(true);
+
+        if(animatePlayerDrawnCard){
+            ImageElement drawnCard = player.getDeck().peek().isGilded() ? playerDrawnCardGilded : playerDrawnCard;
+            if(!drawnCard.visible()) drawnCard.setVisibility(true);
+            if(drawnCard.getY() < height + 500) drawnCard.setPos(drawnCard.getX(), drawnCard.getY() + 25);
+            else{
+                animatePlayerDrawnCard = false;
+                drawnCard.setVisibility(false);
+                drawnCard.setPos(width - 200, height - 200);
+            }
+        }
+        if(animateEnemyDrawnCard){
+            ImageElement drawnCard = enemyDrawnCard;
+            if(!drawnCard.visible()) drawnCard.setVisibility(true);
+            if(drawnCard.getY() > -500) drawnCard.setPos(drawnCard.getX(), drawnCard.getY() - 25);
+            else{
+                animateEnemyDrawnCard = false;
+                drawnCard.setVisibility(false);
+                drawnCard.setPos(200, 200);
+            }
+        }
+        
+        if (animate) {
+            // if(optionsShowing) hidePlayerOptions();
+            if (timer > 0) {
+                timer--;
             }
             else {
-
+                timer = 30;
+    
+                if (playerHandIndex < playerHand.size()) {
+                    int rand = cbai.random(0,3);
+                    switch (rand) {
+                        case 0:
+                            filename = "cardPlace1.mp3";
+                            break;
+                        case 1:
+                            filename = "cardPlace2.mp3";
+                            break;
+                        case 2:
+                            filename = "cardPlace3.mp3";
+                            break;
+                        case 3:
+                            filename = "cardSlide1.mp3";
+                            break;
+                    }
+    
+                    if (!playerHand.get(playerHandIndex).visible()) {
+                        playerHand.get(playerHandIndex).setVisibility(true);
+                        playerHandIndex++;
+                        am.playSound(filename,1);
+                    }
+                    else {
+                        playerHandIndex++;
+                        if (enemyHandIndex < enemyHand.size()) {
+                            if (!enemyHand.get(enemyHandIndex).visible()) {
+                                enemyHand.get(enemyHandIndex).setVisibility(true);
+                                enemyHandIndex++;
+                                am.playSound(filename,1);
+                                animEnemyCard();
+                            }
+                            else {
+                                enemyHandIndex++;
+                            }
+                        }
+                        else {
+                            if (!playerTurn) {
+                                animate = false;
+                            }
+                            if(!optionsShowing && !hitStayShowing && !continueShowing && animate){
+                                showPlayerOptions();
+                            }else if(!optionsShowing && !hitStayShowing && !continueShowing && !animate){
+                                
+                                continueShowing = true;
+                                this.updateHealth();
+                                wm.put(winner);
+                                wm.put(reset);
+                            }
+                            enemyHandIndex = 0;
+                            
+                        }
+                    }
+                }
+                else {
+                    playerHandIndex = 0;
+                }
             }
-            draw = false;
+        }
+        else {
+            timer = 0;
+            
         }
     }
 
@@ -157,56 +289,68 @@ public class SceneBattle implements Scene {
             switch ("" + e.getData()) {
                 case "Stay":
                     playerTurn = false;
-                    wm.remove(hit);
-                    wm.remove(stay);
+                    hideHitStay();
                     enemyTurn();
-                    wm.put(reset);
                     break;
                 case "Hit":
-                    Card c = player.drawCard();
-                    if(c.isGilded()){
-                        Effect eff = c.getEffect();
-                        mostRecentGildedCard = c;
-                        if(player.getHandTotal() > 21 && eff.getEffect() == Effects.BUST_PROOF) c.activate();
+                    int rand = cbai.random(0,3);
+                        switch (rand) {
+                            case 0:
+                                filename = "cardPlace1.mp3";
+                                break;
+                            case 1:
+                                filename = "cardPlace2.mp3";
+                                break;
+                            case 2:
+                                filename = "cardPlace3.mp3";
+                                break;
+                            case 3:
+                                filename = "cardSlide1.mp3";
+                                break;
+                        }
+                    if (player.getHand().size() < 5) {
+                        Card c = player.drawCard();
+                        am.playSound(filename, 1);
+                        animPlayerCard();
                         if(c.isGilded()){
-                            if(eff.getEffect() == Effects.INSTANT_DAMAGE){
-                                c.activate();
-                                if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
-                                updateHealth();
-                            }else if(eff.getEffect() == Effects.HEAL){
-                                c.activate();
-                                player.addHealth((int) eff.getValue());
-                                updateHealth();
+                            Effect eff = c.getEffect();
+                            mostRecentGildedCard = c;
+                            if(player.getHandTotal() > 21 && eff.getEffect() == Effects.BUST_PROOF) c.activate();
+                            if(c.isGilded()){
+                                if(eff.getEffect() == Effects.INSTANT_DAMAGE){
+                                    c.activate();
+                                    if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+                                    updateHealth();
+                                }else if(eff.getEffect() == Effects.HEAL){
+                                    c.activate();
+                                    player.addHealth((int) eff.getValue());
+                                    updateHealth();
+                                }
+                                else  mostRecentGildedCard = c;
                             }
-                            else  mostRecentGildedCard = c;
                         }
                     }
                     drawHands();
                     gameLogic();
+                    
                     break;
                 case "Attack":
                     playerAction = "Attack";
-                    wm.remove(attack);
-                    wm.remove(block);
-                    wm.remove(nothing);
-                    wm.put(hit);
-                    wm.put(stay);
+                    hidePlayerOptions();
+                    showHitStay();
+                    hitVisible = true;
                     break;
                 case "Block":
                     playerAction = "Block";
-                    wm.remove(attack);
-                    wm.remove(block);
-                    wm.remove(nothing);
-                    wm.put(hit);
-                    wm.put(stay);
+                    hidePlayerOptions();
+                    showHitStay();
+                    hitVisible = true;
                     break;
                 case "Nothing":
                     playerAction = "Nothing";
-                    wm.remove(attack);
-                    wm.remove(block);
-                    wm.remove(nothing);
-                    wm.put(hit);
-                    wm.put(stay);
+                    hidePlayerOptions();
+                    showHitStay();
+                    hitVisible = true;
                     break;
                 case "reset":
                     if (player.getHealth() <= 0 || enemy.getHealth() <= 0) {
@@ -216,7 +360,7 @@ public class SceneBattle implements Scene {
                             MapScene.playerDeath();
                             player.reset();
 
-                            Event end = new Event(Events.SCENE_CHANGE,GameState.MENU_MAIN);
+                            Event end = new Event(Events.SCENE_CHANGE,GameState.GAME_OVER);
                             em.push(end);
                             break;
                         }
@@ -225,6 +369,7 @@ public class SceneBattle implements Scene {
                     }
                     else {
                         wm.remove(reset);
+                        continueShowing = false;
                         reset();
                     }
                     break;
@@ -238,6 +383,11 @@ public class SceneBattle implements Scene {
         playerPositions = new int[]{0,0,0,0,0};
         enemyPositions = new int[]{0,0,0,0,0};
 
+        timer = 0;
+        playerHandIndex = 0;
+        enemyHandIndex = 0;
+        hitVisible = false;
+
         playerHealthText.setText("" + player.getHealth());
         enemyHealthText.setText("" + enemy.getHealth());
 
@@ -246,6 +396,7 @@ public class SceneBattle implements Scene {
         
         mostRecentGildedCard = null;
         Card c = player.drawCard();
+        animPlayerCard();
         Effect eff = c.getEffect();
         if(c.isGilded()){
             if(eff.getEffect() == Effects.INSTANT_DAMAGE){
@@ -260,6 +411,8 @@ public class SceneBattle implements Scene {
             else  mostRecentGildedCard = c;
         }
         c = player.drawCard();
+        animPlayerCard();
+
         eff = c.getEffect();
         if(c.isGilded()){
             if(eff.getEffect() == Effects.INSTANT_DAMAGE){
@@ -278,10 +431,14 @@ public class SceneBattle implements Scene {
 
         enemy.getHand().get(0).flip();
         drawHands();
+        playerHand.get(0).setVisibility(false);
+        playerHand.get(1).setVisibility(false);
+        enemyHand.get(0).setVisibility(false);
+        enemyHand.get(1).setVisibility(false);
 
-        wm.put(attack);
-        wm.put(block);
-        wm.put(nothing);
+        // wm.put(attack);
+        // wm.put(nothing);
+        // wm.put(block);
     }
 
     public int[] formatHand(int size) {
@@ -309,6 +466,11 @@ public class SceneBattle implements Scene {
     }
 
     public void drawHands() {
+        if (playerTurn) {
+            timer = 0;
+        }
+        animate = true;
+        // if(optionsShowing) hidePlayerOptions();
         drawPlayerHand();
         drawEnemyHand();
     }
@@ -327,6 +489,16 @@ public class SceneBattle implements Scene {
             playerHand.add(player.getHand().get(i));
             playerHand.get(i).setPos(positions[i], height - 200);
             wm.put(playerHand.get(i));
+            if (i > 1) {
+                //playerHandIndex = i;
+            }
+        }
+        //if (playerHandIndex > 1 && playerTurn) {
+        //    playerHand.get(playerHandIndex).setVisibility(false);
+        //}
+        if (playerHandIndex > 1 && playerTurn) {
+            //playerHand.get(playerHandIndex).setVisibility(false);
+            //playerHandIndex = 2;
         }
     }
     public void drawEnemyHand() {
@@ -343,6 +515,13 @@ public class SceneBattle implements Scene {
             enemyHand.add(enemy.getHand().get(i));
             enemyHand.get(i).setPos(positions[i], 200);
             wm.put(enemyHand.get(i));
+            if (i > 1) {
+                enemyHandIndex = i;
+            }
+        }
+        if (enemyHandIndex > 1 && !playerTurn) {
+            enemyHand.get(enemyHandIndex).setVisibility(false);
+            enemyHandIndex = 2;
         }
     }
 
@@ -353,7 +532,7 @@ public class SceneBattle implements Scene {
             enemy.drawCard();
             drawHands();
             bjai.updateTotals();
-            if (bjai.getEnemyTotal() > 21) {
+            if (bjai.getEnemyTotal() > 21 || enemy.getHand().size() == 5) {
                 gameLogic();
             }
             else {
@@ -374,91 +553,109 @@ public class SceneBattle implements Scene {
         cbai.updateTotals();
 
         if (player.getHand().size() == 5 && bjai.playerTotal <= 21) {
-            cbai.doActions(playerAction, cbai.getAction(), player.getAttack(), mostRecentGildedCard);
-            enemy.setHealth(cbai.getEnemyHealth());
+            this.doActions(playerAction,cbai.getAction(), player.getAttack(), mostRecentGildedCard);
             bjai.setEnemyHealth(enemy.getHealth());
             if (enemy.getHealth() < 0) {
                 enemy.setHealth(0);
             }
-            enemyHealthText.setText("" + enemy.getHealth());
+            //enemyHealthText.setText("" + enemy.getHealth());
             winner = new TextElement("Player Wins!",64, 200, height/2);
-            wm.put(winner);
-            wm.remove(hit);
-            wm.remove(stay);
-            wm.put(reset);
+            hideHitStay();
+            //
+            // continueShowing = true;
+            // wm.put(winner);
+            // wm.put(reset);
             enemy.getHand().get(0).flip();
+            resetRound = true;
         }
         else if (enemy.getHand().size() == 5 && bjai.enemyTotal <= 21) {
-            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), mostRecentGildedCard);
-            player.setHealth(cbai.getPlayerHealth());
+            this.doActions(playerAction,cbai.getAction(), enemy.getAttack(), mostRecentGildedCard);
             bjai.setPlayerHealth(player.getHealth());
             if (player.getHealth() < 0) {
                 player.setHealth(0);
             }
-            playerHealthText.setText("" + player.getHealth());
+            //playerHealthText.setText("" + player.getHealth());
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
-            wm.put(winner);
+            //
+            // wm.put(winner);
+            // continueShowing = true;
+            // wm.put(reset);
             enemy.getHand().get(0).flip();
+            resetRound = true;
         }
         else if (bjai.playerTotal <= 21 && !playerTurn) {
             if (bjai.enemyTotal > 21) {
-                cbai.doActions(playerAction, cbai.getAction(), player.getAttack(), mostRecentGildedCard);
-                enemy.setHealth(cbai.getEnemyHealth());
+                this.doActions(playerAction,cbai.getAction(), player.getAttack(), mostRecentGildedCard);
                 bjai.setEnemyHealth(enemy.getHealth());
                 if (enemy.getHealth() < 0) {
                     enemy.setHealth(0);
                 }
-                enemyHealthText.setText("" + enemy.getHealth());
+                //enemyHealthText.setText("" + enemy.getHealth());
                 winner = new TextElement("Player Wins!",64, 200, height/2);
-                wm.put(winner);
+                // 
+                // wm.put(winner);
+                // continueShowing = true;
+                // wm.put(reset);
                 enemy.getHand().get(0).flip();
+                resetRound = true;
             }
             else {
                 if (bjai.getEnemyTotal() > bjai.getPlayerTotal() && bjai.getEnemyTotal() <= 21) {
-                    cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), mostRecentGildedCard);
-                    player.setHealth(cbai.getPlayerHealth());
+                    this.doActions(playerAction,cbai.getAction(), enemy.getAttack(), mostRecentGildedCard);
                     bjai.setPlayerHealth(player.getHealth());
                     if (player.getHealth() < 0) {
                         player.setHealth(0);
                     }
-                    playerHealthText.setText("" + player.getHealth());
+                    //playerHealthText.setText("" + player.getHealth());
                     winner = new TextElement("Enemy Wins!",64, 200, height/2);
-                    wm.put(winner);
+                    //
+                    // wm.put(winner);
+                    // continueShowing = true;
+                    // wm.put(reset);
                     enemy.getHand().get(0).flip();
+                    resetRound = true;
                 }
                 else if (bjai.getEnemyTotal() < bjai.getPlayerTotal() && bjai.getPlayerTotal() <= 21) {
-                    cbai.doActions(playerAction, cbai.getAction(), player.getAttack(), mostRecentGildedCard);
-                    enemy.setHealth(cbai.getEnemyHealth());
+                    this.doActions(playerAction,cbai.getAction(), player.getAttack(), mostRecentGildedCard);
                     bjai.setEnemyHealth(enemy.getHealth());
                     if (enemy.getHealth() < 0) {
                         enemy.setHealth(0);
                     }
-                    enemyHealthText.setText("" + enemy.getHealth());
+                    //enemyHealthText.setText("" + enemy.getHealth());
                     winner = new TextElement("Player Wins!",64, 200, height/2);
-                    wm.put(winner);
+                    //
+                    // wm.put(winner);
+                    // continueShowing = true;
+                    // wm.put(reset);
                     enemy.getHand().get(0).flip();
+                    resetRound = true;
                 }
                 else {
                     winner = new TextElement("Draw!",64, 200, height/2);
-                    wm.put(winner);
+                    //
+
                     enemy.getHand().get(0).flip();
+                    resetRound = true;
                 }
+               
             }
         }
         else if (bjai.getPlayerTotal() > 21) {
-            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), mostRecentGildedCard);
-            player.setHealth(cbai.getPlayerHealth());
+            this.doActions(playerAction,cbai.getAction(), enemy.getAttack(), mostRecentGildedCard);
             bjai.setPlayerHealth(player.getHealth());
             if (player.getHealth() < 0) {
                 player.setHealth(0);
             }
-            playerHealthText.setText("" + player.getHealth());
+            //playerHealthText.setText("" + player.getHealth());
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
+            hideHitStay();
+            //
             wm.put(winner);
-            wm.remove(hit);
-            wm.remove(stay);
+            continueShowing = true;
+            this.updateHealth();
             wm.put(reset);
             enemy.getHand().get(0).flip();
+            resetRound = true;
         }
     }
 
@@ -466,4 +663,115 @@ public class SceneBattle implements Scene {
         playerHealthText.setText("" + player.getHealth());
         enemyHealthText.setText("" + enemy.getHealth());
     }
+
+    public void doActions(String playerAction, String EnemyAction, int Attack, Card c) {
+
+        double playerOffenseModifier = 1.0;
+        double playerDefenseModifier = 1.0;
+        double enemyOffenseModifier = 1.0;
+        double enemyDefenseModifier = 1.0;
+
+        int playerTotal = cbai.getPlayerTotal();
+        int enemyTotal = cbai.getEnemyTotal();
+
+        if (playerAction == "Attack") {
+            playerOffenseModifier = 1.25;
+            playerDefenseModifier = 1.25;
+        }
+        if (playerAction == "Block") {
+            playerOffenseModifier = 0.75;
+            playerDefenseModifier = 0.75;
+        }
+
+        if (EnemyAction == "Attack") {
+            enemyOffenseModifier = 1.25;
+            enemyDefenseModifier = 1.25;
+        }
+        if (EnemyAction == "Block") {
+            enemyOffenseModifier = 0.75;
+            enemyDefenseModifier = 0.75;
+        }
+        if(c != null){
+            Effect e = c.getEffect();
+            switch(e.getEffect()){
+                case DAMAGE_MODIFIER:
+                    playerOffenseModifier += e.getValue();
+                    c.activate();
+                    break;
+                case HEAL:
+                    break;
+                case DEFENSE_BONUS:
+                    playerDefenseModifier -= Math.max(0.25, e.getValue());
+                    c.activate();
+                    break;
+                case INSTANT_DAMAGE:
+                    break;
+                default:
+                    break;
+                
+            }
+        }
+
+        if ((playerTotal > enemyTotal  && playerTotal <= 21 || enemyTotal > 21) || (player.getHand().size() == 5 && playerTotal <= 21)) {
+            int attack = Attack;
+
+            attack = (int)(attack * playerOffenseModifier * enemyDefenseModifier);
+
+            enemy.setHealth((enemy.getHealth() - (int)attack));
+        }
+        else if ((playerTotal < enemyTotal && enemyTotal <= 21 || playerTotal > 21) || (enemy.getHand().size() == 5 && enemyTotal <= 21)) {
+            int attack = Attack;
+
+            attack = (int)(attack * enemyOffenseModifier * playerDefenseModifier);
+
+            player.setHealth(player.getHealth() - (int)attack);
+        }
+    } 
+
+
+
+    private void hidePlayerOptions() {
+        optionsShowing = false;
+        wm.remove(attack);
+        wm.remove(block);
+        wm.remove(nothing);
+    }
+
+    private void showPlayerOptions() {
+        optionsShowing = true;
+        wm.put(attack);
+        wm.put(block);
+        wm.put(nothing);
+    }
+
+    private void showHitStay() {
+        hitStayShowing = true;
+        wm.put(hit);
+        wm.put(stay);
+    }
+
+    private void hideHitStay() {
+        hitStayShowing = false;
+        wm.remove(hit);
+        wm.remove(stay);
+    }
+
+    private void animPlayerCard(){
+        if(animatePlayerDrawnCard){
+            playerDrawnCard.setPos(playerDrawnCard.getX(), playerDrawnCard.getY() - 100);
+        }else{
+           animatePlayerDrawnCard = true;
+        }
+    }
+
+    private void animEnemyCard(){
+        if(animateEnemyDrawnCard){
+            enemyDrawnCard.setPos(enemyDrawnCard.getX(), enemyDrawnCard.getY() + 100);
+        }else{
+            animateEnemyDrawnCard = true;
+        }
+    }
+
 }
+
+

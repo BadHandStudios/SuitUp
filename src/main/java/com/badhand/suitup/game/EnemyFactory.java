@@ -69,8 +69,8 @@ public class EnemyFactory {
         BlackJackAI ai = enemyAI.next();
         PImage texture = enemyTextures.next();
         String name = enemyNames.next();
-        int health = 15 + 5 * level;
-        int attack = 4 + level;
+        int health = 10 + 5 * level;
+        int attack = 3 + level;
 
         switch(episode){
             case 2:
