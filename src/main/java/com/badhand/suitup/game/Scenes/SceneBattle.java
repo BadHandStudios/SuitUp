@@ -46,8 +46,11 @@ public class SceneBattle implements Scene {
 
     ImageElement playerDeckTop = new ImageElement(width - 200, height - 200,200,300,am.getImage("CardBack1.png"));
     ImageElement enemyDeckTop = new ImageElement(200, 200,200,300,am.getImage("CardBack1.png"));
-
-    
+    ImageElement playerDrawnCard = new ImageElement(width - 200, height - 200,200,300,am.getImage("CardBack1.png"));
+    ImageElement playerDrawnCardGilded = new ImageElement(width - 200, height - 200,200,300,am.getImage("CardBack3.png"));
+    ImageElement enemyDrawnCard = new ImageElement(200, 200,200,300,am.getImage("CardBack1.png"));
+    boolean animatePlayerDrawnCard = false;
+    boolean animateEnemyDrawnCard = false;
 
     TextElement playerHealthText;
     TextElement enemyHealthText;
@@ -117,6 +120,8 @@ public class SceneBattle implements Scene {
 
         mostRecentGildedCard = null;
         Card c = player.drawCard();
+        animPlayerCard();
+        
         Effect eff = c.getEffect();
         if(c.isGilded()){
             if(eff.getEffect() == Effects.INSTANT_DAMAGE){
@@ -132,6 +137,8 @@ public class SceneBattle implements Scene {
         }
         
         c = player.drawCard();
+        animPlayerCard();
+
         eff = c.getEffect();
         if(c.isGilded()){
             if(eff.getEffect() == Effects.INSTANT_DAMAGE){
@@ -157,8 +164,21 @@ public class SceneBattle implements Scene {
         
         wm.put(playerDeckGilded);
         wm.put(enemyDeckGilded);
+        wm.put(playerDrawnCard);
+        playerDrawnCard.setVisibility(false);
+        wm.registerDiffered(playerDrawnCard);
         wm.put(playerDeckTop);
         wm.put(enemyDeckTop);
+
+        wm.put(playerDrawnCardGilded);
+        playerDrawnCardGilded.setVisibility(false);
+        wm.registerDiffered(playerDrawnCardGilded);
+
+        wm.put(enemyDrawnCard);
+        enemyDrawnCard.setVisibility(false);
+        wm.registerDiffered(enemyDrawnCard);
+
+
 
 
 
@@ -170,6 +190,27 @@ public class SceneBattle implements Scene {
     public void update() {
         if(player.getDeck().peek().isGilded()) playerDeckTop.setVisibility(false);
         else playerDeckTop.setVisibility(true);
+
+        if(animatePlayerDrawnCard){
+            ImageElement drawnCard = player.getDeck().peek().isGilded() ? playerDrawnCardGilded : playerDrawnCard;
+            if(!drawnCard.visible()) drawnCard.setVisibility(true);
+            if(drawnCard.getY() < height + 500) drawnCard.setPos(drawnCard.getX(), drawnCard.getY() + 25);
+            else{
+                animatePlayerDrawnCard = false;
+                drawnCard.setVisibility(false);
+                drawnCard.setPos(width - 200, height - 200);
+            }
+        }
+        if(animateEnemyDrawnCard){
+            ImageElement drawnCard = enemyDrawnCard;
+            if(!drawnCard.visible()) drawnCard.setVisibility(true);
+            if(drawnCard.getY() > -500) drawnCard.setPos(drawnCard.getX(), drawnCard.getY() - 25);
+            else{
+                animateEnemyDrawnCard = false;
+                drawnCard.setVisibility(false);
+                drawnCard.setPos(200, 200);
+            }
+        }
         
         if (animate) {
             // if(optionsShowing) hidePlayerOptions();
@@ -208,6 +249,7 @@ public class SceneBattle implements Scene {
                                 enemyHand.get(enemyHandIndex).setVisibility(true);
                                 enemyHandIndex++;
                                 am.playSound(filename,1);
+                                animEnemyCard();
                             }
                             else {
                                 enemyHandIndex++;
@@ -269,6 +311,7 @@ public class SceneBattle implements Scene {
                     if (player.getHand().size() < 5) {
                         Card c = player.drawCard();
                         am.playSound(filename, 1);
+                        animPlayerCard();
                         if(c.isGilded()){
                             Effect eff = c.getEffect();
                             mostRecentGildedCard = c;
@@ -353,6 +396,7 @@ public class SceneBattle implements Scene {
         
         mostRecentGildedCard = null;
         Card c = player.drawCard();
+        animPlayerCard();
         Effect eff = c.getEffect();
         if(c.isGilded()){
             if(eff.getEffect() == Effects.INSTANT_DAMAGE){
@@ -367,6 +411,8 @@ public class SceneBattle implements Scene {
             else  mostRecentGildedCard = c;
         }
         c = player.drawCard();
+        animPlayerCard();
+
         eff = c.getEffect();
         if(c.isGilded()){
             if(eff.getEffect() == Effects.INSTANT_DAMAGE){
@@ -683,31 +729,48 @@ public class SceneBattle implements Scene {
 
 
 
-    public void hidePlayerOptions() {
+    private void hidePlayerOptions() {
         optionsShowing = false;
         wm.remove(attack);
         wm.remove(block);
         wm.remove(nothing);
     }
 
-    public void showPlayerOptions() {
+    private void showPlayerOptions() {
         optionsShowing = true;
         wm.put(attack);
         wm.put(block);
         wm.put(nothing);
     }
 
-    public void showHitStay() {
+    private void showHitStay() {
         hitStayShowing = true;
         wm.put(hit);
         wm.put(stay);
     }
 
-    public void hideHitStay() {
+    private void hideHitStay() {
         hitStayShowing = false;
         wm.remove(hit);
         wm.remove(stay);
     }
 
+    private void animPlayerCard(){
+        if(animatePlayerDrawnCard){
+            playerDrawnCard.setPos(playerDrawnCard.getX(), playerDrawnCard.getY() - 100);
+        }else{
+           animatePlayerDrawnCard = true;
+        }
+    }
+
+    private void animEnemyCard(){
+        if(animateEnemyDrawnCard){
+            enemyDrawnCard.setPos(enemyDrawnCard.getX(), enemyDrawnCard.getY() + 100);
+        }else{
+            animateEnemyDrawnCard = true;
+        }
+    }
 
 }
+
+
