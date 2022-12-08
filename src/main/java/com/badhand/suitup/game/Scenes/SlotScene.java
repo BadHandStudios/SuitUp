@@ -220,6 +220,7 @@ public class SlotScene implements Scene {
         cardImage.beginDraw();
         cardImage.image(randomCard.getTexture(), 0, 0, 150, 300);
         cardImage.image(randomCard.getGildedTexture(), 0, 0, 150, 300);
+        cardImage.endDraw();
         slotImages[2] = cardImage.get();
 
     }
