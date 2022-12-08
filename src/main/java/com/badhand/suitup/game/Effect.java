@@ -8,7 +8,7 @@ public class Effect {
         this.effect = effect;
         switch(effect){
             case DAMAGE_MODIFIER:
-                value = 1.1f;
+                value = 0.25f;
                 break;
             case BUST_PROOF:
                 value = 0.0f;
@@ -19,6 +19,9 @@ public class Effect {
             case INSTANT_DAMAGE:
                 value = 1f;
                 break;
+            case DEFENSE_BONUS:
+                value = 0.25f;
+                break;
             default:
                 value = 1f;
                 break;
@@ -28,7 +31,7 @@ public class Effect {
     public void upgrade(){
         switch(effect){
             case DAMAGE_MODIFIER:
-                value += 0.1f;
+                value += 0.25f;
                 break;
             case BUST_PROOF:
                 break;

@@ -5,4 +5,5 @@ public enum Effects {
     BUST_PROOF,
     HEAL,
     INSTANT_DAMAGE,
+    DEFENSE_BONUS,
 }

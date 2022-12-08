@@ -25,13 +25,12 @@ public class MenuMain implements Scene{
     private Random rand = new Random();
     
 
-    public MenuMain(){
-        
-    }
+    public MenuMain(){}
 
     public void initialize() {
         wm.clear();
 
+        am.stopSound(0);
         am.loopSound("catchit.mp3", 0);
         wm.setBackground(new Color(50,50,50));
         
@@ -42,9 +41,6 @@ public class MenuMain implements Scene{
             am.getImage("chipBlueWhite.png"),
             am.getImage("chipRedWhite.png"),
         };
-        
-        am.loopSound("catchit.mp3", 0);
-
 
         for(int i = 0; i < chips.length; i++){
             int x = rand.nextInt(width);
@@ -62,7 +58,7 @@ public class MenuMain implements Scene{
         TextButton b = new TextButton("Play", 64, width/2, height/2, new Event(Events.SCENE_CHANGE, GameState.MENU_LEVEL_SELECT));
         wm.put(b);
 
-        TextButton c = new TextButton("Shop", 64, width/2, (int)(height/1.5)-16, new Event(Events.SCENE_CHANGE, GameState.MENU_SHOP));
+        TextButton c = new TextButton("Options", 64, width/2, (int)(height/1.5)-16, null);
         wm.put(c);
 
         TextButton d = new TextButton("Quit", 64, width/2, (int) (height/1.25), new Event(Events.QUIT_GAME, null));

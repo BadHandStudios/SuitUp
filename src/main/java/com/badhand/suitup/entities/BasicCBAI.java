@@ -1,7 +1,12 @@
 package com.badhand.suitup.entities;
 
+import com.badhand.suitup.ui.Card;
+import com.badhand.suitup.game.*;
+
 public class BasicCBAI extends CombatAI{
     
+    private Player player = Player.getInstance();
+
     public String getAction() {
         String action = "";
 
@@ -22,7 +27,7 @@ public class BasicCBAI extends CombatAI{
         return action;
     }
 
-    public void doActions(String playerAction, String EnemyAction, int Attack) {
+    public void doActions(String playerAction, String EnemyAction, int Attack, Card c) {
 
         double playerOffenseModifier = 1.0;
         double playerDefenseModifier = 1.0;
@@ -34,35 +39,53 @@ public class BasicCBAI extends CombatAI{
 
         if (playerAction == "Attack") {
             playerOffenseModifier = 1.25;
-            playerDefenseModifier = 0.75;
+            playerDefenseModifier = 1.25;
         }
         if (playerAction == "Block") {
             playerOffenseModifier = 0.75;
-            playerDefenseModifier = 1.25;
+            playerDefenseModifier = 0.75;
         }
 
         if (EnemyAction == "Attack") {
             enemyOffenseModifier = 1.25;
-            enemyDefenseModifier = 0.75;
+            enemyDefenseModifier = 1.25;
         }
         if (EnemyAction == "Block") {
             enemyOffenseModifier = 0.75;
-            enemyDefenseModifier = 1.25;
+            enemyDefenseModifier = 0.75;
+        }
+        if(c != null){
+            Effect e = c.getEffect();
+            switch(e.getEffect()){
+                case DAMAGE_MODIFIER:
+                    playerOffenseModifier += e.getValue();
+                    c.activate();
+                    break;
+                case HEAL:
+                    break;
+                case DEFENSE_BONUS:
+                    playerDefenseModifier -= Math.max(0.25, e.getValue());
+                    c.activate();
+                    break;
+                case INSTANT_DAMAGE:
+                    break;
+                default:
+                    break;
+                
+            }
         }
 
-        if (playerTotal > enemyTotal  && playerTotal <= 21 || enemyTotal > 21) {
+        if ((playerTotal > enemyTotal  && playerTotal <= 21 || enemyTotal > 21) || (getPlayerHand().size() == 5 && playerTotal <= 21)) {
             int attack = Attack;
 
-            attack *= playerOffenseModifier;
-            attack /= enemyDefenseModifier;
+            attack = (int)(attack * playerOffenseModifier * enemyDefenseModifier);
 
             setEnemyHealth(getEnemyHealth() - (int)attack);
         }
-        else if (playerTotal < enemyTotal && enemyTotal <= 21 || playerTotal > 21) {
+        else if ((playerTotal < enemyTotal && enemyTotal <= 21 || playerTotal > 21) || (getEnemyHand().size() == 5 && enemyTotal <= 21)) {
             int attack = Attack;
 
-            attack *= enemyOffenseModifier;
-            attack /= playerDefenseModifier;
+            attack = (int)(attack * enemyOffenseModifier * playerDefenseModifier);
 
             setPlayerHealth(getPlayerHealth() - (int)attack);
         }

@@ -2,6 +2,7 @@ package com.badhand.suitup.assets;
 
 import java.io.*;
 
+import javazoom.jl.player.advanced.jlap;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 
@@ -66,16 +67,8 @@ public class FilePlayer {
     
     public void close() {
         if (jlPlayer != null){
-            jlPlayer.close();
             loop = false;
+            jlPlayer.close();
         } 
-    }
-
-    public boolean getPlaying() {
-        return playing;
-    }
-
-    public void setPlaying(boolean play) {
-        playing = play;
     }
 }

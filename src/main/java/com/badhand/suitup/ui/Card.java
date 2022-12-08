@@ -1,6 +1,6 @@
 package com.badhand.suitup.ui;
 
-import com.badhand.suitup.ui.*;
+
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.events.*;
 import com.badhand.suitup.assets.*;
@@ -27,6 +27,8 @@ public class Card implements GUI{
     private boolean gilded = false;
     private Effect effect;
 
+    private Deck deck;
+
     private PGraphics texture;
 
     private static  WindowManager wm = WindowManager.getInstance();
@@ -40,6 +42,8 @@ public class Card implements GUI{
     private static Random rand = new Random();
     private static Hashtable<String, PGraphics> cardFaces = new Hashtable<String, PGraphics>();
 
+
+    private TextElement toolTip;
 
 
 
@@ -138,6 +142,7 @@ public class Card implements GUI{
 
         if(this.gilded){
             this.gildedElement.setPos(x, y);
+            this.toolTip.setPos(x, y - 175);
         }
     }
 
@@ -208,6 +213,9 @@ public class Card implements GUI{
 
     public void gild(){
         if(!gilded){
+            if(this.deck != null){
+                deck.registerGilded(this);
+            }
             gilded = true;
             if(gildedTexture == null){
                 gildedTexture = am.getImage("gilded.png");
@@ -218,9 +226,47 @@ public class Card implements GUI{
 
             this.effect = new Effect(Effects.values()[rand.nextInt(Effects.values().length)]);
             this.enumeration.add(gildedElement);
+
+            String text;
+            switch(effect.getEffect()){
+                case BUST_PROOF:
+                    text = "Bust Proof!";
+                    break;
+                case DAMAGE_MODIFIER:
+                    text = "Damage +" + (int)(effect.getValue() * 100) + "%";
+                    break;
+                case HEAL:
+                    text = "Heal +" + (int)(effect.getValue()) + "!";
+                    break;
+                case INSTANT_DAMAGE:
+                    text = "" + (int)(effect.getValue()) + " damage!";
+                    break;
+                case DEFENSE_BONUS:
+                    text = "Defense +" + (int)(effect.getValue() * 100) + "%";
+                    break;
+                default:
+                    text = "ERROR!";
+                    break;
+            }
+            toolTip = new TextElement(text, 32, x, y - 175);
+            toolTip.setVisibility(false);
+            this.enumeration.add(toolTip);
         }else{
             this.effect.upgrade();
         }
+    }
+
+    public void activate(){
+        if(!gilded) return;
+        am.playSound("clang.mp3", 3);
+        if(effect.getEffect() == Effects.BUST_PROOF) this.flip();
+        this.toolTip.setVisibility(true);
+    }
+
+    public void deactivate(){
+        if(!gilded) return;
+        faceUp = true;
+        this.toolTip.setVisibility(false);
     }
 
     public boolean isGilded(){
@@ -237,5 +283,9 @@ public class Card implements GUI{
 
     public PImage getGildedTexture(){
         return gildedTexture;
+    }
+
+    public void registerDeck(Deck d){
+        this.deck = d;
     }
 }

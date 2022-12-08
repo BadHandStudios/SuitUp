@@ -7,7 +7,6 @@ import com.badhand.suitup.assets.*;
 import com.badhand.suitup.entities.*;
 
 import java.util.*;
-import processing.core.*;
 
 public class SceneBattle implements Scene {
     
@@ -60,9 +59,9 @@ public class SceneBattle implements Scene {
 
     public void initialize() {
         am.stopSound(0);
-        am.playSound("combat_background_music.mp3", 0);
+        am.loopSound("combat_background_music.mp3", 0);
         wm.clear();
-        wm.setBackground(new Color(173,101,29));
+        wm.setBackground(new Color(10, 60, 20));
 
         player = Player.getInstance();
         bjai = enemy.getBJAI();
@@ -81,22 +80,47 @@ public class SceneBattle implements Scene {
         wm.put(enemyImage);
         wm.put(playerImage);
 
-        
+        int offset = 100;
 
-        ImageElement playerHeart = new ImageElement("playerHeart", 150, height/2 + 140, 100, 100, am.getImage("heart.png"));
+        ImageElement playerHeart = new ImageElement("playerHeart", 150, height/2 + offset, 100, 100, am.getImage("heart.png"));
         wm.put(playerHeart);
-        ImageElement enemyHeart = new ImageElement("enemyHeart", width - 150, height/2 - 140, 100, 100, am.getImage("heart.png"));
+        ImageElement enemyHeart = new ImageElement("enemyHeart", width - 150, height/2 - offset, 100, 100, am.getImage("heart.png"));
         wm.put(enemyHeart);
-        playerHealthText = new TextElement("" + player.getHealth(),36,150,height/2 + 140);
+        playerHealthText = new TextElement("" + player.getHealth(),36,150,height/2 + offset);
         wm.put(playerHealthText);
-        enemyHealthText = new TextElement("" + enemy.getHealth(),36,width-150,height/2 - 140);
+        enemyHealthText = new TextElement("" + enemy.getHealth(),36,width-150,height/2 - offset);
         wm.put(enemyHealthText);
 
         mostRecentGildedCard = null;
         Card c = player.drawCard();
-        if(c.isGilded()) mostRecentGildedCard = c;
+        Effect eff = c.getEffect();
+        if(c.isGilded()){
+            if(eff.getEffect() == Effects.INSTANT_DAMAGE){
+                c.activate();
+                if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+                updateHealth();
+            }else if(eff.getEffect() == Effects.HEAL){
+                c.activate();
+                player.addHealth((int) eff.getValue());
+                updateHealth();
+            }
+            else  mostRecentGildedCard = c;
+        }
+        
         c = player.drawCard();
-        if(c.isGilded()) mostRecentGildedCard = c;
+        eff = c.getEffect();
+        if(c.isGilded()){
+            if(eff.getEffect() == Effects.INSTANT_DAMAGE){
+                c.activate();
+                if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+                updateHealth();
+            }else if(eff.getEffect() == Effects.HEAL){
+                c.activate();
+                player.addHealth((int) eff.getValue());
+                updateHealth();
+            }
+            else  mostRecentGildedCard = c;
+        }
         enemy.drawCard();
         enemy.drawCard();
 
@@ -140,8 +164,23 @@ public class SceneBattle implements Scene {
                     break;
                 case "Hit":
                     Card c = player.drawCard();
-                    if(c.isGilded()) mostRecentGildedCard = c;
-                    if(player.getHandTotal() > 21) c.flip();
+                    if(c.isGilded()){
+                        Effect eff = c.getEffect();
+                        mostRecentGildedCard = c;
+                        if(player.getHandTotal() > 21 && eff.getEffect() == Effects.BUST_PROOF) c.activate();
+                        if(c.isGilded()){
+                            if(eff.getEffect() == Effects.INSTANT_DAMAGE){
+                                c.activate();
+                                if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+                                updateHealth();
+                            }else if(eff.getEffect() == Effects.HEAL){
+                                c.activate();
+                                player.addHealth((int) eff.getValue());
+                                updateHealth();
+                            }
+                            else  mostRecentGildedCard = c;
+                        }
+                    }
                     drawHands();
                     gameLogic();
                     break;
@@ -173,6 +212,13 @@ public class SceneBattle implements Scene {
                     if (player.getHealth() <= 0 || enemy.getHealth() <= 0) {
                         if (enemy.getHealth() <= 0) {
                             player.addChips((enemy.getMaxHealth() * 10) + (cbai.random(1,enemy.getAttack()) * 10));
+                        }else if(player.getHealth() <= 0){
+                            MapScene.playerDeath();
+                            player.reset();
+
+                            Event end = new Event(Events.SCENE_CHANGE,GameState.MENU_MAIN);
+                            em.push(end);
+                            break;
                         }
                         Event end = new Event(Events.SCENE_CHANGE,GameState.MAP_SCENE);
                         em.push(end);
@@ -200,9 +246,33 @@ public class SceneBattle implements Scene {
         
         mostRecentGildedCard = null;
         Card c = player.drawCard();
-        if(c.isGilded()) mostRecentGildedCard = c;
+        Effect eff = c.getEffect();
+        if(c.isGilded()){
+            if(eff.getEffect() == Effects.INSTANT_DAMAGE){
+                c.activate();
+                if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+                updateHealth();
+            }else if(eff.getEffect() == Effects.HEAL){
+                c.activate();
+                player.addHealth((int) eff.getValue());
+                updateHealth();
+            }
+            else  mostRecentGildedCard = c;
+        }
         c = player.drawCard();
-        if(c.isGilded()) mostRecentGildedCard = c;
+        eff = c.getEffect();
+        if(c.isGilded()){
+            if(eff.getEffect() == Effects.INSTANT_DAMAGE){
+                c.activate();
+                if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+                updateHealth();
+            }else if(eff.getEffect() == Effects.HEAL){
+                c.activate();
+                player.addHealth((int) eff.getValue());
+                updateHealth();
+            }
+            else  mostRecentGildedCard = c;
+        }
         enemy.drawCard();
         enemy.drawCard();
 
@@ -304,7 +374,7 @@ public class SceneBattle implements Scene {
         cbai.updateTotals();
 
         if (player.getHand().size() == 5 && bjai.playerTotal <= 21) {
-            cbai.doActions(playerAction, cbai.getAction(), player.getAttack());
+            cbai.doActions(playerAction, cbai.getAction(), player.getAttack(), mostRecentGildedCard);
             enemy.setHealth(cbai.getEnemyHealth());
             bjai.setEnemyHealth(enemy.getHealth());
             if (enemy.getHealth() < 0) {
@@ -319,7 +389,7 @@ public class SceneBattle implements Scene {
             enemy.getHand().get(0).flip();
         }
         else if (enemy.getHand().size() == 5 && bjai.enemyTotal <= 21) {
-            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack());
+            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), mostRecentGildedCard);
             player.setHealth(cbai.getPlayerHealth());
             bjai.setPlayerHealth(player.getHealth());
             if (player.getHealth() < 0) {
@@ -332,7 +402,7 @@ public class SceneBattle implements Scene {
         }
         else if (bjai.playerTotal <= 21 && !playerTurn) {
             if (bjai.enemyTotal > 21) {
-                cbai.doActions(playerAction, cbai.getAction(), player.getAttack());
+                cbai.doActions(playerAction, cbai.getAction(), player.getAttack(), mostRecentGildedCard);
                 enemy.setHealth(cbai.getEnemyHealth());
                 bjai.setEnemyHealth(enemy.getHealth());
                 if (enemy.getHealth() < 0) {
@@ -345,7 +415,7 @@ public class SceneBattle implements Scene {
             }
             else {
                 if (bjai.getEnemyTotal() > bjai.getPlayerTotal() && bjai.getEnemyTotal() <= 21) {
-                    cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack());
+                    cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), mostRecentGildedCard);
                     player.setHealth(cbai.getPlayerHealth());
                     bjai.setPlayerHealth(player.getHealth());
                     if (player.getHealth() < 0) {
@@ -357,7 +427,7 @@ public class SceneBattle implements Scene {
                     enemy.getHand().get(0).flip();
                 }
                 else if (bjai.getEnemyTotal() < bjai.getPlayerTotal() && bjai.getPlayerTotal() <= 21) {
-                    cbai.doActions(playerAction, cbai.getAction(), player.getAttack());
+                    cbai.doActions(playerAction, cbai.getAction(), player.getAttack(), mostRecentGildedCard);
                     enemy.setHealth(cbai.getEnemyHealth());
                     bjai.setEnemyHealth(enemy.getHealth());
                     if (enemy.getHealth() < 0) {
@@ -376,7 +446,7 @@ public class SceneBattle implements Scene {
             }
         }
         else if (bjai.getPlayerTotal() > 21) {
-            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack());
+            cbai.doActions(playerAction, cbai.getAction(), enemy.getAttack(), mostRecentGildedCard);
             player.setHealth(cbai.getPlayerHealth());
             bjai.setPlayerHealth(player.getHealth());
             if (player.getHealth() < 0) {
@@ -390,5 +460,10 @@ public class SceneBattle implements Scene {
             wm.put(reset);
             enemy.getHand().get(0).flip();
         }
+    }
+
+    public void updateHealth(){
+        playerHealthText.setText("" + player.getHealth());
+        enemyHealthText.setText("" + enemy.getHealth());
     }
 }

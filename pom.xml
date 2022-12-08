@@ -60,6 +60,11 @@
 			  <scope>test</scope>
         <version>5.4.2</version>
 		  </dependency>
+        <groupId>org.json</groupId>
+        <artifactId>json</artifactId>
+        <version>20180130</version>
+      </dependency>
+
   </dependencies>
 
   <repositories>

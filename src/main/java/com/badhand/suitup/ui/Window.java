@@ -16,7 +16,7 @@ public class Window extends PApplet {
 
     private boolean ready = false;
 
-    private LinkedList<GUI> guiBuffer = new LinkedList<GUI>();
+    private ArrayList<GUI> guiBuffer = new ArrayList<GUI>();
     
     private ArrayList<HashSet<GUI>> differedRegistries = new ArrayList<HashSet<GUI>>();
 
@@ -68,7 +68,7 @@ public class Window extends PApplet {
 
         synchronized(this){
             for(GUI g : guiBuffer) {
-                
+                try{
                 for(GUI e : g.enumerate()){
                     if(e instanceof Animation){
                         Animation a = (Animation) e;
@@ -83,6 +83,10 @@ public class Window extends PApplet {
                     }
 
                     place(e);
+                }
+                
+                }catch(Exception exception){
+                    // :(
                 }
             }
         }
@@ -146,7 +150,9 @@ public class Window extends PApplet {
     public void mousePressed() {
         synchronized(this){
             try{
-                for(GUI g : guiBuffer) {
+                GUI g;
+                for(int i = 0 ; i < guiBuffer.size(); i++){
+                    g = guiBuffer.get(i);
                     for(GUI e : g.enumerate()){
                         if(e.visible()) {
                             e.click(mouseX, mouseY);
@@ -203,7 +209,6 @@ public class Window extends PApplet {
         PGraphics g = createGraphics(width, height);
         return g;
     }
-
 
     public Object getLock(){
         return this;

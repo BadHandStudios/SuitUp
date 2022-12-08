@@ -17,6 +17,8 @@ public class MapScene implements Scene {
 
     private static EventManager em = EventManager.getInstance();
 
+    private static GameManager gm = GameManager.getInstance();
+
     private static Map map;
 
     private static boolean doubleBack = false;
@@ -47,10 +49,23 @@ public class MapScene implements Scene {
 
     private static TextElement enemyToolTip;
 
+    private static CaptionedImage gildedCards;
+
+    private boolean finalBoss = false;
 
 
+    private int level = 1;
+    private int episode;
+    private static boolean reLevel;
 
+    
     public void initialize() {
+        if(finalBoss){
+            em.push(new Event(Events.END_GAME, episode));
+            finalBoss = false;
+            return;
+        }
+        this.episode = gm.getEpisode();
         if(playMusic) {
             am.stopSound(0);
             am.loopSound("swing.mp3", 0);
@@ -64,9 +79,18 @@ public class MapScene implements Scene {
 
 
         wm.clear();
-        wm.setBackground(new Color(80, 80, 80));
+        switch(episode){
+            case 2:
+                wm.setBackground(new Color(120, 24, 0));
+                break;
+            default:
+               wm.setBackground(new Color(80, 80, 80));
 
-        if(map != null){
+        }
+
+        if(map != null && !reLevel){
+            gildedCards.setCaption(""+p.getDeck().numGilded());
+            
             wm.put(p);
             wm.put(map);
             map.replaceEntities();
@@ -78,12 +102,36 @@ public class MapScene implements Scene {
             playerHealth.setCaption(""+ p.getHealth() + "/" + p.getMaxHealth());
             playerCoins.setCaption("" + p.getChips());
 
+            
+
             wm.put(playerHealth);
             wm.put(playerCoins);
             wm.put(enemyToolTip);
+            wm.put(gildedCards);
+
+
             return;
+        }else{
+            reLevel = false;
         }
 
+        switch(episode){
+            case 2:
+                if(p.getDeck().numGilded() < 1){
+                    Deck d = p.getDeck();
+                    for(int i = 0; i < 51; i++){
+                        d.draw().gild();
+                    }
+                }
+                break;
+            default:
+        }
+
+        finalBoss = false;
+
+        gildedCards = new CaptionedImage(am.getImage("CardBack3.png"), ""+p.getDeck().numGilded(), wm.getWidth() - 275, 50, 64);
+        wm.registerDiffered(gildedCards, 4);
+        wm.put(gildedCards);
 
         enemyToolTip = new TextElement("", 32, wm.getWidth()/2, 200);
         enemyToolTip.setVisibility(false);
@@ -102,7 +150,7 @@ public class MapScene implements Scene {
         wm.put(playerHealth);
         wm.put(playerCoins);
 
-        map = new Map();
+        map = new Map(level, episode);
         p.move(map.getNode(1, 0));
         wm.put(p);
         wm.put(map);
@@ -142,7 +190,7 @@ public class MapScene implements Scene {
         wm.registerDiffered(movesRemainingBar, 3);
         wm.put(movesRemainingBar);
 
-        movesRemainingText = new TextElement("Moves until Boss Encounter", 32, wm.getWidth()/2, 150);
+        movesRemainingText = new TextElement("Moves until level end", 32, wm.getWidth()/2, 150);
         wm.registerDiffered(movesRemainingText, 3);
         wm.put(movesRemainingText);
     }
@@ -201,9 +249,17 @@ public class MapScene implements Scene {
                         }else if(current.getEntity() instanceof Enemy){
                             em.push(new Event(Events.BATTLE_INITIATE, current.getEntity()));
                             current.removeEntity();
+                        }else if(current.getEntity() instanceof Heart){
+                            p.addHealth(5);
+                            playerHealth.setCaption(""+ p.getHealth() + "/" + p.getMaxHealth());
+                            current.removeEntity();
+                        }else if(current.getEntity() instanceof Shop){
+                            current.removeEntity();
+                            em.push(new Event(Events.SCENE_CHANGE, GameState.MENU_SHOP));
                         }
                     }else if(current.isDebug()){
-                        em.push(new Event(Events.SCENE_CHANGE, GameState.SCENE_BATTLE));
+                        nextLevel();
+                        break;
                     }
                 }
 
@@ -224,7 +280,7 @@ public class MapScene implements Scene {
                     }
                     if(movesRemaining == 0) {
                         map.stopGeneration();
-                        movesRemainingText.setText("Approaching Boss!");
+                        movesRemainingText.setText("Approaching End!");
                     }
                     
                 }
@@ -235,5 +291,19 @@ public class MapScene implements Scene {
         
     }
 
+    private void nextLevel(){
+        level++;
+        if(level > 3){
+            em.push(new Event(Events.BOSS_FIGHT, episode));
+            finalBoss = true;
+            return;
+        }
+        p.setHealth(p.getMaxHealth());
+        reLevel = true;
+        this.initialize();
+    }
     
+    public static void playerDeath(){
+        reLevel = true;
+    }
 }

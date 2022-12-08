@@ -3,6 +3,7 @@ package com.badhand.suitup.game;
 import com.badhand.suitup.events.*;
 import com.badhand.suitup.game.Scenes.*;
 import com.badhand.suitup.assets.AssetManager;
+import com.badhand.suitup.assets.DataManager;
 import com.badhand.suitup.entities.*;
 import com.badhand.suitup.ui.WindowManager;
 
@@ -22,6 +23,12 @@ public class GameManager {
     private static WindowManager wm = WindowManager.getInstance();
 
     private static AssetManager am = AssetManager.getInstance();
+
+    private static EnemyFactory ef = EnemyFactory.getInstance();
+
+    private static DataManager dm = DataManager.getInstance();
+
+    private static int episode = 1;
 
     private GameManager(){};
 
@@ -54,11 +61,27 @@ public class GameManager {
                     wm.destroyWindow();
                     System.exit(0);
                     break;
+                case BOSS_FIGHT:
+                    initiateBattle((ef.getBoss((int)e.getData())));
+                    break;
+                case END_GAME:
+                    int ep = (int)e.getData();
+                    dm.saveData("beat_episode_" + ep, 1);
+                    changeScene(GameState.MENU_LEVEL_SELECT);
+                    break;
                 default:
                     currentScene.handle(e);
                     break;
             }
         }
+    }
+
+    public int getEpisode(){
+        return episode;
+    }
+
+    public void setEpisode(int ep){
+        episode = ep;
     }
 
     public synchronized void unlock(){

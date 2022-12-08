@@ -3,6 +3,7 @@ package com.badhand.suitup.game.Scenes;
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.ui.*;
 import com.badhand.suitup.events.*;
+import com.badhand.suitup.assets.*;
 
 import processing.core.PGraphics;
 
@@ -10,16 +11,20 @@ import processing.core.PGraphics;
 public class MenuLevelSelect implements Scene {
 
     private static WindowManager wm = WindowManager.getInstance();
-    private static EventManager em = EventManager.getInstance();
+    private static GameManager gm = GameManager.getInstance();
+    private static DataManager dm = DataManager.getInstance();
 
     private GraphicsWrapper bg;
     private TextButton back;
     private TextElement title, episodeTitle, desc;
+    private ImageElement award;
     
     private String[] episodes = {
         "The Base Experience, fight your way through each level to reach the boss",
-        "Coming soon...",
+        "\nThe Gilded Age approaches! All cards are pre-guilded, \nbut enemies are stronger!",
     };
+
+    private boolean[] beaten = new boolean[episodes.length];
 
     private int selected = 0 ;
 
@@ -68,6 +73,23 @@ public class MenuLevelSelect implements Scene {
         TextButton play = new TextButton("Play", 64, 1920/2, 1080 - 200, new Event(Events.SCENE_CHANGE, GameState.MAP_SCENE));
         wm.put(play);
 
+        // Create an award icon for beating the episode
+        award = new ImageElement(1920/2, 1080 - 300, 64, 64, "award.png");
+        wm.put(award);
+
+        for(int i = 0; i < beaten.length; i++){
+            int beatenEpisode = dm.getInt("beat_episode_" + (i+1));
+            if(beatenEpisode == 1){
+                beaten[i] = true;
+            }
+        }
+
+        if(beaten[selected]){
+            award.setVisibility(true);
+        } else {
+            award.setVisibility(false);
+        }
+
         
     }
 
@@ -91,11 +113,18 @@ public class MenuLevelSelect implements Scene {
                 desc.setText(episodes[selected]);
                 switch(selected){
                     case 0:
+                        gm.setEpisode(1);
                         episodeTitle.setText("Episode I");
                         break;
                     case 1:
+                        gm.setEpisode(2);
                         episodeTitle.setText("Episode II");
                         break;
+                }
+                if(beaten[selected]){
+                    award.setVisibility(true);
+                } else {
+                    award.setVisibility(false);
                 }
                 break;
         }

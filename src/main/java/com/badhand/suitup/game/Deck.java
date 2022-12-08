@@ -2,15 +2,21 @@ package com.badhand.suitup.game;
 
 import com.badhand.suitup.ui.*;
 
+import java.util.*;
+
 public class Deck {
     private ShuffleBag<Card> cards;
+    private ArrayList<Card> gildedCards;
     private int cardsLeft = 52;
 
     public Deck(){
+        gildedCards = new ArrayList<Card>();
         cards = new ShuffleBag<Card>();
         for(int i = 0; i < 4; i++){
             for(int j = 1; j <= 13; j++){
-                cards.add(new Card(Suit.values()[i], j, 0, 0, 200, 300));
+                Card c = new Card(Suit.values()[i], j, 0, 0, 200, 300);
+                c.registerDeck(this);
+                cards.add(c);
             }
         }
     }
@@ -26,7 +32,9 @@ public class Deck {
     public Card draw(){
         cardsLeft--;
         if(cardsLeft == 0) shuffle();
-        return cards.next();
+        Card c = cards.next();
+        c.deactivate();
+        return c;
     }
 
     public void shuffle(){
@@ -36,6 +44,14 @@ public class Deck {
 
     public Card getCard(String name){
         return cards.search(name);
+    }
+
+    public int numGilded(){
+        return gildedCards.size();
+    }
+
+    public void registerGilded(Card c){
+        this.gildedCards.add(c);
     }
 
 }
