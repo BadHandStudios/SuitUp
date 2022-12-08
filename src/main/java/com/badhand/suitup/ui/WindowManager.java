@@ -5,6 +5,8 @@ import processing.core.*;
 public class WindowManager {
     private Window w;
 
+    private int width, height;
+
     private static WindowManager instance = null;
 
     private WindowManager(){}; // Singleton
@@ -17,6 +19,8 @@ public class WindowManager {
     
     public void createWindow(int width, int height){
         w = new Window(width, height);
+        this.width = width;
+        this.height = height;
     }
 
     public boolean isReady() {
@@ -45,12 +49,20 @@ public class WindowManager {
         return true;
     }
 
-    
-    public boolean remove(String name) { // Returns false if window is null
-        if(w == null) return false;
-        w.remove(name);
-        return true;
+    public void registerDiffered(GUI g) {
+        registerDiffered(g, 0);
+    } 
+
+    public void registerDiffered(GUI g, int index){
+        w.registerDiffered(g, index);
     }
+
+    
+    // public boolean remove(String name) { // Returns false if window is null
+    //     if(w == null) return false;
+    //     w.remove(name);
+    //     return true;
+    // }
 
     public boolean remove(GUI g) { // Returns false if window is null
         if(w == null) return false;
@@ -68,6 +80,16 @@ public class WindowManager {
         return true;
     }
 
+    public int getWidth() {
+        return width;
+    }
 
+    public int getHeight() {
+        return height;
+    }
+
+    public Object getLock(){
+        return w.getLock();
+    }
 }
     

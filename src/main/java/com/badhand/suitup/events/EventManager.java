@@ -17,9 +17,13 @@ public class EventManager {
     }
 
     public Event pop() {
+        if(eventQueue.size() == 0) return null;
         return eventQueue.pop();
     }
     public void push(Event e) {
         eventQueue.push(e);
+    }
+    public boolean isEmpty(){
+        return eventQueue.isEmpty();
     }
 }

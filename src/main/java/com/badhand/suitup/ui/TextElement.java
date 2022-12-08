@@ -3,11 +3,15 @@ package com.badhand.suitup.ui;
 
 import processing.core.PGraphics;
 
+import java.util.*;
+
 public class TextElement implements GUI {
     private String text;
 
     private int x, y;
     private int width, height;
+
+    private Color  c = new Color(255, 255, 255);
 
     PGraphics texture;
 
@@ -19,6 +23,8 @@ public class TextElement implements GUI {
 
     private String name = "TextElement_" + id++;
 
+    private LinkedList<GUI> enumeration;
+
     public TextElement(String text, int size, int x, int y) {
         this.size = size;
         this.text = text;
@@ -26,7 +32,9 @@ public class TextElement implements GUI {
         this.y = y;
         this.width = text.length() * 12;
         this.height = 12;
-
+        
+        enumeration = new LinkedList<GUI>();
+        enumeration.add(this);
     }
 
     
@@ -67,6 +75,17 @@ public class TextElement implements GUI {
     public String getText() {
         return text;
     }
+    public void setText(String text) {
+        this.width = text.length() * 12;
+        this.text = text;
+    }
+
+    public Color getColor() {
+        return c;
+    }
+    public void setColor(Color c){
+        this.c = c;
+    }
     
     public boolean visible() {
         return visible;
@@ -82,6 +101,10 @@ public class TextElement implements GUI {
 
     public String getName() {
         return name;
+    }
+
+    public LinkedList<GUI> enumerate() {
+        return enumeration;
     }
     
 }

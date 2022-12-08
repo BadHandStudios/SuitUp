@@ -4,6 +4,8 @@ import com.badhand.suitup.events.*;
 
 import processing.core.*;
 
+import java.util.*;
+
 public class TextButton implements GUI {
     private String text;
     private int x, y;
@@ -17,6 +19,10 @@ public class TextButton implements GUI {
 
     private WindowManager wm = WindowManager.getInstance();
     private EventManager em = EventManager.getInstance();
+
+    private LinkedList<GUI> enumeration;
+
+    private TextElement buttonText;
 
     public TextButton(String text, int size, int x, int y, Event e) {
         this.text = text;
@@ -34,11 +40,16 @@ public class TextButton implements GUI {
         texture.fill(127);
         texture.rect(0, 0, width - 1, height - 1, 5);
         texture.fill(0);
-        texture.textAlign(PConstants.CENTER, PConstants.CENTER);
-        texture.textSize(size);
-        texture.text(text, (width / 2) - 1, (height / 2 - 1));
+        // texture.textAlign(PConstants.CENTER, PConstants.CENTER);
+        // texture.textSize(size);
+        // texture.text(text, (width / 2) - 1, (height / 2 - 1));
         texture.endDraw();
 
+        enumeration = new LinkedList<GUI>();
+        enumeration.add(this);
+
+        buttonText = new TextElement(text, size, x, y);
+        enumeration.add(buttonText);
 
 
         
@@ -49,6 +60,10 @@ public class TextButton implements GUI {
     }
     public int getHeight() {
         return height;
+    }
+
+    public int getSize() {
+        return size;
     }
 
     public int getX() {
@@ -65,6 +80,7 @@ public class TextButton implements GUI {
 
     public void setVisibility(boolean visible) {
         this.visible = visible;
+        this.buttonText.setVisibility(visible);
     }
     public boolean visible(){
         return visible;
@@ -78,10 +94,17 @@ public class TextButton implements GUI {
         return name;
     }
 
+    public String getText() {
+        return text;
+    }
+
     public boolean click(int x, int y) {
-        if(!(x > this.x && x < this.x + width && y > this.y && y < this.y + height)) return false;
+        if(!(x > this.x - (width/2) && x < this.x + width/2 && y > this.y - height/2 && y < this.y + height/2)) return false;
         em.push(e);
         return true;
     }
 
+    public List<GUI> enumerate() {
+        return enumeration;
+    }
 }
