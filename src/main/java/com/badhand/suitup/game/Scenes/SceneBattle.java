@@ -173,13 +173,13 @@ public class SceneBattle implements Scene {
                     }
     
                     if (!playerHand.get(playerHandIndex).visible()) {
-                        System.out.println("Player Card Drawn");
+                        System.out.println("Player Card Drawn: " + playerHandIndex);
                         playerHand.get(playerHandIndex).setVisibility(true);
                         playerHandIndex++;
                         am.playSound(filename,1);
                     }
                     else {
-                        System.out.println("Player Card not Drawn");
+                        System.out.println("Player Card not Drawn: " + playerHandIndex);
                         playerHandIndex++;
                         if (enemyHandIndex < enemyHand.size()) {
                             if (!enemyHand.get(enemyHandIndex).visible()) {
@@ -192,7 +192,9 @@ public class SceneBattle implements Scene {
                             }
                         }
                         else {
-                            animate = false;
+                            if (!playerTurn) {
+                                animate = false;
+                            }
                             enemyHandIndex = 0;
                         }
                     }
