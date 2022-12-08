@@ -219,7 +219,23 @@ public class SceneBattle implements Scene {
                     enemyTurn();
                     break;
                 case "Hit":
+                    int rand = cbai.random(0,3);
+                        switch (rand) {
+                            case 0:
+                                filename = "cardPlace1.mp3";
+                                break;
+                            case 1:
+                                filename = "cardPlace2.mp3";
+                                break;
+                            case 2:
+                                filename = "cardPlace3.mp3";
+                                break;
+                            case 3:
+                                filename = "cardSlide1.mp3";
+                                break;
+                        }
                     Card c = player.drawCard();
+                    am.playSound(filename, 1);
                     if(c.isGilded()){
                         Effect eff = c.getEffect();
                         mostRecentGildedCard = c;
@@ -401,15 +417,15 @@ public class SceneBattle implements Scene {
             playerHand.get(i).setPos(positions[i], height - 200);
             wm.put(playerHand.get(i));
             if (i > 1) {
-                playerHandIndex = i;
+                //playerHandIndex = i;
             }
         }
         //if (playerHandIndex > 1 && playerTurn) {
         //    playerHand.get(playerHandIndex).setVisibility(false);
         //}
         if (playerHandIndex > 1 && playerTurn) {
-            playerHand.get(playerHandIndex).setVisibility(false);
-            playerHandIndex = 2;
+            //playerHand.get(playerHandIndex).setVisibility(false);
+            //playerHandIndex = 2;
         }
     }
     public void drawEnemyHand() {
