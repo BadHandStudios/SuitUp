@@ -1,16 +1,10 @@
 package com.badhand.suitup.game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -44,8 +38,7 @@ public class DeckTest {
             if(_cardNames.contains(curr.toString())){
                 matches++;
             }
-            else{
-                //System.out.println("Card did not match: " + curr);
+            else {
             }
             i++;
         }
@@ -55,38 +48,56 @@ public class DeckTest {
 
     @Test
     void cardsLeftTest() {
+
+    }
+    
+    @Test
+    void drawAllTest(){
+        String msg = "Pass if drawing all cards refills the deck";
+        int initialSize = _deck.cardsLeft();
+        int expected = initialSize;
+        for(int i = 0; i < initialSize; i++){
+            _deck.draw();
+        }
+        int actual = _deck.cardsLeft();
+        assertEquals(expected, actual, msg);
+    }
+
+    @Test
+    void drawTest() {
         String msg = "Pass if drawing a card removes one from the deck.";
         int initialSize = _deck.cardsLeft();
         int expected = initialSize - 1;
         _deck.draw();
         assertEquals(expected, _deck.cardsLeft());
     }
-    
+
     @Test
-    void drawAllTest(){
-        String msg = "Pass if drawing all cards leaves 0 cards in the deck";
+    void getCardTest() {
+        String msg = "Pass if cards exist";
         int initialSize = _deck.cardsLeft();
-        //TODO: Draw all cards and check if there are none left in deck.
+        Card curr;
+        for(int i = 0; i < initialSize; i++)
+        {
+            curr = _deck.getCard(_cardNames.get(i));
+            assertNotNull(curr, msg);
+        }
     }
 
     @Test
-    void testDraw() {
-
-    }
-
-    @Test
-    void testGetCard() {
-        //TODO
-    }
-
-    @Test
-    void testPeek() {
-        //TODO
+    void peekTest() {
+    	String msg = "Pass if all cards correctly peek";
+    	int initialSize = _deck.cardsLeft();
+    	for(int i = 0; i < initialSize; i++) {
+    		Card curr = _deck.peek();
+    		_deck.draw();
+    		assertNotNull(curr);
+    	}
     }
 
     @Test
     void testShuffle() {
-        //TODO
+        assert(false);
     }
 
     @BeforeAll
@@ -96,13 +107,14 @@ public class DeckTest {
         wm = WindowManager.getInstance();
         wm.createWindow(256,256);
         String filename = "validcards.txt";
-        //TODO: Read in validcards.txt, compare each.
         BufferedReader br = new BufferedReader(new FileReader(filename));
 
         while(br.ready()){
             String cl = br.readLine();
             _cardNames.add(cl);
         }
+        
+        br.close();
     }
 
     @BeforeEach

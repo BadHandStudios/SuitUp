@@ -1,10 +1,9 @@
 package com.badhand.suitup.ui;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.*;
-import com.badhand.suitup.game.Deck;
 import com.badhand.suitup.game.Suit;
 
 /*
@@ -25,7 +24,7 @@ public class CardTest
     {
         String msg = "Expected value vs. getValue().";
         int expected = -1;
-        Card testCard;
+        Card testCard = null;
 
         for(int i = 0; i < _mockDeck.size(); i++)
         {
@@ -48,7 +47,7 @@ public class CardTest
     {
         String msg = "Expected suit vs. suitName().";
         String expected = "ERROR";
-        Card testCard;
+        Card testCard = null;
         
         for(int i = 0; i < _mockDeck.size(); i++)
         {
@@ -73,9 +72,108 @@ public class CardTest
             assertEquals(msg, expected, actual);
         }
     }
+    
+    @Test
+    public void getWidthTest() {
+    	String msg = "Pass if card width != 0";
+    	Card testCard = null;
+    	int unexpected = 0;
+    	for(int i = 0; i < _mockDeck.size(); i++)
+    	{
+    		testCard = _mockDeck.get(i);
+    		assertFalse(testCard.getWidth() == unexpected);
+    	}
+    }
+    
+    @Test
+    public void getHeightTest() {
+    	String msg = "Pass if card height != 0";
+    	Card testCard = null; 
+    	int unexpected = 0;
+    	for(int i = 0; i < _mockDeck.size(); i++) {
+    		testCard = _mockDeck.get(i);
+    		assertFalse(testCard.getHeight() == unexpected);
+    	}
+    }
+    
+    @Test
+    public void getTextureTest() {
+    	String msg = "Pass if no card texture is null.";
+    	Card testCard = null;
+    	for(int i = 0; i < _mockDeck.size(); i++) {
+    		testCard = _mockDeck.get(i);
+    		assertNotNull(testCard.getTexture());
+    	}
+    	for(int i = 0; i < _mockDeck.size(); i++) {
+    		testCard = _mockDeck.get(i);
+    		testCard.flip();
+    		assertNotNull(testCard.getTexture());
+    	}
+    	for(int i = 0; i < _mockDeck.size(); i++) {
+    		testCard = _mockDeck.get(i);
+    		testCard.gild();
+    		assertNotNull(testCard.getTexture());
+    	}
+    }
+    
+    @Test
+    public void clickTest() {
+    	//TODO
+    }
+    
+    @Test
+    public void GildTest() {
+    	String msg = "Pass if all cards can be gilded";
+    	Card testCard = null;
+    	for(int i = 0; i < _mockDeck.size(); i++) {
+    		testCard = _mockDeck.get(i);
+    		testCard.gild();
+    		assertTrue(msg, testCard.isGilded());
+    	}
+    	msg = "Pass if all cards can be upgraded";
+    	for(int i = 0; i < _mockDeck.size(); i++) {
+    		testCard = _mockDeck.get(i);
+    		testCard.gild();
+    		assertTrue(msg, testCard.);
+    	}
+    }
+    
+    @Test
+    public void positionTest() {
+    	String msg = "Pass if all cards can be repositioned";
+    	int newXPos = 0;
+    	int newYPos = 0;
+    	Card testCard;
+    	for(int i = 0; i < _mockDeck.size(); i++) {
+    		testCard = _mockDeck.get(i);
+    		testCard.setPos(newXPos, newYPos);
+    		assertEquals(testCard.getX(), newXPos);
+    		assertEquals(testCard.getY(), newYPos);
+    	}
+    }
+    @Test
+    public void visibilityTest() {
+    	String msg = "Pass if card visibility bool getter and setter function";
+    	Card testCard;
+    	boolean vis = false;
+    	for(int i = 0; i < _mockDeck.size(); i++)
+    	{
+    		testCard = _mockDeck.get(i);
+    		testCard.setVisibility(vis);
+    		assertTrue(msg, testCard.visible() == vis);
+    	}
+    	
+    	vis = true;
+    	for(int i = 0; i < _mockDeck.size(); i++)
+    	{
+    		testCard = _mockDeck.get(i);
+    		testCard.setVisibility(vis);
+    		assertTrue(msg, testCard.visible() == vis);
+    	}
+    }
 
     @BeforeAll
-    public static void Setup()
+    public static void setup()
     {
         wm = WindowManager.getInstance();
         wm.createWindow(250, 350);
@@ -84,7 +182,7 @@ public class CardTest
     }
 
     @AfterAll
-    public static void TearDown()
+    public static void tearDown()
     {
         wm.destroyWindow();
     }

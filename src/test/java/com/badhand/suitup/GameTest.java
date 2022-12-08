@@ -49,11 +49,6 @@ public class GameTest {
         em = EventManager.getInstance();
         em.push(new Event(Events.SCENE_CHANGE, GameState.SCENE_BATTLE));
         battleScene = gm.getCurrentScene();
-        // TODO: Tests for
-        // player / enemy bust
-        // player / enemy blackjack
-        // player / enemy hand with ace
-        // player / enemy compare hand value
     }
     
     @AfterAll
@@ -65,6 +60,5 @@ public class GameTest {
     @BeforeEach
     public void BeforeEach()
     {
-        //System.out.println("Gametest BeforeEach happen");
     }
 }
