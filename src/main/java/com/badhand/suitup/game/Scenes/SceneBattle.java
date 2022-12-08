@@ -173,13 +173,11 @@ public class SceneBattle implements Scene {
                     }
     
                     if (!playerHand.get(playerHandIndex).visible()) {
-                        System.out.println("Player Card Drawn: " + playerHandIndex);
                         playerHand.get(playerHandIndex).setVisibility(true);
                         playerHandIndex++;
                         am.playSound(filename,1);
                     }
                     else {
-                        System.out.println("Player Card not Drawn: " + playerHandIndex);
                         playerHandIndex++;
                         if (enemyHandIndex < enemyHand.size()) {
                             if (!enemyHand.get(enemyHandIndex).visible()) {
@@ -308,7 +306,6 @@ public class SceneBattle implements Scene {
     }
 
     public void reset() {
-        System.out.println("");
         wm.remove(winner);
         playerTurn = true;
         playerPositions = new int[]{0,0,0,0,0};
@@ -485,7 +482,6 @@ public class SceneBattle implements Scene {
             if (enemy.getHealth() < 0) {
                 enemy.setHealth(0);
             }
-            System.out.println("Player got 5 cards");
             enemyHealthText.setText("" + enemy.getHealth());
             winner = new TextElement("Player Wins!",64, 200, height/2);
             wm.remove(hit);
@@ -502,7 +498,6 @@ public class SceneBattle implements Scene {
             if (player.getHealth() < 0) {
                 player.setHealth(0);
             }
-            System.out.println("Enemy got 5 cards");
             playerHealthText.setText("" + player.getHealth());
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
             //
@@ -518,7 +513,6 @@ public class SceneBattle implements Scene {
                 if (enemy.getHealth() < 0) {
                     enemy.setHealth(0);
                 }
-                System.out.println("Enemy Busts");
                 enemyHealthText.setText("" + enemy.getHealth());
                 winner = new TextElement("Player Wins!",64, 200, height/2);
                 // 
@@ -534,7 +528,6 @@ public class SceneBattle implements Scene {
                     if (player.getHealth() < 0) {
                         player.setHealth(0);
                     }
-                    System.out.println("Enemy has more total");
                     playerHealthText.setText("" + player.getHealth());
                     winner = new TextElement("Enemy Wins!",64, 200, height/2);
                     //
@@ -549,7 +542,6 @@ public class SceneBattle implements Scene {
                     if (enemy.getHealth() < 0) {
                         enemy.setHealth(0);
                     }
-                    System.out.println("Player has more total");
                     enemyHealthText.setText("" + enemy.getHealth());
                     winner = new TextElement("Player Wins!",64, 200, height/2);
                     //
@@ -574,7 +566,6 @@ public class SceneBattle implements Scene {
             if (player.getHealth() < 0) {
                 player.setHealth(0);
             }
-            System.out.println("Player busts");
             playerHealthText.setText("" + player.getHealth());
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
             wm.remove(hit);
