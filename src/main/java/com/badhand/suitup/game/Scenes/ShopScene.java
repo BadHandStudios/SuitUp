@@ -2,6 +2,7 @@ package com.badhand.suitup.game.Scenes;
 
 import com.badhand.suitup.game.*;
 import com.badhand.suitup.ui.*;
+import com.badhand.suitup.ui.map.Node;
 
 import processing.core.PGraphics;
 
@@ -121,66 +122,69 @@ public class ShopScene implements Scene {
         switch(e.getType()) {
             case SCENE_EVENT:
             rewardText = null;
-                switch((int) e.getData()) {
-                    case 0: //Max health increase by 1
-                    if (p.getChips() >= 500) {
-                        p.removeChips(500);
-                        p.addMaxHealth(1);
-                    }
-                    break;
-                    case 1: //Fill to max health
-                    if(p.getHealth() != p.getMaxHealth() && p.getChips() >= 500) {
-                        p.removeChips(500);
-                        p.setHealth(p.getMaxHealth());
-                    }
-                    break;
-                    case 2: //Gild rand card
-                    if(p.getChips() >= 700 && screenClear == true) {
-                        p.removeChips(750);
-                        String randomCardString = "2;3;4;5;6;7;8;9;10;J;Q;K;A".split(";")[rand.nextInt(13)] + "of" + "Clubs;Dmnds;Hearts;Spades".split(";")[rand.nextInt(4)];
-                        Card randomCard = p.getDeck().getCard(randomCardString);
-                        randomCard.gild();
-                        PGraphics cardImage = wm.newGraphic(300, 300);
-                        cardImage.beginDraw();
-                        cardImage.image(randomCard.getTexture(), 0, 0, 300, 300);
-                        cardImage.image(randomCard.getGildedTexture(), 0, 0, 300, 300);
-                        cardImage.endDraw();
-                        cardWrapper = new GraphicsWrapper(cardImage, 0, 0);
-                        cardWrapper.setPos(wm.getWidth()/2 - 600 + (600*2), wm.getHeight()/2);
-                        
-                        String text;
-                        Effect j = randomCard.getEffect();
-                        switch(j.getEffect()){
-                            case BUST_PROOF:
-                                text = "Bust Proof!";
-                                break;
-                            case DAMAGE_MODIFIER:
-                                text = "Damage +" + (int)(j.getValue() * 100) + "%";
-                                break;
-                            case HEAL:
-                                text = "Heal +" + (int)(j.getValue()) + "!";
-                                break;
-                            case INSTANT_DAMAGE:
-                                text = "Insta-damage +" + (int)(j.getValue());
-                                break;
-                            case DEFENSE_BONUS:
-                                text = "Defense +" + (int)(j.getValue() * 100) + "%";
-                                break;
-                            default:
-                                text = "ERROR!";
-                                break;
-
-                        }
-
-                        rewardText = new TextElement(text, 64,wm.getWidth()/2 - 600 + (600*2), buyRandGild.getHeight() + 610);
-                        screenClear = false;
-                        wm.put(cardWrapper);
-                        wm.put(rewardText);
-                        wm.registerDiffered(rewardText, 2);
-                        timer = 120;
-                    }
-                    break;
+            if(e.getData() instanceof Node) return;
+            switch((int) e.getData()) {
+                case 0: //Max health increase by 1
+                if (p.getChips() >= 500) {
+                    p.removeChips(500);
+                    p.addMaxHealth(1);
                 }
+                break;
+                case 1: //Fill to max health
+                if(p.getHealth() != p.getMaxHealth() && p.getChips() >= 500) {
+                    p.removeChips(500);
+                    p.setHealth(p.getMaxHealth());
+                }
+                break;
+                case 2: //Gild rand card
+                if(p.getChips() >= 700 && screenClear == true) {
+                    p.removeChips(750);
+                    String randomCardString = "2;3;4;5;6;7;8;9;10;J;Q;K;A".split(";")[rand.nextInt(13)] + "of" + "Clubs;Dmnds;Hearts;Spades".split(";")[rand.nextInt(4)];
+                    Card randomCard = p.getDeck().getCard(randomCardString);
+                    randomCard.gild();
+                    PGraphics cardImage = wm.newGraphic(300, 300);
+                    cardImage.beginDraw();
+                    cardImage.image(randomCard.getTexture(), 0, 0, 300, 300);
+                    cardImage.image(randomCard.getGildedTexture(), 0, 0, 300, 300);
+                    cardImage.endDraw();
+                    cardWrapper = new GraphicsWrapper(cardImage, 0, 0);
+                    cardWrapper.setPos(wm.getWidth()/2 - 600 + (600*2), wm.getHeight()/2);
+                    
+                    String text;
+                    Effect j = randomCard.getEffect();
+                    switch(j.getEffect()){
+                        case BUST_PROOF:
+                            text = "Bust Proof!";
+                            break;
+                        case DAMAGE_MODIFIER:
+                            text = "Damage +" + (int)(j.getValue() * 100) + "%";
+                            break;
+                        case HEAL:
+                            text = "Heal +" + (int)(j.getValue()) + "!";
+                            break;
+                        case INSTANT_DAMAGE:
+                            text = "Insta-damage +" + (int)(j.getValue());
+                            break;
+                        case DEFENSE_BONUS:
+                            text = "Defense +" + (int)(j.getValue() * 100) + "%";
+                            break;
+                        default:
+                            text = "ERROR!";
+                            break;
+
+                    }
+
+                    rewardText = new TextElement(text, 64,wm.getWidth()/2 - 600 + (600*2), buyRandGild.getHeight() + 610);
+                    screenClear = false;
+                    wm.put(cardWrapper);
+                    wm.put(rewardText);
+                    wm.registerDiffered(rewardText, 2);
+                    timer = 120;
+                }
+                break;
+                default:
+                return;
+            }
         }
     }
     
