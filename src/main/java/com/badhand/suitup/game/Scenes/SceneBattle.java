@@ -222,6 +222,7 @@ public class SceneBattle implements Scene {
                             }else if(!optionsShowing && !hitStayShowing && !continueShowing && !animate){
                                 
                                 continueShowing = true;
+                                this.updateHealth();
                                 wm.put(winner);
                                 wm.put(reset);
                             }
@@ -511,7 +512,7 @@ public class SceneBattle implements Scene {
             if (enemy.getHealth() < 0) {
                 enemy.setHealth(0);
             }
-            enemyHealthText.setText("" + enemy.getHealth());
+            //enemyHealthText.setText("" + enemy.getHealth());
             winner = new TextElement("Player Wins!",64, 200, height/2);
             hideHitStay();
             //
@@ -527,7 +528,7 @@ public class SceneBattle implements Scene {
             if (player.getHealth() < 0) {
                 player.setHealth(0);
             }
-            playerHealthText.setText("" + player.getHealth());
+            //playerHealthText.setText("" + player.getHealth());
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
             //
             // wm.put(winner);
@@ -543,7 +544,7 @@ public class SceneBattle implements Scene {
                 if (enemy.getHealth() < 0) {
                     enemy.setHealth(0);
                 }
-                enemyHealthText.setText("" + enemy.getHealth());
+                //enemyHealthText.setText("" + enemy.getHealth());
                 winner = new TextElement("Player Wins!",64, 200, height/2);
                 // 
                 // wm.put(winner);
@@ -559,7 +560,7 @@ public class SceneBattle implements Scene {
                     if (player.getHealth() < 0) {
                         player.setHealth(0);
                     }
-                    playerHealthText.setText("" + player.getHealth());
+                    //playerHealthText.setText("" + player.getHealth());
                     winner = new TextElement("Enemy Wins!",64, 200, height/2);
                     //
                     // wm.put(winner);
@@ -574,7 +575,7 @@ public class SceneBattle implements Scene {
                     if (enemy.getHealth() < 0) {
                         enemy.setHealth(0);
                     }
-                    enemyHealthText.setText("" + enemy.getHealth());
+                    //enemyHealthText.setText("" + enemy.getHealth());
                     winner = new TextElement("Player Wins!",64, 200, height/2);
                     //
                     // wm.put(winner);
@@ -599,7 +600,7 @@ public class SceneBattle implements Scene {
             if (player.getHealth() < 0) {
                 player.setHealth(0);
             }
-            playerHealthText.setText("" + player.getHealth());
+            //playerHealthText.setText("" + player.getHealth());
             winner = new TextElement("Enemy Wins!",64, 200, height/2);
             hideHitStay();
             //
