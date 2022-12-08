@@ -1,5 +1,6 @@
 package com.badhand.suitup.game;
 
+import com.badhand.suitup.ui.WindowManager;
 import com.badhand.suitup.ui.map.Node;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -38,5 +39,8 @@ class NodeFactoryTest {
     @BeforeAll
     static void setup(){
         nodeFactory = NodeFactory.getInstance();
+        WindowManager wm = WindowManager.getInstance();
+        wm.createWindow(1920,1080);
+        while(!wm.isReady()){}
     }
 }

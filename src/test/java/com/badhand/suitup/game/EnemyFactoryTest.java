@@ -4,6 +4,7 @@ import com.badhand.suitup.assets.AssetManager;
 import com.badhand.suitup.entities.Enemy;
 import com.badhand.suitup.ui.WindowManager;
 import org.junit.Before;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -64,5 +65,10 @@ class EnemyFactoryTest {
         wm.createWindow(1920,1080);
         while(!wm.isReady()){}
         enemyFactory = EnemyFactory.getInstance();
+    }
+
+    @AfterAll
+    static void tearDown(){
+        //WindowManager.getInstance().destroyWindow();
     }
 }

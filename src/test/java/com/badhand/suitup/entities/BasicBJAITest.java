@@ -3,6 +3,7 @@ package com.badhand.suitup.entities;
 import com.badhand.suitup.game.Suit;
 import com.badhand.suitup.ui.Card;
 import com.badhand.suitup.ui.WindowManager;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -33,5 +34,11 @@ class BasicBJAITest {
         WindowManager wm = WindowManager.getInstance();
         wm.createWindow(1920,1080);
         while(!wm.isReady()){}
+    }
+
+    @AfterAll
+    static void tearDown(){
+
+//        WindowManager.getInstance().destroyWindow();
     }
 }

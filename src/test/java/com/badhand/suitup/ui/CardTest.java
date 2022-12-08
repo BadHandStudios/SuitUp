@@ -150,6 +150,15 @@ public class CardTest
     		assertEquals(testCard.getX(), newXPos);
     		assertEquals(testCard.getY(), newYPos);
     	}
+
+        msg = "Pass if all gilded cards can be repositioned";
+        for(int i = 0; i < _mockDeck.size(); i++) {
+            testCard = _mockDeck.get(i);
+            testCard.gild();
+            testCard.setPos(newXPos, newYPos);
+            assertEquals(testCard.getX(), newXPos);
+            assertEquals(testCard.getY(), newYPos);
+        }
     }
     @Test
     public void visibilityTest() {

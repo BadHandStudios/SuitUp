@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -131,5 +132,10 @@ public class DeckTest {
     @BeforeEach
     public void BeforeEach(){
         _deck = new Deck();
+    }
+
+    @AfterAll
+    static void tearDown(){
+        WindowManager.getInstance().destroyWindow();
     }
 }

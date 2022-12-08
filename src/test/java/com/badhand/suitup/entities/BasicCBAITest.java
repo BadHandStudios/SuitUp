@@ -6,6 +6,7 @@ import com.badhand.suitup.game.Suit;
 import com.badhand.suitup.ui.Card;
 import com.badhand.suitup.ui.Window;
 import com.badhand.suitup.ui.WindowManager;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -108,5 +109,9 @@ class BasicCBAITest {
     void beforeEach(){
         testAI = new BasicCBAI(){};
 
+    }
+    @AfterAll
+    static void tearDown(){
+//        WindowManager.getInstance().destroyWindow();
     }
 }

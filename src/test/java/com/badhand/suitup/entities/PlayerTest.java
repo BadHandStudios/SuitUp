@@ -2,6 +2,7 @@ package com.badhand.suitup.entities;
 
 import com.badhand.suitup.ui.WindowManager;
 import com.badhand.suitup.ui.map.Node;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -93,5 +94,9 @@ class PlayerTest {
         wm.createWindow(1920, 1080);
         while (!wm.isReady()) {}
         player = Player.getInstance();
+    }
+    @AfterAll
+    static void tearDown(){
+//        WindowManager.getInstance().destroyWindow();
     }
 }

@@ -167,7 +167,7 @@ class GameManagerTest {
     }
 
     @BeforeAll
-    static void setup(){
+    static void setUp(){
         windowManager = WindowManager.getInstance();
         eventManager = EventManager.getInstance();
         gameManager = GameManager.getInstance();
@@ -175,5 +175,9 @@ class GameManagerTest {
         while(!windowManager.isReady()){}
     }
 
+    @AfterAll
+    static void tearDown(){
+        windowManager.destroyWindow();
+    }
 
 }

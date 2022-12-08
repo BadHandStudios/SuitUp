@@ -4,6 +4,7 @@ import com.badhand.suitup.game.Deck;
 import com.badhand.suitup.game.Suit;
 import com.badhand.suitup.ui.Card;
 import com.badhand.suitup.ui.WindowManager;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -92,5 +93,9 @@ class EntityTest {
         wm.createWindow(1920,1080);
         while (!wm.isReady()){}
         testEntity = Player.getInstance();
+    }
+    @AfterAll
+    static void tearDown(){
+//        WindowManager.getInstance().destroyWindow();
     }
 }
