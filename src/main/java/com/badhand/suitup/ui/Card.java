@@ -152,6 +152,9 @@ public class Card implements GUI{
 
     public void setVisibility(boolean visible){
         this.visible = visible;
+        if(this.gilded){
+            this.gildedElement.setVisibility(visible);
+        }
     }
 
     public PGraphics getTexture(){

@@ -14,8 +14,8 @@ public class SceneBattle implements Scene {
     AssetManager am = AssetManager.getInstance();
     EventManager em = EventManager.getInstance();
 
-    int width = 1920;
-    int height = 1080;
+    int width = wm.getWidth();
+    int height = wm.getHeight();
     int animWidth = width;
     int animHeight = height/2;
     int timer = 0;
@@ -30,8 +30,8 @@ public class SceneBattle implements Scene {
     int[] enemyPositions = {0,0,0,0,0};
     ArrayList<Card> playerHand = new ArrayList<Card>();
     ArrayList<Card> enemyHand = new ArrayList<Card>();
-    Deck temp1 = new Deck();
-    Deck temp2 = new Deck();
+    // Deck temp1 = new Deck();
+    // Deck temp2 = new Deck();
 
     TextButton hit = new TextButton("Hit",64,840,height/2,new Event(Events.CLICK,"Hit"));
     TextButton stay = new TextButton("Stay",64,1080,height/2,new Event(Events.CLICK,"Stay"));
@@ -41,8 +41,13 @@ public class SceneBattle implements Scene {
     TextButton reset = new TextButton("Continue",64,width/2,height/2, new Event(Events.CLICK,"reset"));
     TextElement winner = new TextElement("",64,200,height/2);
 
-    Card playerDeckTop;
-    Card enemyDeckTop;
+    ImageElement playerDeckGilded = new ImageElement(width - 200, height - 200,200,300,am.getImage("CardBack3.png"));
+    ImageElement enemyDeckGilded = new ImageElement(200, 200,200,300,am.getImage("CardBack3.png"));
+
+    ImageElement playerDeckTop = new ImageElement(width - 200, height - 200,200,300,am.getImage("CardBack1.png"));
+    ImageElement enemyDeckTop = new ImageElement(200, 200,200,300,am.getImage("CardBack1.png"));
+
+    
 
     TextElement playerHealthText;
     TextElement enemyHealthText;
@@ -72,6 +77,7 @@ public class SceneBattle implements Scene {
     }
 
     public void initialize() {
+
         am.stopSound(0);
         am.loopSound("combat_background_music.mp3", 0);
         wm.clear();
@@ -148,6 +154,13 @@ public class SceneBattle implements Scene {
         playerHand.get(1).setVisibility(false);
         enemyHand.get(0).setVisibility(false);
         enemyHand.get(1).setVisibility(false);
+        
+        wm.put(playerDeckGilded);
+        wm.put(enemyDeckGilded);
+        wm.put(playerDeckTop);
+        wm.put(enemyDeckTop);
+
+
 
         // wm.put(attack);
         // wm.put(nothing);
@@ -155,6 +168,8 @@ public class SceneBattle implements Scene {
     }
 
     public void update() {
+        if(player.getDeck().peek().isGilded()) playerDeckTop.setVisibility(false);
+        else playerDeckTop.setVisibility(true);
         
         if (animate) {
             // if(optionsShowing) hidePlayerOptions();
@@ -271,6 +286,7 @@ public class SceneBattle implements Scene {
                     }
                     drawHands();
                     gameLogic();
+                    
                     break;
                 case "Attack":
                     playerAction = "Attack";
