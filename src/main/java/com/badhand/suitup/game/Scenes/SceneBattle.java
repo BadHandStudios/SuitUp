@@ -483,7 +483,7 @@ public class SceneBattle implements Scene {
             enemy.drawCard();
             drawHands();
             bjai.updateTotals();
-            if (bjai.getEnemyTotal() > 21) {
+            if (bjai.getEnemyTotal() > 21 || enemy.getHand().size() == 5) {
                 gameLogic();
             }
             else {
