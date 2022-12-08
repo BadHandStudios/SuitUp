@@ -118,7 +118,6 @@ public class EnemyFactory {
             default:
 
         }
-        
     }
 
     private void loadNames(){
