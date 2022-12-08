@@ -18,7 +18,7 @@ public class SceneBattle implements Scene {
     int height = 1080;
     int animWidth = width;
     int animHeight = height/2;
-    int timer = 30;
+    int timer = 0;
     int enemyHandIndex = 0;
     int playerHandIndex = 0;
 
@@ -70,7 +70,7 @@ public class SceneBattle implements Scene {
         wm.clear();
         wm.setBackground(new Color(10, 60, 20));
 
-        timer = 30;
+        timer = 0;
         playerHandIndex = 0;
         enemyHandIndex = 0;
 
@@ -191,7 +191,7 @@ public class SceneBattle implements Scene {
                         }
                         else {
                             enemyHandIndex = 0;
-                            animate = false;
+                            
                             if (playerTurn && !hitVisible) {
                                 //wm.put(attack);
                                 //wm.put(block);
@@ -200,7 +200,8 @@ public class SceneBattle implements Scene {
                             else if (resetRound) {
                                 //wm.put(winner);
                                 //wm.put(reset);
-                                //resetRound = false;
+                                resetRound = false;
+                                animate = false;
                             }
                         }
                     }
@@ -209,10 +210,14 @@ public class SceneBattle implements Scene {
                     if (resetRound && playerTurn) {
                         //wm.put(winner);
                         //wm.put(reset);
-                        //resetRound = false;
+                        resetRound = false;
+                        return;
+                        // animate = false;
                     }
+
+                    resetRound = false;
                     playerHandIndex = 0;
-                    animate = false;
+                    
                 }
             }
         }
@@ -307,7 +312,7 @@ public class SceneBattle implements Scene {
         playerPositions = new int[]{0,0,0,0,0};
         enemyPositions = new int[]{0,0,0,0,0};
 
-        timer = 30;
+        timer = 0;
         playerHandIndex = 0;
         enemyHandIndex = 0;
         hitVisible = false;
@@ -387,6 +392,7 @@ public class SceneBattle implements Scene {
     }
 
     public void drawHands() {
+        timer = 0;
         animate = true;
         drawPlayerHand();
         drawEnemyHand();
