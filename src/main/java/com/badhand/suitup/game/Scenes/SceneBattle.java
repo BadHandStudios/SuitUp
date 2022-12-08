@@ -173,11 +173,13 @@ public class SceneBattle implements Scene {
                     }
     
                     if (!playerHand.get(playerHandIndex).visible()) {
+                        System.out.println("Player Card Drawn");
                         playerHand.get(playerHandIndex).setVisibility(true);
                         playerHandIndex++;
                         am.playSound(filename,1);
                     }
                     else {
+                        System.out.println("Player Card not Drawn");
                         playerHandIndex++;
                         if (enemyHandIndex < enemyHand.size()) {
                             if (!enemyHand.get(enemyHandIndex).visible()) {
@@ -190,34 +192,13 @@ public class SceneBattle implements Scene {
                             }
                         }
                         else {
+                            animate = false;
                             enemyHandIndex = 0;
-                            
-                            if (playerTurn && !hitVisible) {
-                                //wm.put(attack);
-                                //wm.put(block);
-                                //wm.put(nothing);
-                            }
-                            else if (resetRound) {
-                                //wm.put(winner);
-                                //wm.put(reset);
-                                resetRound = false;
-                                animate = false;
-                            }
                         }
                     }
                 }
                 else {
-                    if (resetRound && playerTurn) {
-                        //wm.put(winner);
-                        //wm.put(reset);
-                        resetRound = false;
-                        return;
-                        // animate = false;
-                    }
-
-                    resetRound = false;
                     playerHandIndex = 0;
-                    
                 }
             }
         }
