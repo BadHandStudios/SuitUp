@@ -265,23 +265,25 @@ public class SceneBattle implements Scene {
                                 filename = "cardSlide1.mp3";
                                 break;
                         }
-                    Card c = player.drawCard();
-                    am.playSound(filename, 1);
-                    if(c.isGilded()){
-                        Effect eff = c.getEffect();
-                        mostRecentGildedCard = c;
-                        if(player.getHandTotal() > 21 && eff.getEffect() == Effects.BUST_PROOF) c.activate();
+                    if (player.getHand().size() < 5) {
+                        Card c = player.drawCard();
+                        am.playSound(filename, 1);
                         if(c.isGilded()){
-                            if(eff.getEffect() == Effects.INSTANT_DAMAGE){
-                                c.activate();
-                                if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
-                                updateHealth();
-                            }else if(eff.getEffect() == Effects.HEAL){
-                                c.activate();
-                                player.addHealth((int) eff.getValue());
-                                updateHealth();
+                            Effect eff = c.getEffect();
+                            mostRecentGildedCard = c;
+                            if(player.getHandTotal() > 21 && eff.getEffect() == Effects.BUST_PROOF) c.activate();
+                            if(c.isGilded()){
+                                if(eff.getEffect() == Effects.INSTANT_DAMAGE){
+                                    c.activate();
+                                    if(enemy.getHealth() > eff.getValue()) enemy.addHealth(-1 * (int) eff.getValue());
+                                    updateHealth();
+                                }else if(eff.getEffect() == Effects.HEAL){
+                                    c.activate();
+                                    player.addHealth((int) eff.getValue());
+                                    updateHealth();
+                                }
+                                else  mostRecentGildedCard = c;
                             }
-                            else  mostRecentGildedCard = c;
                         }
                     }
                     drawHands();
