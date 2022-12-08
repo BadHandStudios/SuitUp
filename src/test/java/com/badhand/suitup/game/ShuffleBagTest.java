@@ -18,7 +18,7 @@ class ShuffleBagTest {
     }
 
     @Test
-    void next() {
+    void nextTest() {
         String msg = "Pass if next returns the item";
         testBag.add("foo");
         assertEquals("foo", testBag.next(), msg);
@@ -35,17 +35,17 @@ class ShuffleBagTest {
     }
 
     @Test
-    void search() {
+    void searchTest() {
         String msg = "Pass if shuffle bag finds an item";
         String testString = "foo";
         testBag.add(testString);
-        assertEquals(testString, (String)testBag.search("foo"), msg);
+        assertEquals(testString,testBag.search("foo"), msg);
         msg = "Pass if shuffle bag fails to find an item";
-        assertNull((String) testBag.search("bar"), msg);
+        assertNull(testBag.search("bar"), msg);
     }
 
     @Test
-    void empty() {
+    void emptyTest() {
         testBag.clear();
         String msg = "Pass if returns true when bag is empty";
         assertTrue(testBag.empty(), msg);
