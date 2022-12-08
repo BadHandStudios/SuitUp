@@ -317,7 +317,7 @@ public class SceneBattle implements Scene {
                             MapScene.playerDeath();
                             player.reset();
 
-                            Event end = new Event(Events.SCENE_CHANGE,GameState.MENU_MAIN);
+                            Event end = new Event(Events.SCENE_CHANGE,GameState.GAME_OVER);
                             em.push(end);
                             break;
                         }
@@ -606,6 +606,7 @@ public class SceneBattle implements Scene {
             //
             wm.put(winner);
             continueShowing = true;
+            this.updateHealth();
             wm.put(reset);
             enemy.getHand().get(0).flip();
             resetRound = true;
