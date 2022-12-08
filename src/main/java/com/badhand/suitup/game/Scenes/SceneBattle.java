@@ -247,6 +247,20 @@ public class SceneBattle implements Scene {
                         if (enemyHandIndex < enemyHand.size()) {
                             if (!enemyHand.get(enemyHandIndex).visible()) {
                                 enemyHand.get(enemyHandIndex).setVisibility(true);
+                                int temporary = 0;
+                                for (int i = 0; i < enemyHand.size(); i++) {
+                                    if (enemyHand.get(i).visible()) {
+                                        temporary++;
+                                    }
+                                }
+                                int[] positions = {0,0,0,0,0};
+                                positions = formatHand(temporary);
+                                for (int i = 0; i < enemyHand.size(); i++) {
+                                    if (enemyHand.get(i).visible()) {
+                                        enemyHand.get(i).setPos(positions[i], 200);
+                                        wm.put(enemyHand.get(i));
+                                    }
+                                }
                                 enemyHandIndex++;
                                 am.playSound(filename,1);
                                 animEnemyCard();
@@ -330,7 +344,7 @@ public class SceneBattle implements Scene {
                             }
                         }
                     }
-                    drawHands();
+                    drawPlayerHand();
                     gameLogic();
                     
                     break;
@@ -502,8 +516,8 @@ public class SceneBattle implements Scene {
         }
     }
     public void drawEnemyHand() {
-        int[] positions = {0,0,0,0,0};
-        positions = formatHand(enemy.getHand().size());
+        //int[] positions = {0,0,0,0,0};
+        //positions = formatHand(enemy.getHand().size());
 
         while (enemyHand.size() > 0) {
             if (enemyHand.get(0) != null) {
@@ -513,8 +527,8 @@ public class SceneBattle implements Scene {
         }
         for (int i = 0; i < enemy.getHand().size(); i++) {
             enemyHand.add(enemy.getHand().get(i));
-            enemyHand.get(i).setPos(positions[i], 200);
-            wm.put(enemyHand.get(i));
+            //enemyHand.get(i).setPos(positions[i], 200);
+            //wm.put(enemyHand.get(i));
             if (i > 1) {
                 enemyHandIndex = i;
             }
