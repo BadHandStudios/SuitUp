@@ -23,7 +23,6 @@ public class EnemyFactory {
     private static ShuffleBag<String> bossNames = new ShuffleBag<String>();
     
     private EnemyFactory(){
-        
         loadAI(1);
         loadNames();
 
