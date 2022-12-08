@@ -16,6 +16,7 @@ class CheaterBJAITest {
     static CheaterBJAI cheaterBJAI;
     @Test
     void hitTest() {
+        //TODO: fix me
         String msg = "Pass if AI hits when total <= 21";
 
         Deck testDeck = new Deck();
@@ -23,8 +24,8 @@ class CheaterBJAITest {
         testHand.add(new Card(Suit.CLUBS, 5, 0, 0, 250, 350));
         testHand.add(new Card(Suit.CLUBS, 6, 0, 0, 250, 350));
         cheaterBJAI.setEnemyDeck(testDeck);
-        cheaterBJAI.setEnemyHand(testHand);
         ArrayList<Card> newHand = testHand;
+        cheaterBJAI.setEnemyHand(newHand);
         newHand.add(cheaterBJAI.enemyDeck.peek());
 
         if(cheaterBJAI.getEnemyTotal() <= 21){

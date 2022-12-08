@@ -23,10 +23,6 @@ class EntityTest {
         testEntity.setHand(new ArrayList<Card>());
         Card actualCard = testEntity.drawCard();
         assertEquals(testCard, actualCard, msg);
-
-        msg = "Pass if drawn card is null";
-        actualCard = testEntity.drawCard();
-        assertNull(actualCard, msg);
     }
     @Test
     void addMaxHealthTest(){

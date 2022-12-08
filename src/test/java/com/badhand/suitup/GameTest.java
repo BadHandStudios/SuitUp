@@ -21,18 +21,6 @@ public class GameTest {
 
     private static Scene battleScene;
 
-    @Test
-    public void gameplayTest2(){
-        //System.out.println("Gametest test 2 happen");
-        assert(true);
-    }
-
-    @Test
-    public void gameplayTest(){
-        //System.out.println("Gametest test happen");
-        assert(true);
-    }
-
     @BeforeAll
     public static void Setup()
     {
